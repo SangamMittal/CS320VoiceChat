@@ -5,22 +5,8 @@
 <html>
 	<head>
 		<title>Chatrooms List</title>
-		<style type="text/css">
-	
-	#chatbox {
-	text-align: left;
-	margin: 0 auto;
-	margin-bottom: 25px;
-	padding: 10px;
-	background: #fff;
-	height: 270px;
-	width: 430px;
-	border: 1px solid #ACD8F0;
-	overflow: auto;
-}
-					
-					
-		</style>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+		integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">			
 	</head>
 
 	<body>
@@ -33,13 +19,11 @@
 		<input type="Submit" name="logout" value="Logout">
 		<input type="Submit" name="createChatroom" value="Create New Chatroom">
 		
-		<p>
-		<a href = http://localhost:8081/groupProject/chatroom > Chatroom 1 </a>
-		<p>
-		<a href = http://localhost:8081/groupProject/chatroom > Chatroom 2 </a>
-		<p>
-		<a href = http://localhost:8081/groupProject/chatroom > Chatroom 3 </a>
-		
+		<div class="list-group">
+			<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 1 </a>
+			<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 2 </a>
+			<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 3 </a>
+		</div>
 
 		
 		

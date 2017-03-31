@@ -5,22 +5,31 @@
 <html>
 	<head>
 		<title>Create Chatroom</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+		integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		
+		<style>
+			.form-control{
+			width: 25%;
+		
+			}
+		</style>
 	</head>
 
 	<body>
 		<form action="${pageContext.servletContext.contextPath}/createChatroom" method="post">
-			<table>
-				<tr>
-					<td class="label">Chatroom Name:</td>
-					<td><input type="text" name="first" size="12" value="${model.first}" /></td>
-				</tr>
-				<tr>
-					<td class="label">Chatroom Password:</td>
-					<td><input type="password" name="second" size="12" value="${model.second}" /></td>
-				</tr>
-
-			</table>
-			<input type="Submit" name="create" value="Create">
+			  <div class="form-group">
+			    <label>Chat Room Name</label>
+			    <input type="username" class="form-control"
+			    			placeholder="Name - 32 max characters" value="${model.first}" >
+			  </div>
+			  <div class="form-group">
+			    <label>Password</label>
+			    <input type="password" class="form-control" 
+			    			placeholder="Password - 32 max characters" value="${model.second}">
+			  </div>
+				
+			<input class="btn btn-warning" type="Submit" name="create" value="Create">
 
 		</form>
 	</body>
