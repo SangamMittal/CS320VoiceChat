@@ -6,7 +6,7 @@ import edu.ycp.cs320.groupProject.model.User;
 public class UserController {
 	
 	// 
-	public void send(User user, String message, Chatroom chatroom)
+	public void sendMessage(User user, String message, Chatroom chatroom)
 	{
 		// Appending the message so it's in the form, username: the message...
 		String s = user.getName() + ": " + message;
@@ -26,14 +26,27 @@ public class UserController {
 	
 	
 	//should it be return type Chatroom?
-	public void createChatroom()
+	public Chatroom createChatroom(Chatroom c)
 	{
+		Chatroom chatR = null;
+		// Contact Database
+		// chatR = db.someMethodName(c);
+		/* Database Method:
+		 * 			Select stmt to see if chatroom name already exist
+		 * 			if not
+		 * 				insert it into database and return the chatroom
+		 * 			if already exist
+		 * 				return null
+		 */
 		
+		return chatR;
 	}
 	
 	//Contact database
-	public void deleteAccount()
+	public void deleteAccount(User user, Chatroom c)
 	{
+		// Contact Database
+		// Database Method
 		
 	}
 	
@@ -42,16 +55,7 @@ public class UserController {
 		return null;
 	}
 	
-	public void cancel()
-	{
-		
-	}
-	
-	public void exitRoom()
-	{
-		
-	}
-	
+
 	
 
 }

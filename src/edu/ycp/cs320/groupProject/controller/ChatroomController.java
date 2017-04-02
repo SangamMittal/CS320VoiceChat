@@ -1,6 +1,7 @@
 package edu.ycp.cs320.groupProject.controller;
 
 import edu.ycp.cs320.groupProject.model.Chatroom;
+import edu.ycp.cs320.groupProject.model.User;
 
 public class ChatroomController {
 	
@@ -12,8 +13,14 @@ public class ChatroomController {
 		return s;
 	}
 	
+	public void permanentlyExitChatroom(User u, Chatroom c){
+		
+		
+	}
 	
 	
+	
+	/*
 	public void appearVoiceIcon()
 	{
 		
@@ -23,5 +30,6 @@ public class ChatroomController {
 	{
 		
 	}
+	*/
 
 }
