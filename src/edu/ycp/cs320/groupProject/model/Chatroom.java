@@ -6,6 +6,11 @@ public class Chatroom {
 	private String password;
 	private boolean hasPassword;
 	private int numUser;
+	private String messages;
+	
+	public Chatroom(){
+		
+	}
 	
 	public Chatroom(String name, String password, boolean hasPassword){
 		
@@ -48,8 +53,13 @@ public class Chatroom {
 	public void setNumUser(int numUser){
 		this.numUser = numUser;
 	}
-
 	
+	public void setMessages(String messag){
+		this.messages = messag;
+	}
 	
+	public String getMessages(){
+		return this.messages;
+	}
 
 }

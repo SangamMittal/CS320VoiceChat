@@ -9,10 +9,15 @@ public class User implements Runnable{
 	private String name;
 	private String password;
  	private boolean admin;
+ 	private boolean isItLogined;
 	private TreeMap<String, String> UserList;
  	
-	ServerSocket ss;
+//	ServerSocket ss;
 	
+	// Blank constructor
+	public User(){
+		
+	}
 	
 	//constructor
 	public User(String name, String password, boolean admin)
@@ -20,7 +25,6 @@ public class User implements Runnable{
 		this.name = name;
 		this.password= password;
 		this.admin = admin;
-		
 	}
 	
 	public String getName()
@@ -54,24 +58,15 @@ public class User implements Runnable{
 		this.admin = admin;
 	}
 	
+	public void setIsItLogined(boolean loginState){
+		this.isItLogined = loginState;
+	}
+	
+	public boolean getIsItLogined(){
+		return isItLogined;
+	}
 
-	
-	//should it be return type Chatroom?
-	public void createChatroom()
-	{
-		
-	}
-	
-	//Contact database
-	public void deleteAccount()
-	{
-		
-	}
-	
-	public String CreateAccount()
-	{
-		return UserList.put(name, password);
-	}
+
 	
 	
 	
@@ -103,12 +98,10 @@ public class User implements Runnable{
 			
 		}
 		*/
-		
-		
-		
 	}
+		
+		
 	
-	
-	
+
 
 }

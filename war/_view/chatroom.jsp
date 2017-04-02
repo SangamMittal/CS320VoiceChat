@@ -10,24 +10,63 @@
 		
 		<style>
 			.form-control{
-			width: 50%;
-			row: 100;
+				width: 50%;
+				height: 500px;
+				row: 100;
 			}
+			
+			.boxSize{
+				width: 50%;
+				max-width: 50%;
+				height: 100px;
+				max-height: 100px;
+				background-color: darkslategrey;
+				color: white;
+				border-style: solid;
+    			border-width: 5px;	
+    			line-height: 0.8;
+    			font-size: 20px;
+    			
+    						
+			}
+			.boxSizeAllM{
+				width: 50%;
+				max-width: 50%;
+				height: 500px;
+				max-height: 500px;
+				background-color: darkslategrey;
+				color: white;
+				border-style: solid;
+    			border-width: 5px;		
+    			line-height: 0.8;
+    			font-size: 20px;
+    			
+    					
+			}
+			.all{
+				background-color: darkslategrey;
+			}
+			
+			
 		</style>
 	</head>
 
-	<body>
+	<body class = "all">
 		<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
 	
 		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post">
 			
-			<textarea class="form-control"  type="text" placeholder="Readonly input here…" readonly>
-			
+			<textarea class="boxSizeAllM"  type="text" name = "allmessages" readonly>
 			</textarea>
-			<input type="Submit" name="send" value="Send">
-			<input type="Submit" name="logout" value="Logout">
+			
+			<textarea class="boxSize form-group"  type="text" name = "allmessages" ></textarea>
+			
+			<input class="btn btn-success" type="Submit" name="send" value="Send">
+			<input class="btn btn-danger" type="Submit" name="logout" value="Logout">
+			<input class="btn btn-warning" type="Submit" name="exit" value="Exit Chat Room">
+			
 			
 		</form>
 	</body>

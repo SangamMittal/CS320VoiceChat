@@ -25,6 +25,9 @@
 				text-color: white;
 				font-size: 20px;
 			}
+			.error {
+				color: red;
+			}
 			
 		</style>
 	
@@ -32,17 +35,21 @@
 	</head>
 
 	<body class = "center">
+		<c:if test="${! empty errorMessage}">
+			<div class="error">${errorMessage}</div>
+		</c:if>	
+	
 		<form  action="${pageContext.servletContext.contextPath}/login" method="post" >
 	
 			  <div class="form-group">
 			    <label class = "form-group label" >Username</label>
-			    <input type="username" class="form-control"
-			    			placeholder="Username - 32 max characters" value="${model.first}" >
+			    <input type="username" name = "username" class="form-control"
+			    			placeholder="Username - 32 max characters" value="${model.name}" >
 			  </div>
 			  <div class="form-group">
 			    <label class = "form-group label">Password</label>
-			    <input type="password" class="form-control" 
-			    			placeholder="Password - 32 max characters" value="${model.second}">
+			    <input type="password" name = "password" class="form-control" 
+			    			placeholder="Password - 32 max characters" value="${model.password}">
 			  </div>
 				
 			<input class="btn btn-primary" type="Submit" name="login" value="Login">

@@ -2,8 +2,10 @@ package edu.ycp.cs320.groupProject.model;
 
 public class LoginSignup {
 	
+	// Do not need a model for loginSignUp
+	// It is not an object
 	
-	
+	/*
 	public boolean checkNameLength(User u)
 	{
 		if (u.getName().length() > 32 )
@@ -41,5 +43,5 @@ public class LoginSignup {
 		else return false;
 	}
 	
-
+	*/
 }
