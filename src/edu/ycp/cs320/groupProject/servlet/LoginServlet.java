@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
 		String password = null;
 		LoginSignupController controller;
 		User user = new User();
-		User model = null;
+		User model = new User();
 		
 		// *********** TESTING *************
 		//model.setName("TestingName");
