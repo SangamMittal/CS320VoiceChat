@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import edu.ycp.cs320.booksdb.model.Author;
 import edu.ycp.cs320.groupProject.model.User;
 
 public class DerbyDatabase implements IDatabase {
@@ -45,8 +45,25 @@ public class DerbyDatabase implements IDatabase {
 						stmt2.setString(1, u.getName());
 						resultSet = stmt2.executeQuery();
 						
+						boolean found = false;
+						int id = 0;
+						
+						while (resultSet.next())
+						{
+							found = true;
+							
+							User user = new User();
+							loadUser(user, resultSet, 1);
+							
+						}
+						
+						if (found== false)
+						{
+							
+						}
 						
 						
+
 						
 						stmt = conn.prepareStatement(" insert into user (username, password) values ( ?, ?) ");
 						stmt.setString(1, u.getPassword() );
@@ -62,6 +79,13 @@ public class DerbyDatabase implements IDatabase {
 				}
 				);
 	}
+		
+		private void loadUser(User u, ResultSet resultSet, int index) throws SQLException {
+			
+			u.setName(resultSet.getString(index++));
+			u.setPassword((resultSet.getString(index++)));
+			
+		}
 	
 
 	@Override
