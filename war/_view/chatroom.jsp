@@ -58,14 +58,13 @@
 	
 		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post">
 			
-			<textarea class="boxSizeAllM"  type="text" name = "allmessages" readonly>
-			</textarea>
+			<textarea class="boxSizeAllM"  type="text" name = "allmessages" readonly>${model.allMessages}</textarea>
 			
-			<textarea class="boxSize form-group"  type="text" name = "allmessages" ></textarea>
+			<textarea class="boxSize form-group"  type="text" name = "usermessage" ></textarea>
 			
 			<input class="btn btn-success" type="Submit" name="send" value="Send">
 			<input class="btn btn-danger" type="Submit" name="logout" value="Logout">
-			<input class="btn btn-warning" type="Submit" name="exit" value="Exit Chat Room">
+			<input class="btn btn-warning" type="Submit" name="exitP" value="Exit Chat Room Permanently">
 			
 			
 		</form>

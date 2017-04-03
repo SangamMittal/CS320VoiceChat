@@ -42,17 +42,28 @@ public class UserController {
 		return chatR;
 	}
 	
-	//Contact database
-	public void deleteAccount(User user, Chatroom c)
+	public boolean deleteAccount(User user, Chatroom c)
 	{
+		boolean success = false;
 		// Contact Database
-		// Database Method
+		// Database Method:
+		// 			Check to see if this user is the admin of this chatroom
+		//			If yes, then remove the chatroom from that list and return true
+		//			If not, return false
 		
+		return success;
 	}
 	
-	public String CreateAccount()
+	public Chatroom CreateAccount(User u, Chatroom c)
 	{
-		return null;
+		Chatroom chatR = null;
+		// Contact the database
+		// Database Method:
+		//			Check to see if chatroom name already exist
+		//			If not, use insert stmt to put it in the database, return that chatroom
+		//			If yes, return null;
+		
+		return chatR;
 	}
 	
 

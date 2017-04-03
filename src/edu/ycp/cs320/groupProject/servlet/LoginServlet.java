@@ -18,7 +18,7 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		System.out.println("In the Login servlet");
+		//System.out.println("In the Login servlet");
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 
 
@@ -29,19 +29,26 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		
-		// Decode form parameters and dispatch to controller
 		String errorMessage = null;
 		String username = null;
 		String password = null;
 		LoginSignupController controller;
 		User user = new User();
 		User model = new User();
+		User sharedUser;
+		
+		
+		
+		//String sharedTest = "Shared Testing!";
+	    //req.getSession().setAttribute("sharedTest", sharedTest); // add to session
+
 		
 		// *********** TESTING *************
 		//model.setName("TestingName");
 		//model.setPassword("TestingPassword");
 		//model = null;
 		
+		// Decode form parameters and dispatch to controller
 		try {
 			username = req.getParameter("username");
 			password = req.getParameter("second");
@@ -94,6 +101,13 @@ public class LoginServlet extends HttpServlet {
 		}//end of user click on signUp button
 
 		
+		// Add parameters(model) as request attributes for other servlets during this session
+		//sharedUser = model;
+		sharedUser = new User();
+		sharedUser.setName("RathanaTesting");
+		req.getSession().setAttribute("sharedUser", sharedUser);
+		//System.out.println(sharedUser.getName());
+		
 		// Add parameters as request attributes
 		req.setAttribute("model", model);
 
@@ -102,13 +116,13 @@ public class LoginServlet extends HttpServlet {
 		req.setAttribute("errorMessage", errorMessage);
 		
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
+		//req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 		
 		//********* TESTING ************
-		System.out.println(user.getName());
-		System.out.println(user.getPassword());
-		System.out.println(model.getName());
-		System.out.println(model.getPassword());
+		//System.out.println(user.getName());
+		//System.out.println(user.getPassword());
+		//System.out.println(model.getName());
+		//System.out.println(model.getPassword());
 		////////////////////////////////////////
 		
 	}//end of doPost
