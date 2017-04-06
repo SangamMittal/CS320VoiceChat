@@ -5,57 +5,108 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.ycp.cs320.booksdb.model.Author;
-import edu.ycp.cs320.booksdb.model.Book;
+import edu.ycp.cs320.groupProject.model.Admin;
+import edu.ycp.cs320.groupProject.model.User;
+import edu.ycp.cs320.groupProject.model.Chatroom;
+import edu.ycp.cs320.groupProject.model.Post;
 
 public class InitialData {
-	public static List<Author> getAuthors() throws IOException {
-		List<Author> authorList = new ArrayList<Author>();
-		ReadCSV readAuthors = new ReadCSV("authors.csv");
+	public static List<User> getUsers() throws IOException {
+		List<User> UserList = new ArrayList<User>();
+		ReadCSV readUsers = new ReadCSV("userList.csv");
 		try {
 			// auto-generated primary key for authors table
-			Integer authorId = 1;
+			Integer user_id = 1;
 			while (true) {
-				List<String> tuple = readAuthors.next();
+				List<String> tuple = readUsers.next();
 				if (tuple == null) {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-				Author author = new Author();
-				author.setAuthorId(authorId++);				
-				author.setLastname(i.next());
-				author.setFirstname(i.next());
-				authorList.add(author);
+				User user = new User();
+				user.setUserId(user_id++);				
+				user.setUsername(i.next());
+				user.setPassword(i.next());
+				UserList.add(user);
 			}
-			return authorList;
+			return UserList;
 		} finally {
-			readAuthors.close();
+			readUsers.close();
 		}
 	}
 	
-	public static List<Book> getBooks() throws IOException {
-		List<Book> bookList = new ArrayList<Book>();
-		ReadCSV readBooks = new ReadCSV("books.csv");
+	//for the chatroomUser list, what are we getting? and what type is the list?
+	public static List<User> getChatroomUsers() throws IOException {
+		List<User> UserList = new ArrayList<User>();
+		ReadCSV readChatroomUsers = new ReadCSV("chatroomUser.csv");
 		try {
-			// auto-generated primary key for books table
-			Integer bookId = 1;
+			// auto-generated primary key for authors table
+			Integer num = 1;
 			while (true) {
-				List<String> tuple = readBooks.next();
+				List<String> tuple = readChatroomUsers.next();
 				if (tuple == null) {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-				Book book = new Book();
-				book.setBookId(bookId++);
-				book.setAuthorId(Integer.parseInt(i.next()));
-				book.setTitle(i.next());
-				book.setIsbn(i.next());
-				book.setPublished(Integer.parseInt(i.next()));
-				bookList.add(book);
+				User user = new User();
+				user.setNum(num++);				
+				user.setChatroomId(Integer.parseInt(i.next()));
+				UserList.add(user); //is it correct to add to the userList?
 			}
-			return bookList;
+			return UserList;
 		} finally {
-			readBooks.close();
+			readChatroomUsers.close();
+		}
+	}
+	
+	public static List<Post> getPosts() throws IOException {
+		List<Post> PostList = new ArrayList<Post>();
+		ReadCSV readPosts = new ReadCSV("messagesList.csv");
+		try {
+			// auto-generated primary key for authors table
+			Integer messages_id = 1;
+			while (true) {
+				List<String> tuple = readPosts.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				Post post = new Post();
+				post.setMessagesID(messages_id++);				
+				post.setText(i.next());
+				
+				PostList.add(post);
+			}
+			return PostList;
+		} finally {
+			readPosts.close();
+		}
+	}
+	
+	public static List<Chatroom> getChatroomList() throws IOException {
+		List<Chatroom> chatroomList = new ArrayList<Chatroom>();
+		ReadCSV readChatrooms = new ReadCSV("chatroomList.csv");
+		try {
+			// auto-generated primary key for books table
+			Integer chatroomId = 1;
+			while (true) {
+				List<String> tuple = readChatrooms.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				Chatroom chatroom = new Chatroom();
+				chatroom.setChatroomID(chatroomId++);
+				chatroom.setAdminID(Integer.parseInt(i.next())); //?
+				chatroom.setMessagesID( Integer.parseInt(i.next()) ); //are these two correct?
+				chatroom.setChatroomName(i.next());
+				chatroom.setPassword(i.next());
+				
+				chatroomList.add(chatroom);
+			}
+			return chatroomList;
+		} finally {
+			readChatrooms.close();
 		}
 	}
 }

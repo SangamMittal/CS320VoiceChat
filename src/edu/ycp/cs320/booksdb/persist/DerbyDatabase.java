@@ -28,66 +28,68 @@ public class DerbyDatabase implements IDatabase {
 	private static final int MAX_ATTEMPTS = 10;
 	
 	@Override
-	public boolean signUp(User u)
+	public List<User> signUp(User u)
 	{
-		return executeTransaction(new Transaction<boolean>()
+		return executeTransaction(new Transaction<List<User>>()
 				{
 				@Override
-				public boolean execute(Connection conn) throws SQLException
+				public List<User> execute(Connection conn) throws SQLException
 				{
 					PreparedStatement stmt= null;		
 					PreparedStatement stmt2= null;
 					ResultSet resultSet = null;
 					try
 					{
+						//Do we have many-to-many tables? Looks like userList is the only table with username
+						stmt2 = conn.prepareStatement("select username.* from userList where username = ?" );
+						stmt2.setString(1, u.getUsername());
 						
-						stmt2 = conn.prepareStatement("select user.username from user where username = ? ");
-						stmt2.setString(1, u.getName());
+						List<User> result = new ArrayList<User>();
+						
 						resultSet = stmt2.executeQuery();
 						
 						boolean found = false;
-						int id = 0;
+						
 						
 						while (resultSet.next())
 						{
-							found = true;
+							found = true;	
+						//	User user = new User(); //I'm not sure if this is correct
+							loadUser(u, resultSet, 1);
 							
-							User user = new User();
-							loadUser(user, resultSet, 1);
+							result.add(new User(u.getUsername() ,u.getPassword() , false));
+							
 							
 						}
 						
-						if (found== false)
+						if (!found)
 						{
-							
+							System.out.println("<" + u.getUsername() + "> was not found in the books table");
 						}
 						
+						return result;
 						
-
+					} finally {
 						
-						stmt = conn.prepareStatement(" insert into user (username, password) values ( ?, ?) ");
-						stmt.setString(1, u.getPassword() );
-						stmt.setString(2, u.getName());
-						stmt.executeUpdate();
-						
-						return true;
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt2);
 					}
-					finally {
-						DBUtil.closeQuietly(stmt);
-					}	
-				}
-				}
-				);
+				} //end execute
+				});
 	}
-		
+				
+						
+					
 		private void loadUser(User u, ResultSet resultSet, int index) throws SQLException {
 			
-			u.setName(resultSet.getString(index++));
+			u.setUserId(resultSet.getInt(index++));
+			u.setUsername(resultSet.getString(index++));
 			u.setPassword((resultSet.getString(index++)));
+			
 			
 		}
 	
-
+//make return a list of users?
 	@Override
 	public User Login(User u)
 	{
@@ -96,18 +98,42 @@ public class DerbyDatabase implements IDatabase {
 				@Override
 				public User execute(Connection conn) throws SQLException
 				{
-					PreparedStatement stmt= null;		
+					PreparedStatement stmt= null;	
+					ResultSet resultSet = null;
 					try
 					{
-						stmt = conn.prepareStatement(" select user.* from user where user.username = ? and user.password = ?  ");
-						stmt.setString(1, u.getName() );
+						stmt = conn.prepareStatement(" select username.* from userList where userList.username = ? and userList.password = ?  ");
+						stmt.setString(1, u.getUsername() );
 						stmt.setString(2, u.getPassword());
+						
+						List<User> result = new ArrayList<User>();
+						
+						
 						resultSet = stmt.executeQuery();
+						
+						boolean found = false;
+						
+						
+						while (resultSet.next())
+						{
+							found = true;	
+						//	User user = new User(); //I'm not sure if this is correct
+							loadUser(u, resultSet, 1);
+							
+							result.add(new User(u.getUsername() ,u.getPassword() , false));	
+							
+						}
+						
+						if (!found)
+						{
+							System.out.println("<" + u.getUsername() + "> was not found in the books table");
+						}
 						
 						return u;
 					}
 					finally {
 						DBUtil.closeQuietly(stmt);
+						DBUtil.closeQuietly(resultSet);
 					}	
 				}
 				}

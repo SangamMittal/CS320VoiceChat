@@ -3,10 +3,22 @@ package edu.ycp.cs320.groupProject.model;
 public class Post {
 	
 	private String text;
+	private int messages_id;
 	
-	public Post(String text)
+	
+	
+	public Post( )
 	{
-		this.text= text;
+		
+	}
+	
+	public void setMessagesID(int messages_id) {
+		this.messages_id = messages_id;
+	}
+	
+	public int getMessagesID()
+	{
+		return messages_id;
 	}
 	
 	public String getText()

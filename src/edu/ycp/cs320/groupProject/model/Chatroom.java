@@ -2,19 +2,35 @@ package edu.ycp.cs320.groupProject.model;
 
 public class Chatroom {
 	
-	private String name;
+	private String chatroomname;
 	private String password;
 	private boolean hasPassword;
 	private int numUser;
 	private String messages;
+	private int chatroom_id;
+	private int admin_id;
+	private int messages_id;
 	
 	public Chatroom(){
 		
 	}
 	
+	public void setChatroomID(int chatroom_id) {
+		this.chatroom_id = chatroom_id;
+	}
+	
+	public void setAdminID(int admin_id) {
+		this.chatroom_id = chatroom_id;
+	}
+	
+	public void setMessagesID(int messages_id) {
+		this.messages_id = messages_id;
+	}
+	
+	
 	public Chatroom(String name, String password, boolean hasPassword){
 		
-		this.name = name;
+		this.chatroomname = chatroomname;
 		this.password = password;
 		this.hasPassword= hasPassword;
 		
@@ -30,12 +46,12 @@ public class Chatroom {
 		return numUser;
 	}
 	
-	public String getName(){
-		return this.name;
+	public String getChatroomName(){
+		return this.chatroomname;
 	}
 	
-	public void setName(String name){
-		this.name = name;
+	public void setChatroomName(String chatroomname){
+		this.chatroomname = chatroomname;
 	}
 	
 	public String getPassword(){

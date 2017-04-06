@@ -4,32 +4,34 @@ import java.io.*;
 import java.net.*;
 import java.util.TreeMap;
 
-public class User implements Runnable{
+public class User{
 	
-	private String name;
+	private String username;
 	private String password;
  	private boolean admin;
  	private boolean isItLogined;
 	private TreeMap<String, String> UserList;
+	private int user_id;
+	private int chatroom_id;
+	private int num;
  	
-//	ServerSocket ss;
-	
+
 	// Blank constructor
 	public User(){
 		
 	}
 	
 	//constructor
-	public User(String name, String password, boolean admin)
+	public User(String username, String password, boolean admin)
 	{
-		this.name = name;
+		this.username = username;
 		this.password= password;
 		this.admin = admin;
 	}
 	
-	public String getName()
+	public String getUsername()
 	{
-		return name;
+		return username;
 	}
 	
 	public String getPassword()
@@ -42,9 +44,9 @@ public class User implements Runnable{
 		return admin;
 	}
 	
-	public void setName(String name)
+	public void setUsername(String username)
 	{
-		this.name= name;
+		this.username= username;
 		
 	}
 	
@@ -68,37 +70,19 @@ public class User implements Runnable{
 
 
 	
-	
-	
-	
-
-	@Override
-	public void run() {
-		throw new UnsupportedOperationException("TODO - implement");
-		/*
-		String name = Thread.currentThread().getName();
-		
-		while (true)
-		{
-			
-			try{
-				
-				System.out.println("Client" + name + "ready to accept;");
-				Socket s = ss.accept();
-				System.out.println("Client accepted connection");
-				
-				BufferedReader readKb = new BufferedReader(new InputStreamReader(System.in));
-				PrintStream writeC = new PrintStream(s.getOutputStream(), true);
-				BufferedReader readC = new BufferedReader(new InputStreamReader(s.getInputStream()));
-				
-				
-				
-				
-			}	
-			
-		}
-		*/
+	public void setUserId(int user_id) {
+		this.user_id = user_id;
 	}
+	
+	public void setChatroomId(int chatroom_id) {
+		this.chatroom_id = chatroom_id;
+	}
+	
+	
+	public void setNum(int num) {
+		this.num = num;
+	}
+	
 		
 		
 	
