@@ -7,65 +7,79 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.ycp.cs320.groupProject.controller.ChatroomController;
+import edu.ycp.cs320.groupProject.controller.UserController;
+import edu.ycp.cs320.groupProject.model.Chatroom;
+import edu.ycp.cs320.groupProject.model.User;
+
 //import edu.ycp.cs320.groupProject.controller.NumbersController;
 //import edu.ycp.cs320.groupProject.model.Numbers;
 
 public class ChatroomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private User sharedUser;
+	private Chatroom sharedChatroom;
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
+		sharedUser = (User) req.getSession().getAttribute("sharedUser");	// getting the sharedUser from login servlet
+		sharedChatroom = (Chatroom) req.getSession().getAttribute("sharedChatroom");	// getting the sharedUser from chatroomList servlet
+		System.out.println(sharedUser.getName());
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-/*		NumbersController controller = new NumbersController();
-		Numbers model = new Numbers();
-
-		// Decode form parameters and dispatch to controller
 		String errorMessage = null;
+		String userMessage = null;
+		User user = sharedUser;
+		Chatroom chatroom = sharedChatroom;
+		UserController uController = new UserController();
+		ChatroomController cController = new ChatroomController();
+		
+		System.out.println(user.getName());
+		
 		try {
-			Double first = getDoubleFromParameter(req.getParameter("first"));
-			Double second = getDoubleFromParameter(req.getParameter("second"));
-
-			if (first == null || second == null) {
-				errorMessage = "Please specify two numbers";
-			} else {
-				model = new Numbers(first, second);
-				controller.setModel(model);
-				controller.multiply();
-			}
+			userMessage = req.getParameter("usermessage");
+					
+					
 		} catch (NumberFormatException e) {
-			errorMessage = "Invalid double";
+			errorMessage = "Nothing";
 		}
 		
+		
+		
+		if(req.getParameter("logout") != null){
+			resp.sendRedirect("login");
+		}
+		else if(req.getParameter("send") != null){
+			if(userMessage != null){
+			//	uController.sendMessage(user, userMessage, chatroom);
+			}
+		}
+		else if(req.getAttribute("exitP") != null){
+			cController.permanentlyExitChatroom(user, chatroom);
+			resp.sendRedirect("chatroomList");
+		}
+
+		
+		
 		// Add parameters as request attributes
-		//req.setAttribute("first", model.getFirst());
-		//req.setAttribute("second", model.getSecond());
-		req.setAttribute("model", model);
+		//req.setAttribute("model", chatroom);
+
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
-		//req.setAttribute("result", model.getResult());
 		
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/multiplyNumbers.jsp").forward(req, resp);
-*/
-		if(req.getParameter("logout") != null)
-			resp.sendRedirect("login");
-	}
+		req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
+		
+		
+	}//end doPost
 
-/*	private Double getDoubleFromParameter(String s) {
-		if (s == null || s.equals("")) {
-			return null;
-		} else {
-			return Double.parseDouble(s);
-		}
-	}
-*/
+
 	
 	
 	

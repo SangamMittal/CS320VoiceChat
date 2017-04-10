@@ -13,8 +13,15 @@ public class ChatroomController {
 		return s;
 	}
 	
-	public void permanentlyExitChatroom(User u, Chatroom c){
+	public boolean permanentlyExitChatroom(User user, Chatroom chatroom){
+		boolean success = false;
 		
+		// Contact the databse
+		// Database Method: check to see if the user exist in that chatroom
+		//			If the user does, then remove it from the database and return true
+		//			else do nothing and return false;
+		
+		return success;
 		
 	}
 	

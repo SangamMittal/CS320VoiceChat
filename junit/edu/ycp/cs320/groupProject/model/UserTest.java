@@ -45,5 +45,19 @@ public class UserTest {
 		assertEquals(false, u.getAdmin());
 	}
 	
+	@Test
+	public void testSetIsItLogined(){
+		boolean state = false;
+		u.setIsItLogined(state);
+		assertEquals(false, u.getIsItLogined());
+	}
+	
+	@Test
+	public void testGetIsItLogined(){
+		boolean state = true;
+		u.setIsItLogined(state);
+		assertEquals(true, u.getIsItLogined());
+	}
+	
 	
 }

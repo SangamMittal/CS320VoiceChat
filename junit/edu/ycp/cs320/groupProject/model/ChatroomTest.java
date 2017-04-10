@@ -70,6 +70,20 @@ public class ChatroomTest {
 		assertEquals(num, room.getNumUser());
 	}
 	
+	@Test
+	public void testSetMessages(){
+		String s = "Hello World!";
+		room.setMessages(s);
+		assertEquals(s, room.getMessages());
+	}
+	
+	@Test
+	public void testGetMessages(){
+		String s = "Mary Had A Little Lamb";
+		room.setMessages(s);
+		assertEquals(s, room.getMessages());
+	}
+	
 	
 	
 	
