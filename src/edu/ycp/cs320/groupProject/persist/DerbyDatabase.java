@@ -1,4 +1,4 @@
-package edu.ycp.cs320.booksdb.persist;
+package edu.ycp.cs320.groupProject.persist;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.booksdb.model.Author;
+import edu.ycp.cs320.groupProject.model.Chatroom;
 import edu.ycp.cs320.groupProject.model.User;
+import edu.ycp.cs320.groupProject.persist.DerbyDatabase.Transaction;
 
 public class DerbyDatabase implements IDatabase {
 	static {
@@ -54,10 +56,10 @@ public class DerbyDatabase implements IDatabase {
 						while (resultSet.next())
 						{
 							found = true;	
-						//	User user = new User(); //I'm not sure if this is correct
-							loadUser(u, resultSet, 1);
+							User user = new User(); //I'm not sure if this is correct
+							loadUser(user, resultSet, 1);
 							
-							result.add(new User(u.getUsername() ,u.getPassword() , false));
+							result.add(new User(user.getUsername() ,user.getPassword() , false));
 							
 							
 						}
@@ -85,6 +87,8 @@ public class DerbyDatabase implements IDatabase {
 			u.setUserId(resultSet.getInt(index++));
 			u.setUsername(resultSet.getString(index++));
 			u.setPassword((resultSet.getString(index++)));
+			
+			
 			
 			
 		}
@@ -141,6 +145,49 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	
+	public void createTables()
+	{
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3= null;
+				PreparedStatement stmt4= null;
+				
+				try {
+					stmt1 = conn.prepareStatement(
+					" create table chatroomList (room_id int primary key generated always as identity (start with 1, increment by 1), chatroom_name varchar(32), password varchar(32), admin_id int, messages_id int)"
+					);	
+					stmt1.executeUpdate();
+					
+					stmt2 = conn.prepareStatement(
+							"create table userList (" +
+							"	user_id int " +
+							"	primary key	generated always as identity (start with 1, increment by 1), " +
+							"	username varchar(32), " +
+							"	password varchar(32) " +
+							
+							")"
+					);
+					stmt2.executeUpdate();
+					
+					stmt3 = conn.prepareStatement("create table chatroomUser (num int primary key generated always as identity (start with 1, increment by 1),room_id int, user_id int)  ");
+					stmt3.executeUpdate();
+					
+					stmt4= conn.prepareStatement(" create table messagesList (messages_id int primary key generated always as identity (start with 1, increment by 1), textfile_Name varchar(70)" );
+		
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+					DBUtil.closeQuietly(stmt4);
+				}
+			}
+		});
+	}
 	
 	
 	public<ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
@@ -196,108 +243,8 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
-	private void loadAuthor(Author author, ResultSet resultSet, int index) throws SQLException {
-		author.setAuthorId(resultSet.getInt(index++));
-		author.setLastname(resultSet.getString(index++));
-		author.setFirstname(resultSet.getString(index++));
-	}
-	
-	private void loadBook(Book book, ResultSet resultSet, int index) throws SQLException {
-		book.setBookId(resultSet.getInt(index++));
-		book.setAuthorId(resultSet.getInt(index++));
-		book.setTitle(resultSet.getString(index++));
-		book.setIsbn(resultSet.getString(index++));
-		book.setPublished(resultSet.getInt(index++));		
-	}
-	
-	public void createTables() {
-		executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				PreparedStatement stmt1 = null;
-				PreparedStatement stmt2 = null;
-				
-				try {
-					stmt1 = conn.prepareStatement(
-						"create table authors (" +
-						"	author_id integer primary key " +
-						"		generated always as identity (start with 1, increment by 1), " +									
-						"	lastname varchar(40)," +
-						"	firstname varchar(40)" +
-						")"
-					);	
-					stmt1.executeUpdate();
-					
-					stmt2 = conn.prepareStatement(
-							"create table books (" +
-							"	book_id integer primary key " +
-							"		generated always as identity (start with 1, increment by 1), " +
-							"	author_id integer constraint author_id references authors, " +
-							"	title varchar(70)," +
-							"	isbn varchar(15)," +
-							"   published integer " +
-							")"
-					);
-					stmt2.executeUpdate();
-					
-					return true;
-				} finally {
-					DBUtil.closeQuietly(stmt1);
-					DBUtil.closeQuietly(stmt2);
-				}
-			}
-		});
-	}
-	
-	public void loadInitialData() {
-		executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				List<Author> authorList;
-				List<Book> bookList;
-				
-				try {
-					authorList = InitialData.getAuthors();
-					bookList = InitialData.getBooks();
-				} catch (IOException e) {
-					throw new SQLException("Couldn't read initial data", e);
-				}
 
-				PreparedStatement insertAuthor = null;
-				PreparedStatement insertBook   = null;
 
-				try {
-					// populate authors table (do authors first, since author_id is foreign key in books table)
-					insertAuthor = conn.prepareStatement("insert into authors (lastname, firstname) values (?, ?)");
-					for (Author author : authorList) {
-//						insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
-						insertAuthor.setString(1, author.getLastname());
-						insertAuthor.setString(2, author.getFirstname());
-						insertAuthor.addBatch();
-					}
-					insertAuthor.executeBatch();
-					
-					// populate books table (do this after authors table,
-					// since author_id must exist in authors table before inserting book)
-					insertBook = conn.prepareStatement("insert into books (author_id, title, isbn, published) values (?, ?, ?, ?)");
-					for (Book book : bookList) {
-//						insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
-						insertBook.setInt(1, book.getAuthorId());
-						insertBook.setString(2, book.getTitle());
-						insertBook.setString(3, book.getIsbn());
-						insertBook.setInt(4,  book.getPublished());
-						insertBook.addBatch();
-					}
-					insertBook.executeBatch();
-					
-					return true;
-				} finally {
-					DBUtil.closeQuietly(insertBook);
-					DBUtil.closeQuietly(insertAuthor);
-				}
-			}
-		});
-	}
 	
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
@@ -306,7 +253,7 @@ public class DerbyDatabase implements IDatabase {
 		db.createTables();
 		
 		System.out.println("Loading initial data...");
-		db.loadInitialData();
+	//	db.loadInitialData();
 		
 		System.out.println("Success!");
 	}

@@ -4,11 +4,9 @@ import edu.ycp.cs320.groupProject.model.*;
 
 import java.util.List;
 
-import edu.ycp.cs320.booksdb.model.Author;
-import edu.ycp.cs320.booksdb.model.Book;
-import edu.ycp.cs320.booksdb.model.Pair;
-import edu.ycp.cs320.booksdb.persist.DatabaseProvider;
-import edu.ycp.cs320.booksdb.persist.IDatabase;
+import edu.ycp.cs320.groupProject.model.Chatroom;
+import edu.ycp.cs320.groupProject.persist.DatabaseProvider;
+import edu.ycp.cs320.groupProject.persist.IDatabase;
 
 public class LoginSignupController {
 	
@@ -22,14 +20,14 @@ public class LoginSignupController {
 		User userDatabase = new User();
 		
 		IDatabase db = DatabaseProvider.getInstance();
-		 User u =  db. ;
+		// User u =  db. ;
 		
 		// Contact the database and return the user
 		// userDatabase = someMethod from DerbyDatabase // check if exist by username only
 		// it should return null if that user does not exist
 
 		if(userDatabase != null){
-			if(userDatabase.getName().equals(u.getName()) && userDatabase.getPassword().equals(u.getPassword())){
+			if(userDatabase.getUsername().equals(u.getUsername()) && userDatabase.getPassword().equals(u.getPassword())){
 				return userDatabase;
 			}
 		}
@@ -45,7 +43,7 @@ public class LoginSignupController {
 		// it should return null if that user does not exist
 		
 		IDatabase db = DatabaseProvider.getInstance();
-		 User u =  db. ;
+		// User u =  db. ;
 		
 		// User not exist yet, so sign up
 		if(userDatabase == null){
