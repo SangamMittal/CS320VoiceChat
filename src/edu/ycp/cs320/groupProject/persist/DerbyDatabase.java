@@ -9,9 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ycp.cs320.booksdb.model.Author;
+
+import edu.ycp.cs320.groupProject.persist.DBUtil;
+import edu.ycp.cs320.groupProject.persist.InitialData;
 import edu.ycp.cs320.groupProject.model.Chatroom;
 import edu.ycp.cs320.groupProject.model.User;
+
+//test made method public
 import edu.ycp.cs320.groupProject.persist.DerbyDatabase.Transaction;
 
 public class DerbyDatabase implements IDatabase {
@@ -23,7 +27,7 @@ public class DerbyDatabase implements IDatabase {
 		}
 	}
 	
-	private interface Transaction<ResultType> {
+	public interface Transaction<ResultType> {
 		public ResultType execute(Connection conn) throws SQLException;
 	}
 
@@ -145,6 +149,9 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	
+	
+	
+	
 	public void createTables()
 	{
 		executeTransaction(new Transaction<Boolean>() {
@@ -184,6 +191,57 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt3);
 					DBUtil.closeQuietly(stmt4);
+				}
+			}
+		});
+	}
+	
+	public void loadInitialData() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				List<User> userList;
+				List<Chatroom> chatroomList;
+				
+				try {
+					userList = InitialData.getUsers();
+					chatroomList = InitialData.getChatroomList();
+				} catch (IOException e) {
+					throw new SQLException("Couldn't read initial data", e);
+				}
+
+				PreparedStatement insertChatroom = null;
+				PreparedStatement insertUser   = null;
+
+				try {
+					// populate authors table (do authors first, since author_id is foreign key in books table)
+					insertChatroom = conn.prepareStatement("insert into chatroomList (chatroom_name, password) values (?, ?)");
+					for (Chatroom chatroom : chatroomList) {
+//						insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
+						insertChatroom.setString(1, chatroom.getChatroomName() );
+						insertChatroom.setString(2, chatroom.getPassword());
+			
+						insertChatroom.addBatch();
+					}
+					insertChatroom.executeBatch();
+					
+					// populate books table (do this after authors table,
+					// since author_id must exist in authors table before inserting book)
+					insertUser = conn.prepareStatement("insert into userList (username, password) values (?, ?)");
+					for (User user : userList) {
+//						insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
+						
+						insertUser.setString(1, user.getUsername());
+						insertUser.setString(2, user.getPassword());
+						
+						insertUser.addBatch();
+					}
+					insertUser.executeBatch();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertUser);
+					DBUtil.closeQuietly(insertChatroom);
 				}
 			}
 		});
