@@ -37,7 +37,7 @@ public class InitialData {
 	
 	//for the chatroomUser list, what are we getting? and what type is the list?
 	public static List<User> getChatroomUsers() throws IOException {
-		List<User> UserList = new ArrayList<User>();
+		List<User> ChatroomUserList = new ArrayList<User>();
 		ReadCSV readChatroomUsers = new ReadCSV("chatroomUser.csv");
 		try {
 			// auto-generated primary key for authors table
@@ -51,9 +51,9 @@ public class InitialData {
 				User user = new User();
 				user.setNum(num++);				
 				user.setChatroomId(Integer.parseInt(i.next()));
-				UserList.add(user); //is it correct to add to the userList?
+				ChatroomUserList.add(user); //is it correct to add to the userList?
 			}
-			return UserList;
+			return ChatroomUserList;
 		} finally {
 			readChatroomUsers.close();
 		}
@@ -99,8 +99,8 @@ public class InitialData {
 				chatroom.setChatroomID(chatroomId++);
 				chatroom.setChatroomName(i.next());
 				chatroom.setPassword(i.next());
-				chatroom.setAdminID(Integer.parseInt(i.next())); //?
-				chatroom.setMessagesID( Integer.parseInt(i.next()) ); //are these two correct?
+				chatroom.setAdminID(Integer.valueOf(i.next())); //?
+				chatroom.setMessagesID( Integer.valueOf(i.next()) ); //are these two correct?
 				
 				
 				chatroomList.add(chatroom);

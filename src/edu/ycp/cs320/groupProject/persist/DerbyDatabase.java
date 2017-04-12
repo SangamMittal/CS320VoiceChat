@@ -203,24 +203,29 @@ public class DerbyDatabase implements IDatabase {
 			public Boolean execute(Connection conn) throws SQLException {
 				List<User> userList;
 				List<Chatroom> chatroomList;
+				List<User> chatroomUserList;
 				
 				try {
 					userList = InitialData.getUsers();
 					chatroomList = InitialData.getChatroomList();
+					chatroomUserList = InitialData.getChatroomUsers();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
 
 				PreparedStatement insertChatroom = null;
 				PreparedStatement insertUser   = null;
+				PreparedStatement insertchatroomUserList= null;
 
 				try {
 					// populate authors table (do authors first, since author_id is foreign key in books table)
-					insertChatroom = conn.prepareStatement("insert into chatroomList (chatroom_name, password) values (?, ?)");
+					insertChatroom = conn.prepareStatement("insert into chatroomList (chatroom_name, password, admin_id, messages_id) values (?, ?, ?, ?)");
 					for (Chatroom chatroom : chatroomList) {
 //						insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
 						insertChatroom.setString(1, chatroom.getChatroomName() );
 						insertChatroom.setString(2, chatroom.getPassword());
+						insertChatroom.setInt(3, chatroom.getAdminID());
+						insertChatroom.setInt(4, chatroom.getMessagesID());
 			
 						insertChatroom.addBatch();
 					}
@@ -239,10 +244,24 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertUser.executeBatch();
 					
+					insertchatroomUserList = conn.prepareStatement("insert into chatroomUser (room_id, user_id) values (?, ?)");
+					for (User user: chatroomUserList) {
+//						insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
+						insertchatroomUserList.setInt(1, user.getChatroomId() );
+						insertchatroomUserList.setInt(2, user.getUserID() );
+						
+			
+						insertchatroomUserList.addBatch();
+					}
+					insertchatroomUserList.executeBatch();
+					
+					
+					
 					return true;
 				} finally {
 					DBUtil.closeQuietly(insertUser);
 					DBUtil.closeQuietly(insertChatroom);
+					DBUtil.closeQuietly(insertchatroomUserList);
 				}
 			}
 		});
