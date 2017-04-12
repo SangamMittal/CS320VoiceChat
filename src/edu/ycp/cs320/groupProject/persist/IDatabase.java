@@ -7,7 +7,7 @@ import edu.ycp.cs320.groupProject.model.User;
 public interface IDatabase {
 
 
-	public List<User> signUp(User u);
+	public Boolean signUp(User u);
 
 	public boolean Login(User u);
 
