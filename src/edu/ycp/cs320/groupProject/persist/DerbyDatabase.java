@@ -9,9 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ycp.cs320.booksdb.model.Author;
+
+import edu.ycp.cs320.groupProject.persist.DBUtil;
+import edu.ycp.cs320.groupProject.persist.InitialData;
 import edu.ycp.cs320.groupProject.model.Chatroom;
 import edu.ycp.cs320.groupProject.model.User;
+
+//test made method public
 import edu.ycp.cs320.groupProject.persist.DerbyDatabase.Transaction;
 
 public class DerbyDatabase implements IDatabase {
@@ -23,7 +27,7 @@ public class DerbyDatabase implements IDatabase {
 		}
 	}
 	
-	private interface Transaction<ResultType> {
+	public interface Transaction<ResultType> {
 		public ResultType execute(Connection conn) throws SQLException;
 	}
 
@@ -88,9 +92,6 @@ public class DerbyDatabase implements IDatabase {
 			u.setUsername(resultSet.getString(index++));
 			u.setPassword((resultSet.getString(index++)));
 			
-			
-			
-			
 		}
 	
 //make return a list of users?
@@ -121,10 +122,10 @@ public class DerbyDatabase implements IDatabase {
 						while (resultSet.next())
 						{
 							found = true;	
-						//	User user = new User(); //I'm not sure if this is correct
-							loadUser(u, resultSet, 1);
+							User user = new User(); //I'm not sure if this is correct
+							loadUser(user, resultSet, 1);
 							
-							result.add(new User(u.getUsername() ,u.getPassword() , false));	
+							result.add(new User(user.getUsername() ,user.getPassword() , false));	
 							
 						}
 						
@@ -145,6 +146,9 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	
+	
+	
+	
 	public void createTables()
 	{
 		executeTransaction(new Transaction<Boolean>() {
@@ -161,22 +165,26 @@ public class DerbyDatabase implements IDatabase {
 					);	
 					stmt1.executeUpdate();
 					
-					stmt2 = conn.prepareStatement(
+				stmt2 = conn.prepareStatement(
 							"create table userList (" +
 							"	user_id int " +
 							"	primary key	generated always as identity (start with 1, increment by 1), " +
 							"	username varchar(32), " +
 							"	password varchar(32) " +
 							
+						
 							")"
 					);
+					
+					
 					stmt2.executeUpdate();
 					
-					stmt3 = conn.prepareStatement("create table chatroomUser (num int primary key generated always as identity (start with 1, increment by 1),room_id int, user_id int)  ");
+					stmt3 = conn.prepareStatement("create table chatroomUser (num int primary key generated always as identity (start with 1, increment by 1),room_id int, user_id int)");
 					stmt3.executeUpdate();
 					
-					stmt4= conn.prepareStatement(" create table messagesList (messages_id int primary key generated always as identity (start with 1, increment by 1), textfile_Name varchar(70)" );
-		
+				//	stmt4= conn.prepareStatement("create table messagesList (messages_id int primary key generated always as identity (start with 1, increment by 1), textfile_Name varchar(70)" );
+					//stmt4.executeUpdate();
+					
 					
 					return true;
 				} finally {
@@ -184,6 +192,76 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt3);
 					DBUtil.closeQuietly(stmt4);
+				}
+			}
+		});
+	}
+	
+	public void loadInitialData() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				List<User> userList;
+				List<Chatroom> chatroomList;
+				List<User> chatroomUserList;
+				
+				try {
+					userList = InitialData.getUsers();
+					chatroomList = InitialData.getChatroomList();
+					chatroomUserList = InitialData.getChatroomUsers();
+				} catch (IOException e) {
+					throw new SQLException("Couldn't read initial data", e);
+				}
+
+				PreparedStatement insertChatroom = null;
+				PreparedStatement insertUser   = null;
+				PreparedStatement insertchatroomUserList= null;
+
+				try {
+					// populate authors table (do authors first, since author_id is foreign key in books table)
+					insertChatroom = conn.prepareStatement("insert into chatroomList (chatroom_name, password, admin_id, messages_id) values (?, ?, ?, ?)");
+					for (Chatroom chatroom : chatroomList) {
+//						insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
+						insertChatroom.setString(1, chatroom.getChatroomName() );
+						insertChatroom.setString(2, chatroom.getPassword());
+						insertChatroom.setInt(3, chatroom.getAdminID());
+						insertChatroom.setInt(4, chatroom.getMessagesID());
+			
+						insertChatroom.addBatch();
+					}
+					insertChatroom.executeBatch();
+					
+					// populate books table (do this after authors table,
+					// since author_id must exist in authors table before inserting book)
+					insertUser = conn.prepareStatement("insert into userList (username, password) values (?, ?)");
+					for (User user : userList) {
+//						insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
+						
+						insertUser.setString(1, user.getUsername());
+						insertUser.setString(2, user.getPassword());
+						
+						insertUser.addBatch();
+					}
+					insertUser.executeBatch();
+					
+					insertchatroomUserList = conn.prepareStatement("insert into chatroomUser (room_id, user_id) values (?, ?)");
+					for (User user: chatroomUserList) {
+//						insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
+						insertchatroomUserList.setInt(1, user.getChatroomId() );
+						insertchatroomUserList.setInt(2, user.getUserID() );
+						
+			
+						insertchatroomUserList.addBatch();
+					}
+					insertchatroomUserList.executeBatch();
+					
+					
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertUser);
+					DBUtil.closeQuietly(insertChatroom);
+					DBUtil.closeQuietly(insertchatroomUserList);
 				}
 			}
 		});
@@ -253,7 +331,7 @@ public class DerbyDatabase implements IDatabase {
 		db.createTables();
 		
 		System.out.println("Loading initial data...");
-	//	db.loadInitialData();
+		db.loadInitialData();
 		
 		System.out.println("Success!");
 	}

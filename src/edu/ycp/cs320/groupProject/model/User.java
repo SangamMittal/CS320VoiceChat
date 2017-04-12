@@ -12,7 +12,7 @@ public class User{
  	private boolean isItLogined;
 	private TreeMap<String, String> UserList;
 	private int user_id;
-	private int chatroom_id;
+	private int room_id;
 	private int num;
  	
 
@@ -74,8 +74,8 @@ public class User{
 		this.user_id = user_id;
 	}
 	
-	public void setChatroomId(int chatroom_id) {
-		this.chatroom_id = chatroom_id;
+	public void setChatroomId(int room_id) {
+		this.room_id = room_id;
 	}
 	
 	
@@ -83,6 +83,15 @@ public class User{
 		this.num = num;
 	}
 	
+	public int getChatroomId()
+	{
+		return this.room_id;
+	}
+	
+	public int getUserID()
+	{
+		return this.user_id;
+	}
 		
 		
 	

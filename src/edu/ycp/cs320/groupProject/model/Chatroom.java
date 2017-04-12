@@ -66,6 +66,14 @@ public class Chatroom {
 		return this.numUser;
 	}
 	
+	public int getAdminID(){
+		return this.admin_id;
+	}
+	
+	public int getMessagesID(){
+		return this.messages_id;
+	}
+	
 	public void setNumUser(int numUser){
 		this.numUser = numUser;
 	}
