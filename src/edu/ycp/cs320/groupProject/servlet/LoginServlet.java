@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
 		LoginSignupController controller;
 		User user = new User();
 		User model = new User();
-		String sharedUser;
+		String sharedUser = null;
 		
 		
 		
@@ -74,9 +74,10 @@ public class LoginServlet extends HttpServlet {
 		if(req.getParameter("login") != null){
 			controller = new LoginSignupController();
 			//model = controller.login(user);
-			
+			boolean logincheck = controller.login(user);
 			// if user exist and matched password
-			if(model != null){
+			if(logincheck == true){
+				sharedUser = user.getUsername();
 				resp.sendRedirect("chatroomList");
 			}
 			else{
@@ -90,9 +91,10 @@ public class LoginServlet extends HttpServlet {
 		else if (req.getParameter("signUp") != null){
 			controller = new LoginSignupController();
 			//model = controller.signUp(user);			// call function and try it signUp the user
-			
+			boolean signupcheck = controller.signUp(user);
 			// signUp is successful
-			if(model != null){
+			if(signupcheck == true){
+				sharedUser = user.getUsername();
 				resp.sendRedirect("chatroomList");
 			}
 			else{
@@ -103,7 +105,7 @@ public class LoginServlet extends HttpServlet {
 		
 		// Add parameters(model) as request attributes for other servlets during this session
 		//sharedUser = model;
-		sharedUser = model.getUsername();
+		
 		req.getSession().setAttribute("sharedUser", sharedUser);
 
 		/*
