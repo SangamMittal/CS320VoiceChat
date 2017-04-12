@@ -21,7 +21,7 @@ public class ChatroomListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+		// TESTING 1 2 3
 		String user = (String) req.getSession().getAttribute("sharedUser");
 		
 		if(user == null){
