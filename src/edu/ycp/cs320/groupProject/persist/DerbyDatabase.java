@@ -92,9 +92,6 @@ public class DerbyDatabase implements IDatabase {
 			u.setUsername(resultSet.getString(index++));
 			u.setPassword((resultSet.getString(index++)));
 			
-			
-			
-			
 		}
 	
 //make return a list of users?
@@ -125,10 +122,10 @@ public class DerbyDatabase implements IDatabase {
 						while (resultSet.next())
 						{
 							found = true;	
-						//	User user = new User(); //I'm not sure if this is correct
-							loadUser(u, resultSet, 1);
+							User user = new User(); //I'm not sure if this is correct
+							loadUser(user, resultSet, 1);
 							
-							result.add(new User(u.getUsername() ,u.getPassword() , false));	
+							result.add(new User(user.getUsername() ,user.getPassword() , false));	
 							
 						}
 						
@@ -168,22 +165,26 @@ public class DerbyDatabase implements IDatabase {
 					);	
 					stmt1.executeUpdate();
 					
-					stmt2 = conn.prepareStatement(
+				stmt2 = conn.prepareStatement(
 							"create table userList (" +
 							"	user_id int " +
 							"	primary key	generated always as identity (start with 1, increment by 1), " +
 							"	username varchar(32), " +
 							"	password varchar(32) " +
 							
+						
 							")"
 					);
+					
+					
 					stmt2.executeUpdate();
 					
-					stmt3 = conn.prepareStatement("create table chatroomUser (num int primary key generated always as identity (start with 1, increment by 1),room_id int, user_id int)  ");
+					stmt3 = conn.prepareStatement("create table chatroomUser (num int primary key generated always as identity (start with 1, increment by 1),room_id int, user_id int)");
 					stmt3.executeUpdate();
 					
-					stmt4= conn.prepareStatement(" create table messagesList (messages_id int primary key generated always as identity (start with 1, increment by 1), textfile_Name varchar(70)" );
-		
+				//	stmt4= conn.prepareStatement("create table messagesList (messages_id int primary key generated always as identity (start with 1, increment by 1), textfile_Name varchar(70)" );
+					//stmt4.executeUpdate();
+					
 					
 					return true;
 				} finally {
@@ -311,7 +312,7 @@ public class DerbyDatabase implements IDatabase {
 		db.createTables();
 		
 		System.out.println("Loading initial data...");
-	//	db.loadInitialData();
+		db.loadInitialData();
 		
 		System.out.println("Success!");
 	}

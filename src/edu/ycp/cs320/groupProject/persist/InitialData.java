@@ -97,10 +97,11 @@ public class InitialData {
 				Iterator<String> i = tuple.iterator();
 				Chatroom chatroom = new Chatroom();
 				chatroom.setChatroomID(chatroomId++);
-				chatroom.setAdminID(Integer.parseInt(i.next())); //?
-				chatroom.setMessagesID( Integer.parseInt(i.next()) ); //are these two correct?
 				chatroom.setChatroomName(i.next());
 				chatroom.setPassword(i.next());
+				chatroom.setAdminID(Integer.parseInt(i.next())); //?
+				chatroom.setMessagesID( Integer.parseInt(i.next()) ); //are these two correct?
+				
 				
 				chatroomList.add(chatroom);
 			}
