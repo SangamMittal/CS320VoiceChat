@@ -15,7 +15,7 @@
 			}
 			
 			.form-control{
-				width: 75%;
+				width: 10%;
 				margin: auto;
 				text-align: center;
 				vertical-align: middle;
@@ -40,7 +40,7 @@
 		<form action="${pageContext.servletContext.contextPath}/chatroomList" method="post">
 
 			
-			<div class="list-group">
+			<div class="list-group row">
 				<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 1 </a>
 				<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 2 </a>
 				<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 3 </a>
@@ -50,9 +50,27 @@
 
 			
 			</div>
-			<input class="form-control btn btn-info" type="Submit" name="createChatroom" value="Create New Chatroom">
-			<input class="form-control btn btn-success" type="Submit" name="refresh" value="Refresh">
-			<input class="form-control btn btn-danger" type="Submit" name="logout" value="Logout">
+			
+			<div class = "row> 	
+				<div class="col-md-4 col-md-offset-10">
+					<input class="btn btn-info" type="Submit" name="createChatroom" value="Create New Chatroom">
+				</div>
+			</div/>
+			
+			<div class = "row>
+				<div class="col-md-4 col-md-offset-10">
+					<input class="btn btn-success" type="Submit" name="refresh" value="Refresh">
+				</div>
+			</div/>
+			
+			<div class = "row">
+				<div class="col-md-4 col-md-offset-10">
+					<input class="btn btn-danger" type="Submit" name="logout" value="Logout">
+				</div>
+			</div/>
+			
+  				
+  		
 		
 		
 		</form>

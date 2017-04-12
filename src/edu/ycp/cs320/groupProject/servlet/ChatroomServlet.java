@@ -23,10 +23,24 @@ public class ChatroomServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		
+		String user = (String) req.getSession().getAttribute("sharedUser");
+		
+		if(user == null){
+			System.out.println("    User: <" + user + "> not logged in or session timed out");
+		
+			// user is not logged in, or the session expired
+			resp.sendRedirect(req.getContextPath() + "/login");
+			return;
+		}
+		
+		// now we have the user's User object,
+		// proceed to handle request...
+		System.out.println("     User: <" + user + "> logged in");
+		
+		
 		req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
-		sharedUser = (User) req.getSession().getAttribute("sharedUser");	// getting the sharedUser from login servlet
-		sharedChatroom = (Chatroom) req.getSession().getAttribute("sharedChatroom");	// getting the sharedUser from chatroomList servlet
-		System.out.println(sharedUser.getName());
+
 	}
 	
 	@Override
@@ -39,7 +53,7 @@ public class ChatroomServlet extends HttpServlet {
 		UserController uController = new UserController();
 		ChatroomController cController = new ChatroomController();
 		
-		System.out.println(user.getName());
+		System.out.println(user.getUsername());
 		
 		try {
 			userMessage = req.getParameter("usermessage");

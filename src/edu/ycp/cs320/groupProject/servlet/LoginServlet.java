@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
 		LoginSignupController controller;
 		User user = new User();
 		User model = new User();
-		User sharedUser;
+		String sharedUser;
 		
 		
 		
@@ -60,7 +60,7 @@ public class LoginServlet extends HttpServlet {
 				errorMessage = "Error: Max 32 Characters";
 			}
 			else{
-				user.setName(username);
+				user.setUsername(username);
 				user.setPassword(password);
 			}
 					
@@ -103,14 +103,13 @@ public class LoginServlet extends HttpServlet {
 		
 		// Add parameters(model) as request attributes for other servlets during this session
 		//sharedUser = model;
-		sharedUser = new User();
-		sharedUser.setName("RathanaTesting");
+		sharedUser = model.getUsername();
 		req.getSession().setAttribute("sharedUser", sharedUser);
-		//System.out.println(sharedUser.getName());
-		
+
+		/*
 		// Add parameters as request attributes
 		req.setAttribute("model", model);
-
+		*/
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
