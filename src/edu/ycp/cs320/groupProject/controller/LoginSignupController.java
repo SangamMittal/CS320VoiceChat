@@ -20,7 +20,9 @@ public class LoginSignupController {
 		User userDatabase = new User();
 		
 		IDatabase db = DatabaseProvider.getInstance();
-		// User u =  db. ;
+		
+		
+		 User u =  db.Login(u) ;
 		
 		// Contact the database and return the user
 		// userDatabase = someMethod from DerbyDatabase // check if exist by username only

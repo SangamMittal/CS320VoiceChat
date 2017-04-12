@@ -96,12 +96,12 @@ public class DerbyDatabase implements IDatabase {
 	
 //make return a list of users?
 	@Override
-	public User Login(User u)
+	public boolean Login(User u)
 	{
-		return executeTransaction(new Transaction<User>()
+		return executeTransaction(new Transaction<Boolean>()
 				{
 				@Override
-				public User execute(Connection conn) throws SQLException
+				public Boolean execute(Connection conn) throws SQLException
 				{
 					PreparedStatement stmt= null;	
 					ResultSet resultSet = null;
@@ -125,7 +125,7 @@ public class DerbyDatabase implements IDatabase {
 							User user = new User(); //I'm not sure if this is correct
 							loadUser(user, resultSet, 1);
 							
-							result.add(new User(user.getUsername() ,user.getPassword() , false));	
+							return true;
 							
 						}
 						
@@ -134,7 +134,7 @@ public class DerbyDatabase implements IDatabase {
 							System.out.println("<" + u.getUsername() + "> was not found in the books table");
 						}
 						
-						return u;
+						return false;
 					}
 					finally {
 						DBUtil.closeQuietly(stmt);
