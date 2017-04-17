@@ -241,7 +241,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				stmt = conn.prepareStatement("select * from ?Messages where roomID = ?" );
 				
-				stmt.setInt(1, c.getChatroomID() );
+				stmt.setInt(1, getRoomID(c) );
 				
 				stmt.executeQuery();
 				
@@ -279,6 +279,203 @@ public class DerbyDatabase implements IDatabase {
 		p.setMessagesID(resultSet.getInt(index++));
 	
 	}
+	
+	@Override
+	public Boolean insertMessages(Chatroom c, Post p){
+		return executeTransaction(new Transaction<Boolean>()
+		{
+		@Override
+		public Boolean execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;
+			PreparedStatement stmt2= null;
+			ResultSet resultSet = null;
+			try
+			{
+				stmt = conn.prepareStatement("insert into ?Messages(sender_id, messageString) values(?, ?)" );
+				stmt.setInt(1, getRoomID(c));
+				stmt.setInt(2, p.getMessagesID());
+				stmt.setString(3, p.getText());
+				stmt.executeUpdate();
+				
+				boolean found = false;
+				
+				stmt2 = conn.prepareStatement("select from ?Messages where sender_id = ? and messageString = ?" );
+				stmt2.setInt(1, getRoomID(c));
+				stmt2.setInt(2, p.getMessagesID());
+				stmt2.setString(3, p.getText());
+				
+				resultSet = stmt2.executeQuery();
+				
+				while (resultSet.next())
+				{
+					found = true;	
+					User user = new User();
+					loadUser(user, resultSet, 1);
+					
+					return true;
+					
+				}
+				
+				if (!found)
+				{
+					System.out.println("<" + p.getText() + "> was not inserted");
+				}
+				
+				return false;
+				
+			} finally {
+				
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt2);
+			}
+		} //end execute
+		});
+	}
+	private void loadChatroom(Chatroom c, ResultSet resultSet, int index) throws SQLException {
+		c.setChatroomName(resultSet.getString(index++));
+		c.setPassword(resultSet.getString(index++));
+		c.setAdminID(resultSet.getInt(index++));
+		
+	}
+	@Override
+	public List<Chatroom> selectAllChatrooms(){
+		return executeTransaction(new Transaction<List<Chatroom>>()
+		{
+		@Override
+		public List<Chatroom> execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;	
+			ResultSet resultSet = null;
+			try
+			{
+				stmt = conn.prepareStatement(" select * from chatroomList");
+				
+				List<Chatroom> result = new ArrayList<Chatroom>();
+				
+				resultSet = stmt.executeQuery();
+				
+				boolean found = false;
+				
+				
+				while (resultSet.next())
+				{
+					found = true;	
+					Chatroom user = new Chatroom();
+					loadChatroom(user, resultSet, 1);
+					
+				}
+				
+				if (!found)
+				{
+					System.out.println("There are no Chatrooms.");
+				}
+				
+				return result;
+			}
+			finally {
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(resultSet);
+			}	
+		}
+		}
+		);
+	}
+	
+	@Override
+	public Boolean insertUserIntoChatroom(User u, Chatroom c){
+		return executeTransaction(new Transaction<Boolean>()
+		{
+		@Override
+		public Boolean execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;
+			PreparedStatement stmt2= null;
+			ResultSet resultSet = null;
+			try
+			{
+				stmt = conn.prepareStatement("insert into chatroomUser(chatroom_id, user_id) values(?, ?)" );
+				stmt.setInt(1, getRoomID(c));
+				stmt.setInt(2, u.getUserID());
+				stmt.executeUpdate();
+				
+				boolean found = false;
+				
+				stmt2 = conn.prepareStatement("select from chatroomUser where chatroom_id = ? and user_id = ?" );
+				stmt2.setInt(1, getRoomID(c));
+				stmt2.setInt(2, u.getUserID());
+				
+				resultSet = stmt2.executeQuery();
+				
+				while (resultSet.next())
+				{
+					found = true;	
+					User user = new User();
+					loadUser(user, resultSet, 1);
+					
+					return true;
+					
+				}
+				
+				if (!found)
+				{
+					System.out.println("<" + u.getUsername() + "> was not inserted");
+				}
+				
+				return false;
+				
+			} finally {
+				
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt2);
+			}
+		} //end execute
+		});
+	}
+	
+	private int getRoomID(Chatroom c){
+		return executeTransaction(new Transaction<Integer>()
+		{
+		@Override
+		public Integer execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;	
+			ResultSet resultSet = null;
+			try
+			{
+				stmt = conn.prepareStatement(" select chatroomList.room_id from chatroomList where chatroom_name = ?");
+				stmt.setString(1, c.getChatroomName());
+				
+				resultSet = stmt.executeQuery();
+				
+				boolean found = false;
+				Integer result = 0;
+				
+				while (resultSet.next())
+				{
+					found = true;	
+					Chatroom user = new Chatroom();
+					loadChatroom(user, resultSet, 1);
+					result = resultSet.getInt(1);
+					
+				}
+				
+				if (!found)
+				{
+					System.out.println("There are no Chatrooms with that name");
+				}
+				
+				return result;
+			}
+			finally {
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(resultSet);
+			}	
+		}
+		}
+		);
+	}
+	
 	
 	public void createTables()
 	{
