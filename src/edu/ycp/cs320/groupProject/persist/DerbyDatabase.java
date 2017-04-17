@@ -239,7 +239,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				
 				
-				stmt = conn.prepareStatement("select messageString.* from chatroomMessages where sender_ID = ?" );
+				stmt = conn.prepareStatement("select * from ?Messages where roomID = ?" );
 				
 				stmt.setInt(1, c.getChatroomID() );
 				
@@ -247,15 +247,16 @@ public class DerbyDatabase implements IDatabase {
 				
 				while (resultSet.next())
 				{
-					String message = resultSet.getString(1);
+					Post message = new Post();
+					
+					loadPost(message, resultSet, 1);
+					
 					postList.add(message);
 				}
 				
 				
 				
-				
-				
-				return 
+				return postList;
 			
 				
 			
@@ -272,6 +273,12 @@ public class DerbyDatabase implements IDatabase {
 		
 	}
 	
+	public void loadPost(Post p, ResultSet resultSet, int index)
+			throws SQLException {
+		p.setText(resultSet.getString(index++));
+		p.setMessagesID(resultSet.getInt(index++));
+	
+	}
 	
 	public void createTables()
 	{
