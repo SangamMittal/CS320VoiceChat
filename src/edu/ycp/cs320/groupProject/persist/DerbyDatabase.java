@@ -479,6 +479,126 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	
+	@Override
+	public Boolean removeUserFromChatroom(Chatroom c, User u) {
+		// TODO Auto-generated method stub
+		return executeTransaction(new Transaction<Boolean>()
+		{
+			@Override
+			public Boolean execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt= null;	
+				
+				try
+				{
+					stmt = conn.prepareStatement(
+							"Delete from chatroomUser, userList, chatroomList " +
+							" where userList.username = ? and chatroomList.chatroom_name = ? and " +
+							" userList.user_id = chatroomUser.user_id and " +
+							" chatroomList.room_id = chatroomUser.room_id "
+					);
+					
+					stmt.executeUpdate();
+				}
+				finally {
+					DBUtil.closeQuietly(stmt);
+				}	
+				return null;
+			}//end of execute
+		}
+		);
+	}//end of removeUserFromChatroom
+
+
+
+	@Override
+	public User selectAdminFromChatroom(Chatroom c) {
+		// TODO Auto-generated method stub
+		return executeTransaction(new Transaction<User>()
+		{
+			@Override
+			public User execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt= null;
+				ResultSet resultSet= null;
+				User user = null;
+				
+				try
+				{
+					stmt = conn.prepareStatement(
+							" select userList.username " +
+							" from userList, chatroomList" +
+							" where chatroomList.admin_id = userList.user_id" +
+							" and chatroom.chatroom_name = ?" +
+							" and userList.username = ?"
+					);
+					
+					resultSet = stmt.executeQuery();
+					loadUser(user, resultSet, 1);
+					return user;
+				}
+				finally {
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}	
+			}//end of execute
+		}
+		);
+		
+	}//end of selectAdminFromChatroom
+
+
+
+	@Override
+	public Boolean changeAdmin(Chatroom c, User u) {
+		// TODO Auto-generated method stub
+		return executeTransaction(new Transaction<Boolean>()
+		{
+			@Override
+			public Boolean execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt= null;	
+				ResultSet resultSet= null;
+				PreparedStatement stmt2 = null;
+
+				User adminNew = null;
+				
+				try
+				{
+					stmt = conn.prepareStatement(
+							"select userList.* " +
+							" from userList " +
+							" where userList.username = ?"
+					);
+					stmt.setString(1, u.getUsername());
+					resultSet = stmt.executeQuery();
+					loadUser(adminNew, resultSet, 1);
+					
+					
+					stmt2 = conn.prepareStatement(
+							"update chatroomList " +
+							" set admin_id = ? " +
+							" where chatroomList.chatroom_name = ? "
+					);
+					stmt2.setInt(1, adminNew.getUserID());
+					stmt2.setString(2, c.getChatroomName());
+					stmt2.executeUpdate();
+					
+					
+				return true;
+				}
+				finally {
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt2);
+				}	
+			}//end of execute
+		}
+		);
+
+	}// end of changeAdmin
+	
+	
 	public void createTables()
 	{
 		executeTransaction(new Transaction<Boolean>() {
