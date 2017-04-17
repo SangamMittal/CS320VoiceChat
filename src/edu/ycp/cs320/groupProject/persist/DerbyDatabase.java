@@ -273,6 +273,8 @@ public class DerbyDatabase implements IDatabase {
 		
 	}
 	
+	
+	
 	public void loadPost(Post p, ResultSet resultSet, int index)
 			throws SQLException {
 		p.setText(resultSet.getString(index++));
