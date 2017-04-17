@@ -85,5 +85,9 @@ public class Chatroom {
 	public String getMessages(){
 		return this.messages;
 	}
+	
+	public int getChatroomID(){
+		return this.chatroom_id;
+	}
 
 }

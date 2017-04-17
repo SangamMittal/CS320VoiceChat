@@ -12,7 +12,11 @@ import java.util.List;
 
 import edu.ycp.cs320.groupProject.persist.DBUtil;
 import edu.ycp.cs320.groupProject.persist.InitialData;
+import edu.ycp.cs320.booksdb.model.Author;
+import edu.ycp.cs320.booksdb.model.Book;
+import edu.ycp.cs320.booksdb.model.Pair;
 import edu.ycp.cs320.groupProject.model.Chatroom;
+import edu.ycp.cs320.groupProject.model.Post;
 import edu.ycp.cs320.groupProject.model.User;
 
 //test made method public
@@ -145,8 +149,128 @@ public class DerbyDatabase implements IDatabase {
 				);
 	}
 	
+	//work on: when does it return true vs when does it return false;
+	public Boolean deleteUser(User u)
+	{
+		return executeTransaction(new Transaction<Boolean>()
+		{
+		@Override
+		public Boolean execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;			
+			try
+			{
+				stmt = conn.prepareStatement("delete from userList where username = ?" );
+				stmt.setString(1, u.getUsername());	
+				stmt.executeUpdate();
+				
+				return true;
+				
+			} finally {
+				DBUtil.closeQuietly(stmt);
+			}
+		} 
+		});	
+	}
 	
+	public Boolean deleteChatroom(Chatroom c)
+	{
+		return executeTransaction(new Transaction<Boolean>()
+		{
+		@Override
+		public Boolean execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;			
+			try
+			{
+				stmt = conn.prepareStatement("delete from chatroomList where username = ?" );
+				stmt.setString(1, c.getChatroomName());	
+				stmt.executeUpdate();
+				
+				return true;
+				
+			} finally {
+				DBUtil.closeQuietly(stmt);
+			}
+		} 
+		});
+		
+	}
 	
+	public Boolean createChatroom(Chatroom c, User u)
+	{
+		return executeTransaction(new Transaction<Boolean>()
+		{
+		@Override
+		public Boolean execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;			
+			try
+			{
+				stmt = conn.prepareStatement("insert into chatroomList (chatroom_name, password, admin_id, messages_id ) values (?,?,?,?) " );
+				stmt.setString(1, c.getChatroomName());	
+				stmt.setString(2, c.getPassword());	
+				stmt.setInt(3, c.getAdminID());	
+				stmt.setInt(4, c.getMessagesID());	
+				stmt.executeUpdate();
+				
+				return true;
+				
+			} finally {
+				DBUtil.closeQuietly(stmt);
+			}
+		} 
+		});
+		
+	}
+	
+	public List<Post> selectMessages(Chatroom c)
+	{
+		return executeTransaction(new Transaction<List<Post>>()
+		{
+		@Override
+		public List<Post> execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;
+			ResultSet resultSet = null;
+			List<Post> postList = null;
+			try
+			{
+				
+				
+				
+				stmt = conn.prepareStatement("select messageString.* from chatroomMessages where sender_ID = ?" );
+				
+				stmt.setInt(1, c.getChatroomID() );
+				
+				stmt.executeQuery();
+				
+				while (resultSet.next())
+				{
+					String message = resultSet.getString(1);
+					postList.add(message);
+				}
+				
+				
+				
+				
+				
+				return 
+			
+				
+			
+				
+				
+				
+			} finally {
+				DBUtil.closeQuietly(stmt);
+			}
+		} 
+		});
+		
+		
+		
+	}
 	
 	
 	public void createTables()

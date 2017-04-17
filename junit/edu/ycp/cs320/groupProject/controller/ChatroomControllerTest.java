@@ -24,6 +24,8 @@ public class ChatroomControllerTest {
 	@Test
 	public void testAllMessages(){
 		
+		
+		
 	}
 	
 	@Test

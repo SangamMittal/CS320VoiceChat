@@ -13,7 +13,7 @@ public interface IDatabase {
 //done
 	public boolean Login(User u);
 	
-//josh	
+	//josh	
 	public Boolean deleteUser(User u);
 	//josh
 	public Boolean deleteChatroom(Chatroom c);
