@@ -12,9 +12,6 @@ import java.util.List;
 
 import edu.ycp.cs320.groupProject.persist.DBUtil;
 import edu.ycp.cs320.groupProject.persist.InitialData;
-import edu.ycp.cs320.booksdb.model.Author;
-import edu.ycp.cs320.booksdb.model.Book;
-import edu.ycp.cs320.booksdb.model.Pair;
 import edu.ycp.cs320.groupProject.model.Chatroom;
 import edu.ycp.cs320.groupProject.model.Post;
 import edu.ycp.cs320.groupProject.model.User;
