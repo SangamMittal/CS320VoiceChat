@@ -49,7 +49,7 @@ public class DerbyDatabase implements IDatabase {
 					try
 					{
 						
-						stmt = conn.prepareStatement("select username.* from userList where username = ?" );
+						stmt = conn.prepareStatement("select * from userList where username = ?" );
 						stmt.setString(1, u.getUsername());
 						
 						List<User> result = new ArrayList<User>();
@@ -122,7 +122,7 @@ public class DerbyDatabase implements IDatabase {
 					ResultSet resultSet = null;
 					try
 					{
-						stmt = conn.prepareStatement(" select username.* from userList where userList.username = ? and userList.password = ?  ");
+						stmt = conn.prepareStatement(" select * from userList where userList.username = ? and userList.password = ?  ");
 						stmt.setString(1, u.getUsername() );
 						stmt.setString(2, u.getPassword());
 						
@@ -366,6 +366,7 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	private void loadChatroom(Chatroom c, ResultSet resultSet, int index) throws SQLException {
+		c.setChatroomID(resultSet.getInt(index++));
 		c.setChatroomName(resultSet.getString(index++));
 		c.setPassword(resultSet.getString(index++));
 		c.setAdminID(resultSet.getInt(index++));
