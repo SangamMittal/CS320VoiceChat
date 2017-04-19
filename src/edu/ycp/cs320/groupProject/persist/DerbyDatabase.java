@@ -213,7 +213,7 @@ public class DerbyDatabase implements IDatabase {
 				stmt.executeUpdate();
 				
 				
-				stmt2 = conn.prepareStatement("drop table ?Messages ");
+				stmt2 = conn.prepareStatement("delete from messagesList where chatroom_id = ?");
 				stmt2.setInt(1, getRoomID(c));	
 				stmt2.executeUpdate();
 				
@@ -238,7 +238,6 @@ public class DerbyDatabase implements IDatabase {
 		public Boolean execute(Connection conn) throws SQLException
 		{
 			PreparedStatement stmt= null;	
-			PreparedStatement stmt2= null;	
 			try
 			{
 				stmt = conn.prepareStatement("insert into chatroomList (chatroom_name, password, admin_id, messages_id ) values (?,?,?,?) " );
@@ -248,15 +247,10 @@ public class DerbyDatabase implements IDatabase {
 				stmt.setInt(4, c.getMessagesID());	
 				stmt.executeUpdate();
 				
-				stmt2 = conn.prepareStatement("create table ?Messages (sender_id varchar(32), messageString varchar(70))");
-				stmt2.setInt(1, getRoomID(c));
-				stmt2.executeUpdate();
-				
 				return true;
 				
 			} finally {
 				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(stmt2);
 			}
 		} 
 		});
@@ -333,7 +327,7 @@ public class DerbyDatabase implements IDatabase {
 			ResultSet resultSet = null;
 			try
 			{
-				stmt = conn.prepareStatement("insert into ?Messages(sender_id, messageString) values(?, ?)" );
+				stmt = conn.prepareStatement("insert into messagesList (chatroom_id, sender_id, messageString) values(?, ?, ?)" );
 				stmt.setInt(1, getRoomID(c));
 				stmt.setInt(2, p.getMessagesID());
 				stmt.setString(3, p.getText());
@@ -341,7 +335,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				boolean found = false;
 				
-				stmt2 = conn.prepareStatement("select from ?Messages where sender_id = ? and messageString = ?" );
+				stmt2 = conn.prepareStatement("select from messagesList where chatroom_id = ? and sender_id = ? and messageString = ?" );
 				stmt2.setInt(1, getRoomID(c));
 				stmt2.setInt(2, p.getMessagesID());
 				stmt2.setString(3, p.getText());
@@ -764,8 +758,8 @@ public class DerbyDatabase implements IDatabase {
 					stmt3 = conn.prepareStatement("create table chatroomUser (num int primary key generated always as identity (start with 1, increment by 1),room_id int, user_id int)");
 					stmt3.executeUpdate();
 					
-				//	stmt4= conn.prepareStatement("create table messagesList (messages_id int primary key generated always as identity (start with 1, increment by 1), textfile_Name varchar(70)" );
-					//stmt4.executeUpdate();
+					stmt4= conn.prepareStatement("create table messagesList (chatroom_id int, sender_id varchar(32), messageString varchar(70)" );
+					stmt4.executeUpdate();
 					
 					
 					return true;
