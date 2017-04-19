@@ -204,7 +204,7 @@ public class DerbyDatabase implements IDatabase {
 			try
 			{
 				
-				stmt0 = conn.prepareStatement("delete from chatroomUser where room_id = ?")
+				stmt0 = conn.prepareStatement("delete from chatroomUser where room_id = ?");
 				stmt0.setInt(1, getRoomID(c));
 				stmt0.executeUpdate();
 				
