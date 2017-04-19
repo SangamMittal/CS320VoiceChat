@@ -101,14 +101,15 @@ public class DerbyDatabaseTests {
 		System.out.println("user deleted");
 		
 		}
-		
+
+		/*
 		LoggedIn=db.Login(u);
 		
 		if (LoggedIn== true)
 		{
 			fail("User should not have logged in because user should not exist because user should have been deleted");
 		}
-		
+		*/
 		
 		
 	
@@ -186,7 +187,7 @@ public class DerbyDatabaseTests {
 		}
 		
 		// Delete users and chatroom
-		db.deleteChatroom(room);
+		db.deleteChatroom(room ,user);
 		db.deleteUser(user);
 		db.deleteUser(user2);
 		//db.removeUserFromChatroom(room, user);
@@ -225,7 +226,7 @@ public class DerbyDatabaseTests {
 		}
 		
 		// Delete users and chatroom
-		db.deleteChatroom(room);
+		db.deleteChatroom(room, user);
 		db.deleteUser(user);
 
 	}// end testSelectAdminFromChatroom
@@ -273,13 +274,20 @@ public class DerbyDatabaseTests {
 		}
 		
 		// Delete users and chatroom
-		db.deleteChatroom(room);
+		db.deleteChatroom(room, user);
 		db.deleteUser(user);
 		db.deleteUser(user2);
 		//db.removeUserFromChatroom(room, user);
 		
 	}// end testChangeAdmin
 	
-	
+	@Test
+	public void testCreateChatroom()
+	{
+		User u = new User("student123", "ycp", false);
+		Chatroom c = new Chatroom();
+		
+		
+	}
 
 }
