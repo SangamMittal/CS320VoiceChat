@@ -110,6 +110,7 @@ public class DerbyDatabaseTests {
 		}
 		
 		
+		
 	
 	}
 	/*	
@@ -124,6 +125,22 @@ public class DerbyDatabaseTests {
 		
 	}
 */	
+	
+	@Test
+	public void testDeleteChatroom()
+	{
+		User u = new User("student123", "ycp", false);
+		Chatroom c = new Chatroom();
+		Boolean deleted = false;
+		
+		deleted=  db.deleteChatroom(c, u);
+		
+		if (deleted == true)
+		{
+			
+		}
+		
+	}
 	
 	
 

@@ -16,7 +16,7 @@ public interface IDatabase {
 	//josh	
 	public User deleteUser(User u);
 	//josh
-	public Boolean deleteChatroom(Chatroom c);
+	public Boolean deleteChatroom(Chatroom c, User u);
 	//josh
 	public Boolean createChatroom(Chatroom c, User u);
 	//josh

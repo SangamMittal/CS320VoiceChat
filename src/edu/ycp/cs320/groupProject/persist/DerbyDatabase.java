@@ -191,20 +191,27 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
-	public Boolean deleteChatroom(Chatroom c)
+	public Boolean deleteChatroom(Chatroom c, User u)
 	{
 		return executeTransaction(new Transaction<Boolean>()
 		{
 		@Override
 		public Boolean execute(Connection conn) throws SQLException
 		{
+			PreparedStatement stmt0= null;
 			PreparedStatement stmt= null;
 			PreparedStatement stmt2= null;
 			try
 			{
-				stmt = conn.prepareStatement("delete from chatroomList where username = ?" );
-				stmt.setString(1, c.getChatroomName());	
+				
+				stmt0 = conn.prepareStatement("delete from chatroomUser where room_id = ?")
+				stmt0.setInt(1, getRoomID(c));
+				stmt0.executeUpdate();
+				
+				stmt = conn.prepareStatement("delete from chatroomList where chatroomList.room_id=?" );
+				stmt.setInt(1, getRoomID(c));	
 				stmt.executeUpdate();
+				
 				
 				stmt2 = conn.prepareStatement("drop table ?Messages ");
 				stmt2.setInt(1, getRoomID(c));	
@@ -213,6 +220,7 @@ public class DerbyDatabase implements IDatabase {
 				return true;
 				
 			} finally {
+				DBUtil.closeQuietly(stmt0);
 				DBUtil.closeQuietly(stmt);
 				DBUtil.closeQuietly(stmt2);
 			}
@@ -240,7 +248,7 @@ public class DerbyDatabase implements IDatabase {
 				stmt.setInt(4, c.getMessagesID());	
 				stmt.executeUpdate();
 				
-				stmt2 = conn.prepareStatement("create table ?Messages (sender_id, messageString)");
+				stmt2 = conn.prepareStatement("create table ?Messages (sender_id varchar(32), messageString varchar(70))");
 				stmt2.setInt(1, getRoomID(c));
 				stmt2.executeUpdate();
 				
