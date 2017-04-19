@@ -527,23 +527,80 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException
 			{
-				PreparedStatement stmt= null;	
+				
+				PreparedStatement stmt0 = null;
+				ResultSet resultSet0 = null;
+				PreparedStatement stmt1 = null;
+				ResultSet resultSet1 = null;
+				PreparedStatement stmt2 = null;	
+				PreparedStatement stmt3 = null;
+				ResultSet resultSet3 = null;
+				User user = new User();
+				Chatroom room = new Chatroom();
+				Boolean successORnot = false;
 				
 				try
 				{
-					stmt = conn.prepareStatement(
-							"Delete from chatroomUser, userList, chatroomList " +
-							" where userList.username = ? and chatroomList.chatroom_name = ? and " +
-							" userList.user_id = chatroomUser.user_id and " +
-							" chatroomList.room_id = chatroomUser.room_id "
+					// Getting the chatroom row
+					stmt0 = conn.prepareStatement(
+							"Select chatroomList.* from chatroomList " +
+							" where chatroomList.chatroom_name = ?"
 					);
+					stmt0.setString(1, c.getChatroomName());
+					resultSet0 = stmt0.executeQuery();
+					loadChatroom(room, resultSet0, 1);
 					
-					stmt.executeUpdate();
+					// Getting the user row
+					stmt1 = conn.prepareStatement(
+							"Select userList.* from userList " +
+							" where userList.username = ? "
+					);
+					stmt1.setString(1, u.getUsername());
+					resultSet1 = stmt1.executeQuery();
+					loadUser(user, resultSet1, 1);
+					
+					// Deleting: using user_id and room_id
+					stmt2 = conn.prepareStatement(
+							"Delete from chatroomUser " +
+							" where chatroomUser.user_id = ? and " +
+							" chatroomUser.room_id = ? "
+					);
+					stmt2.setInt(1, user.getUserID());
+					stmt2.setInt(2, room.getChatroomID());
+					stmt2.executeUpdate();
+					
+					// Check to see if it is still there or not
+					stmt3 = conn.prepareStatement(
+							"Select chatroomUser.* from chatroomUser " +
+							" where chatroomUser.user_id = ? and " +
+							" chatroomUser.room_id = ? "
+					);
+					stmt3.setString(1, u.getUsername());
+					stmt3.setString(2, c.getChatroomName());
+					resultSet3 = stmt3.executeQuery();
+					
+				
+					
+					if(user.getUserID() == resultSet3.getInt(1) || 
+							room.getChatroomID() == resultSet3.getInt(2)){
+						successORnot =  false;
+					}
+					else{
+						successORnot = true;
+					}
+					
+					return successORnot;
 				}
 				finally {
-					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt0);
+					DBUtil.closeQuietly(resultSet0);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+					DBUtil.closeQuietly(resultSet3);
+
 				}	
-				return null;
 			}//end of execute
 		}
 		);
@@ -559,27 +616,43 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public User execute(Connection conn) throws SQLException
 			{
-				PreparedStatement stmt= null;
-				ResultSet resultSet= null;
+				PreparedStatement stmt0 = null;
+				ResultSet resultSet0 = null;
+				PreparedStatement stmt1= null;
+				ResultSet resultSet1= null;
 				User user = null;
-				
+				Chatroom room = new Chatroom();
+
 				try
 				{
-					stmt = conn.prepareStatement(
-							" select userList.username " +
-							" from userList, chatroomList" +
-							" where chatroomList.admin_id = userList.user_id" +
-							" and chatroom.chatroom_name = ?" +
-							" and userList.username = ?"
-					);
 					
-					resultSet = stmt.executeQuery();
-					loadUser(user, resultSet, 1);
+					// Getting the chatroom row
+					stmt0 = conn.prepareStatement(
+							"Select chatroomList.* from chatroomList " +
+							" where chatroomList.chatroom_name = ?"
+					);
+					stmt0.setString(1, c.getChatroomName());
+					resultSet0 = stmt0.executeQuery();
+					loadChatroom(room, resultSet0, 1);
+					
+					// Get the Admin User
+					stmt1 = conn.prepareStatement(
+							" select userList.* " +
+							" from userList " +
+							" and userList.user_id = ?"
+					);
+					stmt1.setInt(1, room.getAdminID());
+					resultSet1 = stmt1.executeQuery();
+					loadUser(user, resultSet1, 1);
+					
+					
 					return user;
 				}
 				finally {
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt0);
+					DBUtil.closeQuietly(resultSet0);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
 				}	
 			}//end of execute
 		}
@@ -600,11 +673,15 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt= null;	
 				ResultSet resultSet= null;
 				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				ResultSet resultSet3= null;
+				Boolean successORnot = false;
 
-				User adminNew = null;
+				User adminNew = new User();
 				
 				try
 				{
+					// Getting the new admin information
 					stmt = conn.prepareStatement(
 							"select userList.* " +
 							" from userList " +
@@ -614,7 +691,7 @@ public class DerbyDatabase implements IDatabase {
 					resultSet = stmt.executeQuery();
 					loadUser(adminNew, resultSet, 1);
 					
-					
+					// Change the admin
 					stmt2 = conn.prepareStatement(
 							"update chatroomList " +
 							" set admin_id = ? " +
@@ -624,13 +701,28 @@ public class DerbyDatabase implements IDatabase {
 					stmt2.setString(2, c.getChatroomName());
 					stmt2.executeUpdate();
 					
+					// Check if the change was successful
+					stmt3 = conn.prepareStatement(
+							" select chatroomList.admin_id " +
+							" from chatroomList " +
+							" where chatroomList.chatroom_name = ? "		
+					);
+					stmt.setString(1, c.getChatroomName());
+					resultSet3 = stmt3.executeQuery();
 					
-				return true;
+					if(resultSet3.getInt(1) == u.getUserID()){
+						successORnot = true;
+					}
+					
+				return successORnot;
 				}
 				finally {
 					DBUtil.closeQuietly(stmt);
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+					DBUtil.closeQuietly(resultSet3);
+
 				}	
 			}//end of execute
 		}

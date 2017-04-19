@@ -143,5 +143,143 @@ public class DerbyDatabaseTests {
 	}
 	
 	
+	@Test
+	public void testRemoveUserFromChatroom() {
+		System.out.println("\n*** Testing removeUserFromChatroom ***");
+		
+		// Create new User
+		String username = "TestingRemoveUserFromChatroom";
+		String password = "TestingRemoveUserFromChatroom";
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		System.out.println("	SignUp Success: " + db.signUp(user));
+		
+		// Create new User
+		String username2 = "TestingRemoveUserFromChatroom2";
+		String password2 = "TestingRemoveUserFromChatroom2";
+		User user2 = new User();
+		user.setUsername(username2);
+		user.setPassword(password2);
+		System.out.println("	SignUp Success: " + db.signUp(user2));
+	
+		// Create new Chatroom
+		String roomName = "TestingRemoveUserFromChatroom";
+		String roomPassword = "TestingRemoveUserFromChatroom";
+		Chatroom room = new Chatroom();
+		room.setChatroomName(roomName);
+		room.setPassword(roomPassword);
+		System.out.println("	Create Success: " + db.createChatroom(room, user));
+		
+		// Insert user into chatroom
+		System.out.println("	Insert New User Success: " + db.insertUserIntoChatroom(user2, room));
+		
+		// Remove user
+		Boolean removeSuccess = db.removeUserFromChatroom(room, user2) && db.removeUserFromChatroom(room, user);
+		
+		// Check to see if insert was successful
+		if(removeSuccess == false){
+			fail("Failed to remove user from chatroom!");
+		}
+		else{
+			System.out.println("Successful in removing user from chatroom");
+		}
+		
+		// Delete users and chatroom
+		db.deleteChatroom(room);
+		db.deleteUser(user);
+		db.deleteUser(user2);
+		//db.removeUserFromChatroom(room, user);
+		
+	}// end testRemoveUserFromChatroom
+	
+	@Test
+	public void testSelectAdminFromChatroom() {
+		System.out.println("\n*** Testing selectAdminFromChatroom ***");
+		
+		// Create new User
+		String username = "TestingSelectAdminFromChatroom";
+		String password = "TestingSelectAdminFromChatroom";
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		System.out.println("	SignUp Success: " + db.signUp(user));
+	
+		// Create new Chatroom
+		String roomName = "TestingSelectAdminFromChatroom";
+		String roomPassword = "TestingSelectAdminFromChatroom";
+		Chatroom room = new Chatroom();
+		room.setChatroomName(roomName);
+		room.setPassword(roomPassword);
+		System.out.println("	Create Success: " + db.createChatroom(room, user));
+		
+		// Get the admin of a chatroom
+		User userReturn = db.selectAdminFromChatroom(room);
+		
+		// Check to see if insert was successful
+		if(userReturn.getUsername() != username){
+			fail("Failed to get Admin from chatroom!");
+		}
+		else{
+			System.out.println("Successful in selecting admin from chatroom");
+		}
+		
+		// Delete users and chatroom
+		db.deleteChatroom(room);
+		db.deleteUser(user);
+
+	}// end testSelectAdminFromChatroom
+	
+	@Test
+	public void testChangeAdmin() {
+		System.out.println("\n*** Testing changeAdmin ***");
+		
+		// Create new User
+		String username = "TestingChangeAdmin";
+		String password = "TestingChangeAdmin";
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		System.out.println("	SignUp Success: " + db.signUp(user));
+		
+		// Create new User
+		String username2 = "TestingChangeAdmin2";
+		String password2 = "TestingChangeAdmin2";
+		User user2 = new User();
+		user.setUsername(username2);
+		user.setPassword(password2);
+		System.out.println("	SignUp Success: " + db.signUp(user2));
+	
+		// Create new Chatroom
+		String roomName = "TestingChangeAdmin";
+		String roomPassword = "TestingChangeAdmin";
+		Chatroom room = new Chatroom();
+		room.setChatroomName(roomName);
+		room.setPassword(roomPassword);
+		System.out.println("	Create Success: " + db.createChatroom(room, user));
+		
+		// Insert user into chatroom
+		System.out.println("	Insert New User Success: " + db.insertUserIntoChatroom(user2, room));
+		
+		// Change Admin
+		Boolean changeSuccess = db.changeAdmin(room, user2);
+		
+		// Check to see if insert was successful
+		if(db.selectAdminFromChatroom(room).getUsername() != username2){
+			fail("Failed to change admin!");
+		}
+		else{
+			System.out.println("Successful in changing admin");
+		}
+		
+		// Delete users and chatroom
+		db.deleteChatroom(room);
+		db.deleteUser(user);
+		db.deleteUser(user2);
+		//db.removeUserFromChatroom(room, user);
+		
+	}// end testChangeAdmin
+	
+	
 
 }
