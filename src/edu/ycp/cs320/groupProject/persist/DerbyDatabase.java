@@ -446,8 +446,6 @@ public class DerbyDatabase implements IDatabase {
 				while (resultSet.next())
 				{
 					found = true;	
-					User user = new User();
-					loadUser(user, resultSet, 1);
 					
 					return true;
 					
