@@ -670,26 +670,28 @@ public class DerbyDatabase implements IDatabase {
 				Boolean successORnot = false;
 
 				User adminNew = new User();
-				
+				int adminNewID = 0;
 				try
 				{
 					// Getting the new admin information
 					stmt = conn.prepareStatement(
-							"select userList.* " +
+							"select userList.user_id " +
 							" from userList " +
 							" where userList.username = ?"
 					);
 					stmt.setString(1, u.getUsername());
 					resultSet = stmt.executeQuery();
-					loadUser(adminNew, resultSet, 1);
-					
+					//loadUser(adminNew, resultSet, 1);
+					if(resultSet.next())
+						adminNewID = resultSet.getInt(1);
+					System.out.println("New Admin ID: " + adminNewID);
 					// Change the admin
 					stmt2 = conn.prepareStatement(
 							"update chatroomList " +
 							" set admin_id = ? " +
 							" where chatroomList.chatroom_name = ? "
 					);
-					stmt2.setInt(1, adminNew.getUserID());
+					stmt2.setInt(1, adminNewID);
 					stmt2.setString(2, c.getChatroomName());
 					stmt2.executeUpdate();
 					
@@ -699,10 +701,10 @@ public class DerbyDatabase implements IDatabase {
 							" from chatroomList " +
 							" where chatroomList.chatroom_name = ? "		
 					);
-					stmt.setString(1, c.getChatroomName());
+					stmt3.setString(1, c.getChatroomName());
 					resultSet3 = stmt3.executeQuery();
 					
-					if(resultSet3.getInt(1) == u.getUserID()){
+					if(resultSet3.getInt(1) == adminNewID){
 						successORnot = true;
 					}
 					

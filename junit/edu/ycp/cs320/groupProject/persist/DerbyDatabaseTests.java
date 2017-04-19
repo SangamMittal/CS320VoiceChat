@@ -149,24 +149,24 @@ public class DerbyDatabaseTests {
 		System.out.println("\n*** Testing removeUserFromChatroom ***");
 		
 		// Create new User
-		String username = "TestingRemoveUserFromChatroom";
-		String password = "TestingRemoveUserFromChatroom";
+		String username = "TestingRemove";
+		String password = "TestingRemove";
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
 		System.out.println("	SignUp Success: " + db.signUp(user));
 		
 		// Create new User
-		String username2 = "TestingRemoveUserFromChatroom2";
-		String password2 = "TestingRemoveUserFromChatroom2";
+		String username2 = "TestingRemove2";
+		String password2 = "TestingRemove2";
 		User user2 = new User();
 		user.setUsername(username2);
 		user.setPassword(password2);
 		System.out.println("	SignUp Success: " + db.signUp(user2));
 	
 		// Create new Chatroom
-		String roomName = "TestingRemoveUserFromChatroom";
-		String roomPassword = "TestingRemoveUserFromChatroom";
+		String roomName = "TestingRemove";
+		String roomPassword = "TestingRemove";
 		Chatroom room = new Chatroom();
 		room.setChatroomName(roomName);
 		room.setPassword(roomPassword);
@@ -199,16 +199,16 @@ public class DerbyDatabaseTests {
 		System.out.println("\n*** Testing selectAdminFromChatroom ***");
 		
 		// Create new User
-		String username = "TestingSelectAdminFromChatroom";
-		String password = "TestingSelectAdminFromChatroom";
+		String username = "TestingSelect";
+		String password = "TestingSelect";
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
 		System.out.println("	SignUp Success: " + db.signUp(user));
 	
 		// Create new Chatroom
-		String roomName = "TestingSelectAdminFromChatroom";
-		String roomPassword = "TestingSelectAdminFromChatroom";
+		String roomName = "TestingSelect";
+		String roomPassword = "TestingSelect";
 		Chatroom room = new Chatroom();
 		room.setChatroomName(roomName);
 		room.setPassword(roomPassword);
@@ -236,24 +236,24 @@ public class DerbyDatabaseTests {
 		System.out.println("\n*** Testing changeAdmin ***");
 		
 		// Create new User
-		String username = "TestingChangeAdmin";
-		String password = "TestingChangeAdmin";
+		String username = "TestingChange";
+		String password = "TestingChange";
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
 		System.out.println("	SignUp Success: " + db.signUp(user));
 		
 		// Create new User
-		String username2 = "TestingChangeAdmin2";
-		String password2 = "TestingChangeAdmin2";
+		String username2 = "TestingChange2";
+		String password2 = "TestingChange2";
 		User user2 = new User();
-		user.setUsername(username2);
-		user.setPassword(password2);
+		user2.setUsername(username2);
+		user2.setPassword(password2);
 		System.out.println("	SignUp Success: " + db.signUp(user2));
 	
 		// Create new Chatroom
-		String roomName = "TestingChangeAdmin";
-		String roomPassword = "TestingChangeAdmin";
+		String roomName = "TestingChange";
+		String roomPassword = "TestingChange";
 		Chatroom room = new Chatroom();
 		room.setChatroomName(roomName);
 		room.setPassword(roomPassword);
