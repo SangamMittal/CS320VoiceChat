@@ -190,6 +190,7 @@ public class DerbyDatabase implements IDatabase {
 		});	
 	}
 	
+	@Override
 	public Boolean deleteChatroom(Chatroom c)
 	{
 		return executeTransaction(new Transaction<Boolean>()
@@ -197,23 +198,30 @@ public class DerbyDatabase implements IDatabase {
 		@Override
 		public Boolean execute(Connection conn) throws SQLException
 		{
-			PreparedStatement stmt= null;			
+			PreparedStatement stmt= null;
+			PreparedStatement stmt2= null;
 			try
 			{
 				stmt = conn.prepareStatement("delete from chatroomList where username = ?" );
 				stmt.setString(1, c.getChatroomName());	
 				stmt.executeUpdate();
 				
+				stmt2 = conn.prepareStatement("drop table ?Messages ");
+				stmt2.setInt(1, getRoomID(c));	
+				stmt2.executeUpdate();
+				
 				return true;
 				
 			} finally {
 				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2);
 			}
 		} 
 		});
 		
 	}
 	
+	@Override
 	public Boolean createChatroom(Chatroom c, User u)
 	{
 		return executeTransaction(new Transaction<Boolean>()
@@ -221,7 +229,8 @@ public class DerbyDatabase implements IDatabase {
 		@Override
 		public Boolean execute(Connection conn) throws SQLException
 		{
-			PreparedStatement stmt= null;			
+			PreparedStatement stmt= null;	
+			PreparedStatement stmt2= null;	
 			try
 			{
 				stmt = conn.prepareStatement("insert into chatroomList (chatroom_name, password, admin_id, messages_id ) values (?,?,?,?) " );
@@ -231,10 +240,15 @@ public class DerbyDatabase implements IDatabase {
 				stmt.setInt(4, c.getMessagesID());	
 				stmt.executeUpdate();
 				
+				stmt2 = conn.prepareStatement("create table ?Messages (sender_id, messageString)");
+				stmt2.setInt(1, getRoomID(c));
+				stmt2.executeUpdate();
+				
 				return true;
 				
 			} finally {
 				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2);
 			}
 		} 
 		});
@@ -382,7 +396,7 @@ public class DerbyDatabase implements IDatabase {
 					found = true;	
 					Chatroom user = new Chatroom();
 					loadChatroom(user, resultSet, 1);
-					
+					result.add(user);
 				}
 				
 				if (!found)

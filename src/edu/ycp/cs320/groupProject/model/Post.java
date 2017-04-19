@@ -4,7 +4,7 @@ public class Post {
 	
 	private String text;
 	private int messages_id;
-	
+	private String user;
 	
 	
 	public Post( )
@@ -31,6 +31,12 @@ public class Post {
 		this.text= text;
 	}
 	
-
-
+	public void setSenderName(String name){
+		user = name;
+	}
+	
+	public String getSenderName(){
+		return user;
+	}
+	
 }
