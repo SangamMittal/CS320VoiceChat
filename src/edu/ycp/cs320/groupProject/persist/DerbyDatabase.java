@@ -435,6 +435,8 @@ public class DerbyDatabase implements IDatabase {
 				stmt.setInt(2, u.getUserID());
 				stmt.executeUpdate();
 				
+				return true;
+				/*
 				boolean found = false;
 				
 				stmt2 = conn.prepareStatement("select * from chatroomUser where room_id = ? and user_id = ?" );
@@ -457,7 +459,7 @@ public class DerbyDatabase implements IDatabase {
 				}
 				
 				return false;
-				
+				*/
 			} finally {
 				
 				DBUtil.closeQuietly(resultSet);
@@ -488,8 +490,6 @@ public class DerbyDatabase implements IDatabase {
 				while (resultSet.next())
 				{
 					found = true;	
-					Chatroom user = new Chatroom();
-					loadChatroom(user, resultSet, 1);
 					result = resultSet.getInt(1);
 					
 				}
