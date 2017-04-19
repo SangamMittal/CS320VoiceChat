@@ -45,15 +45,16 @@ public class DerbyDatabase implements IDatabase {
 					PreparedStatement stmt= null;		
 					PreparedStatement stmt2= null;
 					ResultSet resultSet = null;
+					ResultSet resultSet2= null;
 					try
 					{
-						//Do we have many-to-many tables? Looks like userList is the only table with username
-						stmt2 = conn.prepareStatement("select username.* from userList where username = ?" );
-						stmt2.setString(1, u.getUsername());
+						
+						stmt = conn.prepareStatement("select username.* from userList where username = ?" );
+						stmt.setString(1, u.getUsername());
 						
 						List<User> result = new ArrayList<User>();
 						
-						resultSet = stmt2.executeQuery();
+						resultSet = stmt.executeQuery();
 						
 						boolean found = false;
 						
@@ -61,25 +62,38 @@ public class DerbyDatabase implements IDatabase {
 						while (resultSet.next())
 						{
 							found = true;	
-							User user = new User(); //I'm not sure if this is correct
+							User user = new User(); 
 							loadUser(user, resultSet, 1);
 							
 							//result.add(new User(user.getUsername() ,user.getPassword() , false));
-							return true;
+							return false;
 							
 						}
 						
 						if (!found)
 						{
 							System.out.println("<" + u.getUsername() + "> was not found in the books table");
+							
+							stmt2 =conn.prepareStatement("insert into userList (username, password) values (?,?)");
+							stmt2.setString(1, u.getUsername());
+							stmt2.setString(2, u.getPassword());
+							
+							stmt2.executeUpdate();
+							
+							return true;
 						}
 						
-						return false;
+						else return false;
+						
+						
 						
 					} finally {
 						
 						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+						DBUtil.closeQuietly(resultSet2);
 						DBUtil.closeQuietly(stmt2);
+						
 					}
 				} //end execute
 				});
@@ -147,21 +161,27 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	//work on: when does it return true vs when does it return false;
-	public Boolean deleteUser(User u)
+	public User deleteUser(User u)
 	{
-		return executeTransaction(new Transaction<Boolean>()
+		return executeTransaction(new Transaction<User>()
 		{
 		@Override
-		public Boolean execute(Connection conn) throws SQLException
+		public User execute(Connection conn) throws SQLException
 		{
-			PreparedStatement stmt= null;			
+			PreparedStatement stmt= null;	
+			PreparedStatement stmt2= null;
+			ResultSet resultSet2= null;
 			try
 			{
 				stmt = conn.prepareStatement("delete from userList where username = ?" );
 				stmt.setString(1, u.getUsername());	
 				stmt.executeUpdate();
+			
 				
-				return true;
+		
+				
+				
+				return u;
 				
 			} finally {
 				DBUtil.closeQuietly(stmt);
@@ -393,14 +413,14 @@ public class DerbyDatabase implements IDatabase {
 			ResultSet resultSet = null;
 			try
 			{
-				stmt = conn.prepareStatement("insert into chatroomUser(chatroom_id, user_id) values(?, ?)" );
+				stmt = conn.prepareStatement("insert into chatroomUser(room_id, user_id) values(?, ?)" );
 				stmt.setInt(1, getRoomID(c));
 				stmt.setInt(2, u.getUserID());
 				stmt.executeUpdate();
 				
 				boolean found = false;
 				
-				stmt2 = conn.prepareStatement("select from chatroomUser where chatroom_id = ? and user_id = ?" );
+				stmt2 = conn.prepareStatement("select * from chatroomUser where room_id = ? and user_id = ?" );
 				stmt2.setInt(1, getRoomID(c));
 				stmt2.setInt(2, u.getUserID());
 				
