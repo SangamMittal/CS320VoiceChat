@@ -35,6 +35,10 @@ public interface IDatabase {
 	public Boolean insertUserIntoChatroom(User u, Chatroom c);
 	
 	
+	//josh-- selectUser
+	
+	public User selectUser(User u);
+	
 	
 	
 	

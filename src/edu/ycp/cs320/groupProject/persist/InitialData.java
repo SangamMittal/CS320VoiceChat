@@ -110,4 +110,36 @@ public class InitialData {
 			readChatrooms.close();
 		}
 	}
+	
+	public static List<Post> getPosts2() throws IOException {
+		List<Post> PostList = new ArrayList<Post>();
+		ReadCSV readPosts = new ReadCSV("postContents.csv");
+		try {
+			// auto-generated primary key for books table
+			int sender_id = 1;
+			int room_id =1;
+			
+			while (true) {
+				List<String> tuple = readPosts.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				Post post = new Post();
+				
+				post.setText(i.next());
+				post.setSenderID( Integer.valueOf(i.next()) );
+				post.setRoomID( Integer.valueOf(i.next()));
+				
+				PostList.add(post);
+			}
+			return PostList;
+		} finally {
+			readPosts.close();
+		}
+	}
+	
+	
+	
+	
 }

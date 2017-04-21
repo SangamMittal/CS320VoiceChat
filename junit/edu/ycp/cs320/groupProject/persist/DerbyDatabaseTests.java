@@ -28,6 +28,7 @@ public class DerbyDatabaseTests {
 	Boolean usernameFound= false;
 	User u = new User("student", "ycp", false);
 
+	ArrayList<Post>   posts   = new ArrayList<Post>();
 	
 	
 	
@@ -94,22 +95,31 @@ public class DerbyDatabaseTests {
 		
 		if (userInserted== true)
 		{
-			System.out.println("Book inserted; now delete it");
+			System.out.println("User inserted; now must delete it");
 			
 		User userDeleted = db.deleteUser(u);
 		
 		System.out.println("user deleted");
 		
 		}
-
-		/*
-		LoggedIn=db.Login(u);
 		
-		if (LoggedIn== true)
+		//Now try to select the deleted user
+		
+		User temporaryUser= db.selectUser(u);
+		
+		if (temporaryUser == null)
 		{
-			fail("User should not have logged in because user should not exist because user should have been deleted");
+			
 		}
-		*/
+		
+		else 
+		{
+			fail("User should not exist but does");
+		}
+
+		
+	
+		
 		
 		
 	
@@ -285,9 +295,51 @@ public class DerbyDatabaseTests {
 	public void testCreateChatroom()
 	{
 		User u = new User("student123", "ycp", false);
-		Chatroom c = new Chatroom();
+		Chatroom c = new Chatroom("ChatroomName", "password", true);
+		Boolean created= false;
+	//	Boolean selected= false;
+		
+	created	= db.createChatroom(c, u);
+		System.out.println(created);
+		if (created==false)
+		{
+			fail("chatroom not created");
+		}
+		else 
+		{
+			System.out.println("Chatroom created");
+		}
+	}
+
+	@Test
+	public void testSelectMessages()
+	{
+		List<Post> PostList =null;
+		
+		Chatroom c = new Chatroom("ChatroomName", "password", true);
+		c.setChatroomID(1);
+	
+		//Something should be going into PostList here, otherwise I wouldn't be getting a null pointer exception
+		PostList = db.selectMessages(c);
+		
+		if (PostList.isEmpty())
+		{
+			fail("PostList empty when it should have messages from chatroom c in it");
+		}
+		
+		else
+		{
+			posts = new ArrayList<Post>();
+			for (Post p : posts) {
+				
+				posts.add(p);
+				System.out.println(p.getText());
+			}
+		}
+		
+		
 		
 		
 	}
-
+	
 }

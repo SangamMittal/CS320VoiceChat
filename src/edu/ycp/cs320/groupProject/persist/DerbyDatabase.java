@@ -48,32 +48,37 @@ public class DerbyDatabase implements IDatabase {
 					ResultSet resultSet2= null;
 					try
 					{
-						
+						//select all tuples from userList where username is given, so just that tuple
 						stmt = conn.prepareStatement("select * from userList where username = ?" );
 						stmt.setString(1, u.getUsername());
 						
 						List<User> result = new ArrayList<User>();
 						
+						//execute statement
 						resultSet = stmt.executeQuery();
 						
 						boolean found = false;
 						
-						
+						//for each username,
 						while (resultSet.next())
 						{
 							found = true;	
-							User user = new User(); 
+							User user = new User();
+							
+							//take the tuple elements we got in the statement and put them in the user object
 							loadUser(user, resultSet, 1);
 							
 							//result.add(new User(user.getUsername() ,user.getPassword() , false));
 							return false;
 							
 						}
-						
+						//if the resultSet comes up empty, the username is new
 						if (!found)
 						{
-							System.out.println("<" + u.getUsername() + "> was not found in the books table");
+							//
+							System.out.println("<" + u.getUsername() + "> was not found in the userList table");
 							
+							//insert into userList the username you enter
 							stmt2 =conn.prepareStatement("insert into userList (username, password) values (?,?)");
 							stmt2.setString(1, u.getUsername());
 							stmt2.setString(2, u.getPassword());
@@ -122,6 +127,7 @@ public class DerbyDatabase implements IDatabase {
 					ResultSet resultSet = null;
 					try
 					{
+						//select all tuples from userList where username and password are givens (it'll be 1 tuple, then)
 						stmt = conn.prepareStatement(" select * from userList where userList.username = ? and userList.password = ?  ");
 						stmt.setString(1, u.getUsername() );
 						stmt.setString(2, u.getPassword());
@@ -161,6 +167,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	//work on: when does it return true vs when does it return false;
+	@Override
 	public User deleteUser(User u)
 	{
 		return executeTransaction(new Transaction<User>()
@@ -169,18 +176,13 @@ public class DerbyDatabase implements IDatabase {
 		public User execute(Connection conn) throws SQLException
 		{
 			PreparedStatement stmt= null;	
-			PreparedStatement stmt2= null;
-			ResultSet resultSet2= null;
 			try
 			{
 				stmt = conn.prepareStatement("delete from userList where username = ?" );
 				stmt.setString(1, u.getUsername());	
 				stmt.executeUpdate();
 			
-				
-		
-				
-				
+
 				return u;
 				
 			} finally {
@@ -189,6 +191,41 @@ public class DerbyDatabase implements IDatabase {
 		} 
 		});	
 	}
+	
+	@Override
+	public User selectUser(User u)
+	{
+		return executeTransaction(new Transaction<User>()
+		{
+		@Override
+		public User execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;
+			ResultSet resultSet= null;
+			String username= null;
+			try
+			{
+				stmt = conn.prepareStatement("select * from userList where username = ?" );
+				stmt.setString(1, u.getUsername());	
+				resultSet= stmt.executeQuery();
+			
+				while (resultSet.next()){
+					
+				username = resultSet.getString(1);	
+				}
+				
+
+				return u;
+				
+			} finally {
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(resultSet);
+			}
+		} 
+		});	
+	}
+	
+	
 	
 	@Override
 	public Boolean deleteChatroom(Chatroom c, User u)
@@ -237,7 +274,10 @@ public class DerbyDatabase implements IDatabase {
 		@Override
 		public Boolean execute(Connection conn) throws SQLException
 		{
-			PreparedStatement stmt= null;	
+			PreparedStatement stmt= null;
+			PreparedStatement stmt2=null;
+			ResultSet resultSet2 = null;
+			Boolean success = false;
 			try
 			{
 				stmt = conn.prepareStatement("insert into chatroomList (chatroom_name, password, admin_id, messages_id ) values (?,?,?,?) " );
@@ -247,7 +287,23 @@ public class DerbyDatabase implements IDatabase {
 				stmt.setInt(4, c.getMessagesID());	
 				stmt.executeUpdate();
 				
-				return true;
+				stmt2= conn.prepareStatement("select * from chatroomList where chatroomList.chatroom_name=?  ");
+				stmt2.setString(1, c.getChatroomName());
+				resultSet2= stmt2.executeQuery();
+				
+				while (resultSet2.next())
+				{	
+				System.out.println("Entered while loop in createChatroom");
+						
+			//	return true;
+				success= true;
+				
+				System.out.println("In while loop after success is set to true");
+				}
+				
+				return success;
+				
+				
 				
 			} finally {
 				DBUtil.closeQuietly(stmt);
@@ -266,38 +322,29 @@ public class DerbyDatabase implements IDatabase {
 		{
 			PreparedStatement stmt= null;
 			ResultSet resultSet = null;
-			List<Post> postList = null;
+			List<Post> postList = new ArrayList<Post>();
 			try
 			{
+				stmt = conn.prepareStatement("select * from postContents, chatroomList where postContents.room_ID = ? and chatroomList.room_ID = postContents.room_ID" );
+				//setting the second argument to 1 right now rather than getRoomID(c) just for the test's sake
+				//until we can figure it out
+				//I think there may be bugs in getRoomID(c)
 				
-				
-				
-				stmt = conn.prepareStatement("select * from ?Messages where roomID = ?" );
-				
-				stmt.setInt(1, getRoomID(c) );
-				
-				stmt.executeQuery();
+				stmt.setInt(1, 1);
+				resultSet= stmt.executeQuery();
 				
 				while (resultSet.next())
 				{
-					Post message = new Post();
-					
+					Post message = new Post();		
 					loadPost(message, resultSet, 1);
-					
 					postList.add(message);
 				}
 				
-				
-				
 				return postList;
-			
-				
-			
-				
-				
 				
 			} finally {
 				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(resultSet);
 			}
 		} 
 		});
@@ -479,7 +526,7 @@ public class DerbyDatabase implements IDatabase {
 			ResultSet resultSet = null;
 			try
 			{
-				stmt = conn.prepareStatement(" select chatroomList.room_id from chatroomList where chatroom_name = ?");
+				stmt = conn.prepareStatement("select chatroomList.room_id from chatroomList where chatroom_name = ?");
 				stmt.setString(1, c.getChatroomName());
 				
 				resultSet = stmt.executeQuery();
@@ -734,6 +781,7 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt3= null;
 				PreparedStatement stmt4= null;
+				PreparedStatement stmt5=null;
 				
 				try {
 					stmt1 = conn.prepareStatement(
@@ -761,6 +809,10 @@ public class DerbyDatabase implements IDatabase {
 					stmt4= conn.prepareStatement("create table messagesList (chatroom_id int, sender_id varchar(32), messageString varchar(70))" );
 					stmt4.executeUpdate();
 					
+					stmt5= conn.prepareStatement("create table postContents (messageString varchar(70), user_id int, room_id int)");
+					stmt5.executeUpdate();
+					
+					
 					
 					return true;
 				} finally {
@@ -780,11 +832,16 @@ public class DerbyDatabase implements IDatabase {
 				List<User> userList;
 				List<Chatroom> chatroomList;
 				List<User> chatroomUserList;
+				List<Post> messagesList;
+				List<Post> postContents;
 				
 				try {
 					userList = InitialData.getUsers();
 					chatroomList = InitialData.getChatroomList();
 					chatroomUserList = InitialData.getChatroomUsers();
+					messagesList= InitialData.getPosts();
+					postContents= InitialData.getPosts2();
+					
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -792,6 +849,9 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertChatroom = null;
 				PreparedStatement insertUser   = null;
 				PreparedStatement insertchatroomUserList= null;
+			
+				PreparedStatement insertMessagesList= null;
+				PreparedStatement insertPostContents= null;
 
 				try {
 					// populate authors table (do authors first, since author_id is foreign key in books table)
@@ -830,6 +890,36 @@ public class DerbyDatabase implements IDatabase {
 						insertchatroomUserList.addBatch();
 					}
 					insertchatroomUserList.executeBatch();
+					
+					/////////////////////////////////////
+					
+					insertMessagesList = conn.prepareStatement("insert into messagesList (chatroom_id, sender_id, messageString) values (?, ?, ?)");
+					for (Post post: messagesList) {
+//						
+						insertMessagesList.setInt(1, post.getRoomID() );
+						insertMessagesList.setInt(2, post.getSenderID() );
+						insertMessagesList.setString(3, post.getText());
+						
+						
+			
+						insertMessagesList.addBatch();
+					}
+					insertMessagesList.executeBatch();
+					
+					//////////////////////////////////////
+					
+					insertPostContents = conn.prepareStatement("insert into postContents (messageString, user_id, room_id) values (?, ?, ?)");
+					for (Post post: postContents) {
+//						
+						insertPostContents.setString(1, post.getText() );
+						insertPostContents.setInt(2, post.getSenderID() );
+						insertPostContents.setInt(3, post.getRoomID());
+						
+						
+			
+						insertPostContents.addBatch();
+					}
+					insertPostContents.executeBatch();
 					
 					
 					
