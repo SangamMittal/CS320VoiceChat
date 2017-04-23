@@ -39,11 +39,14 @@ public interface IDatabase {
 	
 	public User selectUser(User u);
 	
+<<<<<<< HEAD
 	//josh-- selectChatroom
 	
 	
 	public Chatroom selectChatroom(Chatroom c);
 	
+=======
+>>>>>>> branch 'master' of https://github.com/bruser15/CS320VoiceChat.git
 	
 	
 	
