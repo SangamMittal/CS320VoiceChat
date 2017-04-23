@@ -28,7 +28,7 @@ public interface IDatabase {
 	//rathana
 	public Boolean changeAdmin(Chatroom c, User u);
 	//brad
-	public Boolean insertMessages(Chatroom c, Post p);
+	public Boolean insertMessages(Chatroom c, Post p, User u);
 	//brad
 	public List<Chatroom> selectAllChatrooms();
 	//brad

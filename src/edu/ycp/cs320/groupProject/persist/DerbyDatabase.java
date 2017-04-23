@@ -527,7 +527,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
-	public Boolean insertMessages(Chatroom c, Post p){
+	public Boolean insertMessages(Chatroom c, Post p, User u){
 		return executeTransaction(new Transaction<Boolean>()
 		{
 		@Override
