@@ -540,7 +540,7 @@ public class DerbyDatabase implements IDatabase {
 			{
 				stmt = conn.prepareStatement("insert into messagesList (chatroom_id, sender_id, messageString) values(?, ?, ?)" );
 				stmt.setInt(1, getRoomID(c));
-				stmt.setInt(2, p.getMessagesID());
+				stmt.setInt(2, selectUser(u).getUserID());
 				stmt.setString(3, p.getText());
 				stmt.executeUpdate();
 				
@@ -548,7 +548,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				stmt2 = conn.prepareStatement("select from messagesList where chatroom_id = ? and sender_id = ? and messageString = ?" );
 				stmt2.setInt(1, getRoomID(c));
-				stmt2.setInt(2, p.getMessagesID());
+				stmt2.setInt(2, selectUser(u).getUserID());
 				stmt2.setString(3, p.getText());
 				
 				resultSet = stmt2.executeQuery();
