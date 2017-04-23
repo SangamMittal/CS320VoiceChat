@@ -34,14 +34,14 @@ public class ChatroomTest {
 	
 	@Test
 	public void testGetName(){
-		assertEquals("name", room.getName());
+		assertEquals("name", room.getChatroomName());
 	}
 	
 	@Test
 	public void testSetName(){
 		String a = "Hello";
-		room.setName(a);
-		assertEquals(a, room.getName());
+		room.setChatroomName(a);
+		assertEquals(a, room.getChatroomName());
 	}
 	
 	@Test

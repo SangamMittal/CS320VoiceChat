@@ -48,32 +48,37 @@ public class DerbyDatabase implements IDatabase {
 					ResultSet resultSet2= null;
 					try
 					{
-						
+						//select all tuples from userList where username is given, so just that tuple
 						stmt = conn.prepareStatement("select * from userList where username = ?" );
 						stmt.setString(1, u.getUsername());
 						
 						List<User> result = new ArrayList<User>();
 						
+						//execute statement
 						resultSet = stmt.executeQuery();
 						
 						boolean found = false;
 						
-						
+						//for each username,
 						while (resultSet.next())
 						{
 							found = true;	
-							User user = new User(); 
+							User user = new User();
+							
+							//take the tuple elements we got in the statement and put them in the user object
 							loadUser(user, resultSet, 1);
 							
 							//result.add(new User(user.getUsername() ,user.getPassword() , false));
 							return false;
 							
 						}
-						
+						//if the resultSet comes up empty, the username is new
 						if (!found)
 						{
-							System.out.println("<" + u.getUsername() + "> was not found in the books table");
+							//
+							System.out.println("<" + u.getUsername() + "> was not found in the userList table");
 							
+							//insert into userList the username you enter
 							stmt2 =conn.prepareStatement("insert into userList (username, password) values (?,?)");
 							stmt2.setString(1, u.getUsername());
 							stmt2.setString(2, u.getPassword());
@@ -105,7 +110,7 @@ public class DerbyDatabase implements IDatabase {
 			
 			u.setUserId(resultSet.getInt(index++));
 			u.setUsername(resultSet.getString(index++));
-			u.setPassword((resultSet.getString(index++)));
+			u.setPassword(resultSet.getString(index++));
 			
 		}
 	
@@ -122,6 +127,7 @@ public class DerbyDatabase implements IDatabase {
 					ResultSet resultSet = null;
 					try
 					{
+						//select all tuples from userList where username and password are givens (it'll be 1 tuple, then)
 						stmt = conn.prepareStatement(" select * from userList where userList.username = ? and userList.password = ?  ");
 						stmt.setString(1, u.getUsername() );
 						stmt.setString(2, u.getPassword());
@@ -161,6 +167,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	//work on: when does it return true vs when does it return false;
+	@Override
 	public User deleteUser(User u)
 	{
 		return executeTransaction(new Transaction<User>()
@@ -169,22 +176,124 @@ public class DerbyDatabase implements IDatabase {
 		public User execute(Connection conn) throws SQLException
 		{
 			PreparedStatement stmt= null;	
-			PreparedStatement stmt2= null;
-			ResultSet resultSet2= null;
+			PreparedStatement stmt2 = null;
+			PreparedStatement stmt3 = null;
+			ResultSet resultSet3 = null;
 			try
 			{
+				// Getting that user
+				User uReturn = new User();
+				uReturn = selectUser(u);
+				System.out.println(uReturn.getUsername());
+				
+				//Deleting that user from userList table
 				stmt = conn.prepareStatement("delete from userList where username = ?" );
 				stmt.setString(1, u.getUsername());	
 				stmt.executeUpdate();
+				
+				//Delete that user from chatroomUser table
+				stmt2 = conn.prepareStatement("delete from chatroomUser where user_id = ?");
+				stmt2.setInt(1, uReturn.getUserID());
+				stmt2.executeUpdate();
 			
+				// Try to select that user again
+				String uTry = null;
+				stmt3 = conn.prepareStatement(" select username from userList where username = ? ");
+				stmt3.setString(1, u.getUsername());
+				resultSet3 = stmt3.executeQuery();
+				if(resultSet3.next())
+					uTry = resultSet3.getString(1);
 				
-		
-				
-				
-				return u;
+				// Check to if removal was successful
+				if(uTry == null){
+					System.out.println("User: " + u.getUsername() + " is deleted!");
+				}
+				else{
+					System.out.println("UNABLE to delete user: " + u.getUsername());
+					uReturn = null;
+				}
+
+				return uReturn;
 				
 			} finally {
 				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2);
+				DBUtil.closeQuietly(stmt3);
+				DBUtil.closeQuietly(resultSet3);
+
+			}
+		} 
+		});	
+	}
+	
+	@Override
+	public User selectUser(User u)
+	{
+		return executeTransaction(new Transaction<User>()
+		{
+		@Override
+		public User execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;
+			ResultSet resultSet= null;
+			String username= null;
+			User uReturn = new User();
+			try
+			{
+				// Getting the user based on username
+				stmt = conn.prepareStatement("select * from userList where username = ?" );
+				stmt.setString(1, u.getUsername());	
+				resultSet= stmt.executeQuery();
+			
+				//while (resultSet.next()){
+				if(resultSet.next() != false){
+					if(u.getUsername().equals(resultSet.getString(2)))
+						loadUser(uReturn, resultSet, 1);
+				}
+				else{
+					uReturn = null;
+				}
+				//}
+				
+
+				return uReturn;
+				
+			} finally {
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(resultSet);
+			}
+		} 
+		});	
+	}
+	
+	@Override
+	public Chatroom selectChatroom(Chatroom c)
+	{
+		return executeTransaction(new Transaction<Chatroom>()
+		{
+		@Override
+		public Chatroom execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;
+			ResultSet resultSet= null;
+			String chatroomName= null;
+			try
+			{
+				stmt = conn.prepareStatement("select * from chatroomList where chatroom_name = ?" );
+				stmt.setString(1, c.getChatroomName());	
+				resultSet= stmt.executeQuery();
+			
+				while (resultSet.next()){
+					
+				chatroomName = resultSet.getString(2);	
+				}
+				
+
+				return c;
+				
+			} finally {
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(resultSet);
 			}
 		} 
 		});	
@@ -201,21 +310,96 @@ public class DerbyDatabase implements IDatabase {
 			PreparedStatement stmt0= null;
 			PreparedStatement stmt= null;
 			PreparedStatement stmt2= null;
+			PreparedStatement stmt3= null;
+			ResultSet resultSet3 = null;
+			Boolean success = false;
 			try
 			{
+				// Getting roomID
+				int roomID = getRoomID(c);
 				
-				stmt0 = conn.prepareStatement("delete from chatroomUser where room_id = ?");
-				stmt0.setInt(1, getRoomID(c));
+				// Delete chatroom in chatroomUser
+				stmt0 = conn.prepareStatement("delete from chatroomUser where chatroomUser.room_id = ?");
+				stmt0.setInt(1, roomID);
 				stmt0.executeUpdate();
 				
-				stmt = conn.prepareStatement("delete from chatroomList where chatroomList.room_id=?" );
-				stmt.setInt(1, getRoomID(c));	
+				// Delete chatroom in chatroomList
+				stmt = conn.prepareStatement("delete from chatroomList where chatroomList.room_id = ?" );
+				stmt.setInt(1, roomID);	
 				stmt.executeUpdate();
 				
-				
+				// Delete chatroom messages
 				stmt2 = conn.prepareStatement("delete from messagesList where chatroom_id = ?");
-				stmt2.setInt(1, getRoomID(c));	
+				stmt2.setInt(1, roomID);	
 				stmt2.executeUpdate();
+				
+				// Trying to get that deleted chatroom
+				String cTry = null;
+				stmt3 = conn.prepareStatement("select chatroom_name from chatroomList where chatroomList.chatroom_name = ?");
+				stmt3.setString(1, c.getChatroomName());
+				resultSet3= stmt3.executeQuery();
+				if(resultSet3.next())
+					cTry = resultSet3.getString(1);
+
+				// Checking if it was deleted
+				if(cTry != null)
+				{
+					System.out.println("Delete Chatroom method: Entered while loop, so there are chatrooms in the chatroomList, should return false");
+					success = false;
+				}
+				else{
+					success = true;
+				}
+				
+				
+				return success;
+				
+			} finally {
+				DBUtil.closeQuietly(stmt0);
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2);
+				DBUtil.closeQuietly(stmt3);
+				DBUtil.closeQuietly(resultSet3);
+			}
+		} 
+		});
+		
+	}
+	
+/*
+	@Override
+	public Boolean deleteChatroom(Chatroom c, User u)
+	{
+		return executeTransaction(new Transaction<Boolean>()
+		{
+		@Override
+		public Boolean execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt0= null;
+			PreparedStatement stmt= null;
+			PreparedStatement stmt2= null;
+			try
+			{
+				// Getting room_id
+				int roomID = getRoomID(c);
+				
+				// Deleting chatroom in chatroomUser table
+				stmt0 = conn.prepareStatement("delete from chatroomUser where room_id = ?");
+				stmt0.setInt(1, roomID);
+				stmt0.executeUpdate();
+				
+				// Deleting chatroom in chatroomList table
+				stmt = conn.prepareStatement("delete from chatroomList where chatroomList.room_id=?" );
+				stmt.setInt(1, roomID);	
+				stmt.executeUpdate();
+				
+				// Deleting all chatroom messages
+				stmt2 = conn.prepareStatement("delete from messagesList where chatroom_id = ?");
+				stmt2.setInt(1, roomID);	
+				stmt2.executeUpdate();
+				
+				// Checking to see if the chatroom are still there
+// ***************************************** WORKING HERE ********************************************************				
 				
 				return true;
 				
@@ -228,7 +412,7 @@ public class DerbyDatabase implements IDatabase {
 		});
 		
 	}
-	
+*/
 	@Override
 	public Boolean createChatroom(Chatroom c, User u)
 	{
@@ -237,20 +421,54 @@ public class DerbyDatabase implements IDatabase {
 		@Override
 		public Boolean execute(Connection conn) throws SQLException
 		{
-			PreparedStatement stmt= null;	
+			PreparedStatement stmt0= null;
+			ResultSet resultSet0 = null;
+			PreparedStatement stmt= null;
+			PreparedStatement stmt2=null;
+			ResultSet resultSet2 = null;
+			Boolean success = false;
+			String roomName = c.getChatroomName();
 			try
 			{
-				stmt = conn.prepareStatement("insert into chatroomList (chatroom_name, password, admin_id, messages_id ) values (?,?,?,?) " );
-				stmt.setString(1, c.getChatroomName());	
+				// Getting Admin_id
+				int adminID = 0;
+				stmt0 = conn.prepareStatement(" select user_id from userList where username = ?");
+				stmt0.setString(1, u.getUsername());
+				resultSet0 = stmt0.executeQuery();
+				if(resultSet0.next())
+					adminID = resultSet0.getInt(1);
+				System.out.println(adminID);
+				
+				// Insert new chatroom
+				stmt = conn.prepareStatement(" insert into chatroomList (chatroom_name, password, admin_id, messages_id ) values (?,?,?,?) " );
+				stmt.setString(1, roomName);	
 				stmt.setString(2, c.getPassword());	
-				stmt.setInt(3, c.getAdminID());	
+				stmt.setInt(3, adminID);	
 				stmt.setInt(4, c.getMessagesID());	
 				stmt.executeUpdate();
 				
-				return true;
+				//Trying to get that chatroom
+				stmt2= conn.prepareStatement(" select chatroom_name from chatroomList where chatroomList.chatroom_name=?  ");
+				stmt2.setString(1, roomName);
+				resultSet2= stmt2.executeQuery();
+				if(resultSet2.next())
+				{	
+					success= true;
+					System.out.println(success);
+					System.out.println("In while loop after success is set to true");
+				}
+				
+				return success;
+				
+				
 				
 			} finally {
+				DBUtil.closeQuietly(stmt0);
+				DBUtil.closeQuietly(resultSet0);
 				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2);
+				DBUtil.closeQuietly(resultSet2);
+
 			}
 		} 
 		});
@@ -266,38 +484,31 @@ public class DerbyDatabase implements IDatabase {
 		{
 			PreparedStatement stmt= null;
 			ResultSet resultSet = null;
-			List<Post> postList = null;
+			List<Post> postList = new ArrayList<Post>();
 			try
 			{
+				stmt = conn.prepareStatement("select * from postContents, chatroomList "
+						+ " where postContents.room_ID = ? "
+						+ " and chatroomList.room_ID = postContents.room_ID" );
+				//setting the second argument to 1 right now rather than getRoomID(c) just for the test's sake
+				//until we can figure it out
+				//I think there may be bugs in getRoomID(c)
 				
-				
-				
-				stmt = conn.prepareStatement("select * from ?Messages where roomID = ?" );
-				
-				stmt.setInt(1, getRoomID(c) );
-				
-				stmt.executeQuery();
+				stmt.setInt(1, 1);
+				resultSet= stmt.executeQuery();
 				
 				while (resultSet.next())
 				{
-					Post message = new Post();
-					
+					Post message = new Post();		
 					loadPost(message, resultSet, 1);
-					
 					postList.add(message);
 				}
 				
-				
-				
 				return postList;
-			
-				
-			
-				
-				
 				
 			} finally {
 				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(resultSet);
 			}
 		} 
 		});
@@ -479,7 +690,7 @@ public class DerbyDatabase implements IDatabase {
 			ResultSet resultSet = null;
 			try
 			{
-				stmt = conn.prepareStatement(" select chatroomList.room_id from chatroomList where chatroom_name = ?");
+				stmt = conn.prepareStatement("select chatroomList.room_id from chatroomList where chatroom_name = ?");
 				stmt.setString(1, c.getChatroomName());
 				
 				resultSet = stmt.executeQuery();
@@ -510,6 +721,8 @@ public class DerbyDatabase implements IDatabase {
 		);
 	}
 	
+
+	
 	
 	@Override
 	public Boolean removeUserFromChatroom(Chatroom c, User u) {
@@ -520,8 +733,8 @@ public class DerbyDatabase implements IDatabase {
 			public Boolean execute(Connection conn) throws SQLException
 			{
 				
-				PreparedStatement stmt0 = null;
-				ResultSet resultSet0 = null;
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
 				PreparedStatement stmt1 = null;
 				ResultSet resultSet1 = null;
 				PreparedStatement stmt2 = null;	
@@ -533,66 +746,72 @@ public class DerbyDatabase implements IDatabase {
 				
 				try
 				{
-					// Getting the chatroom row
-					stmt0 = conn.prepareStatement(
-							"Select chatroomList.* from chatroomList " +
-							" where chatroomList.chatroom_name = ?"
+					//Getting roomID
+					int roomID = 0;
+					stmt = conn.prepareStatement(
+							" Select room_id from chatroomList where chatroom_name = ? "
 					);
-					stmt0.setString(1, c.getChatroomName());
-					resultSet0 = stmt0.executeQuery();
-					loadChatroom(room, resultSet0, 1);
+					stmt.setString(1, "TestingRemove");
+					resultSet = stmt.executeQuery();
+					//System.out.println(resultSet.next());
+					
+					if(resultSet.next())
+						roomID = resultSet.getInt(1);
+					System.out.println("RoomID: " + roomID);
+
 					
 					// Getting the user row
 					stmt1 = conn.prepareStatement(
-							"Select userList.* from userList " +
+							"Select userList.user_id from userList " +
 							" where userList.username = ? "
 					);
+
 					stmt1.setString(1, u.getUsername());
 					resultSet1 = stmt1.executeQuery();
-					loadUser(user, resultSet1, 1);
-					
+					resultSet1.next();
+					int user_id = resultSet1.getInt(1);
+
+
+
 					// Deleting: using user_id and room_id
 					stmt2 = conn.prepareStatement(
 							"Delete from chatroomUser " +
 							" where chatroomUser.user_id = ? and " +
 							" chatroomUser.room_id = ? "
 					);
-					stmt2.setInt(1, user.getUserID());
-					stmt2.setInt(2, room.getChatroomID());
+					stmt2.setInt(1, user_id);
+					stmt2.setInt(2, roomID);
 					stmt2.executeUpdate();
 					
 					// Check to see if it is still there or not
 					stmt3 = conn.prepareStatement(
-							"Select chatroomUser.* from chatroomUser " +
+							"Select chatroomUser.user_id from chatroomUser " +
 							" where chatroomUser.user_id = ? and " +
 							" chatroomUser.room_id = ? "
 					);
-					stmt3.setString(1, u.getUsername());
-					stmt3.setString(2, c.getChatroomName());
+					stmt3.setInt(1, user_id);
+					stmt3.setInt(2, roomID);
 					resultSet3 = stmt3.executeQuery();
 					
-				
-					
-					if(user.getUserID() == resultSet3.getInt(1) || 
-							room.getChatroomID() == resultSet3.getInt(2)){
-						successORnot =  false;
-					}
-					else{
+					if(!resultSet3.next())
 						successORnot = true;
-					}
+					else
+						successORnot = false;
 					
-					return successORnot;
+					
 				}
 				finally {
-					DBUtil.closeQuietly(stmt0);
-					DBUtil.closeQuietly(resultSet0);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(resultSet1);
 					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt3);
 					DBUtil.closeQuietly(resultSet3);
 
-				}	
+				}
+				return successORnot;
+
 			}//end of execute
 		}
 		);
@@ -612,31 +831,38 @@ public class DerbyDatabase implements IDatabase {
 				ResultSet resultSet0 = null;
 				PreparedStatement stmt1= null;
 				ResultSet resultSet1= null;
-				User user = null;
+				User user = new User();
 				Chatroom room = new Chatroom();
 
 				try
 				{
-					
-					// Getting the chatroom row
+					int roomID = getRoomID(c);
+					System.out.println("Room ID: "+ roomID);
+					// Getting the adminID
 					stmt0 = conn.prepareStatement(
-							"Select chatroomList.* from chatroomList " +
-							" where chatroomList.chatroom_name = ?"
+							"Select chatroomList.admin_id from chatroomList " +
+							" where chatroomList.room_id = ?"
 					);
-					stmt0.setString(1, c.getChatroomName());
+					stmt0.setInt(1, roomID);
 					resultSet0 = stmt0.executeQuery();
-					loadChatroom(room, resultSet0, 1);
-					
+					resultSet0.next();
+					int adminID = resultSet0.getInt(1);
+					System.out.println("Admin ID: " + adminID);
 					// Get the Admin User
 					stmt1 = conn.prepareStatement(
-							" select userList.* " +
+							" select * " +
 							" from userList " +
-							" and userList.user_id = ?"
+							" where userList.user_id = ?"
 					);
-					stmt1.setInt(1, room.getAdminID());
+					stmt1.setInt(1, adminID);
 					resultSet1 = stmt1.executeQuery();
-					loadUser(user, resultSet1, 1);
-					
+					while (resultSet1.next())
+					{
+						user = new User();
+						loadUser(user, resultSet1, 1);
+						return user;
+					}
+					//loadUser(user, resultSet1, 1);
 					
 					return user;
 				}
@@ -703,9 +929,10 @@ public class DerbyDatabase implements IDatabase {
 					);
 					stmt3.setString(1, c.getChatroomName());
 					resultSet3 = stmt3.executeQuery();
-					
-					if(resultSet3.getInt(1) == adminNewID){
-						successORnot = true;
+					if(resultSet3.next()){
+						if(resultSet3.getInt(1) == adminNewID){
+							successORnot = true;
+						}
 					}
 					
 				return successORnot;
@@ -724,6 +951,7 @@ public class DerbyDatabase implements IDatabase {
 
 	}// end of changeAdmin
 	
+
 	
 	public void createTables()
 	{

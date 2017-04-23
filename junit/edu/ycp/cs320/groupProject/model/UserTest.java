@@ -14,7 +14,7 @@ public class UserTest {
 	
 	@Test
 	public void testGetName(){
-		assertEquals("name", u.getName());
+		assertEquals("name", u.getUsername());
 	}
 	
 	@Test
@@ -29,8 +29,8 @@ public class UserTest {
 	
 	@Test
 	public void testSetName(){
-		u.setName("Hello");
-		assertEquals("Hello", u.getName());
+		u.setUsername("Hello");
+		assertEquals("Hello", u.getUsername());
 	}
 	
 	@Test

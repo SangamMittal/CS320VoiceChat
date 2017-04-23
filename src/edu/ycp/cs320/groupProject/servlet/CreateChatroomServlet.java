@@ -7,6 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.ycp.cs320.groupProject.controller.ChatroomController;
+import edu.ycp.cs320.groupProject.controller.LoginSignupController;
+import edu.ycp.cs320.groupProject.model.Chatroom;
+import edu.ycp.cs320.groupProject.model.User;
+
 //import edu.ycp.cs320.groupProject.controller.GuessingGameController;
 //import edu.ycp.cs320.groupProject.model.GuessingGame;
 
@@ -36,45 +41,59 @@ public class CreateChatroomServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-/*		GuessingGame model = new GuessingGame();
 
-		GuessingGameController controller = new GuessingGameController();
-		controller.setModel(model);
+		Chatroom room = new Chatroom();
+		User user = new User();
+		ChatroomController roomController;
+		String errorMessage = null;
 		
-		if (req.getParameter("startGame") != null) {
-			controller.startGame();
-		} else {
-			// Reconstruct current GuessingGame model object
-			Integer curMin = getInteger(req, "min");
-			Integer curMax = getInteger(req, "max");
+		
+		// Decode form parameters and dispatch to controller
+		try {
+			String username = (String) req.getSession().getAttribute("sharedUser");
+			String roomName = req.getParameter("roomName");
+			String roomPassword = req.getParameter("roomPassword");
 			
-			model.setMin(curMin);
-			model.setMax(curMax);
-
-			if (req.getParameter("gotIt") != null) {
-				controller.setNumberFound();
-			} else if (req.getParameter("less") != null) {
-				controller.setNumberIsLessThanGuess();
-			} else if (req.getParameter("more") != null) {
-				controller.setNumberIsGreaterThanGuess();
-			} else {
-				throw new ServletException("Unknown command");
+			if(username == null)
+				System.out.println("Not Logged In!!");
+			
+			if (roomName == null || roomPassword == null) {
+				errorMessage = "Please enter infomation";
 			}
+			else if (roomName.length() > 32 || roomPassword.length() > 32){
+				errorMessage = "Error: Max 32 Characters";
+			}
+			else{
+				user.setUsername(username);
+				room.setChatroomName(roomName);
+				room.setPassword(roomPassword);
+			}
+					
+					
+		} catch (NumberFormatException e) {
+			errorMessage = "Invalid double";
 		}
 		
-		req.setAttribute("game", model);
+		// User click on create button
+		if(req.getParameter("create") != null){
+			roomController = new ChatroomController();
+			boolean createChatroomcheck = roomController.create(room, user);
+			// if user exist and matched password
+			if(createChatroomcheck == true){
+				resp.sendRedirect("chatroomList");
+			}
+			else{
+				errorMessage = "Username is already taken";
+			}
+			
+		}//end of user click on create button
 		
-		req.getRequestDispatcher("/_view/guessingGame.jsp").forward(req, resp);
-*/
-		if(req.getParameter("create") != null)
-			resp.sendRedirect("chatroom");
+		
+		// Add result objects as request attributes
+		req.setAttribute("errorMessage", errorMessage);
 
 		
 	}
-/*
-	private int getInteger(HttpServletRequest req, String name) {
-		return Integer.parseInt(req.getParameter(name));
-	}
-*/	
+
 	
 }

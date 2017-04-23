@@ -1,12 +1,14 @@
 package edu.ycp.cs320.groupProject.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.ycp.cs320.groupProject.controller.ChatroomController;
 import edu.ycp.cs320.groupProject.controller.UserController;
 import edu.ycp.cs320.groupProject.model.Chatroom;
 import edu.ycp.cs320.groupProject.model.User;
@@ -45,13 +47,17 @@ public class ChatroomListServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		UserController userController = new UserController();
+		ChatroomController roomController = new ChatroomController();
 		Chatroom chatroom = null;
 		Chatroom sharedChatroom = null;
+		
+		ArrayList<Chatroom> allChatrooms = null;
+		
+		allChatrooms = roomController.getAllChatroom();
 		
 		if(req.getParameter("logout") != null){
 			sharedUser = userController.logout();
 			resp.sendRedirect("login");
-			
 		}
 		else if(req.getParameter("createChatroom") != null){
 			resp.sendRedirect("createChatroom");
@@ -62,6 +68,12 @@ public class ChatroomListServlet extends HttpServlet {
 		sharedChatroom = chatroom;
 		req.getSession().setAttribute("sharedChatroom", sharedChatroom);
 		
+		// Add result objects as request attributes
+		//req.setAttribute("errorMessage", errorMessage);
+		req.setAttribute("allChatrooms", allChatrooms);
+
+		// Forward to view to render the result HTML document
+		req.getRequestDispatcher("/_view/chatroomList.jsp").forward(req, resp);
 		
 		
 		

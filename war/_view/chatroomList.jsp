@@ -26,6 +26,13 @@
 				background-color: darkslategrey;
 			}
 			
+			td.nameCol {
+				text-align: left;
+				color: blue;
+				font-weight: bold;
+				max-width: 400px;
+				padding-left: 20px;
+			}			
 		
 		
 		</style>
@@ -39,14 +46,21 @@
 	
 		<form action="${pageContext.servletContext.contextPath}/chatroomList" method="post">
 
+			    <c:forEach items="${authors}" var="author">
+			        <tr class="authorRow">
+			            <td class="nameCol">${author.lastname}</td>
+			            <td class="nameCol">${author.firstname}</td>			            
+			        </tr>
+			    </c:forEach>
 			
+			<c:forEach items="${allChatrooms}" var = "room">
+					<tr>
+						<td class="nameCol">${room.chatroomName}</td> 
+					</tr>
+			</c:forEach>
 			<div class="list-group row">
-				<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 1 </a>
 				<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 2 </a>
-				<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 3 </a>
-				<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 4 </a>
-				<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 5 </a>
-				<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 6 </a>
+
 
 			
 			</div>

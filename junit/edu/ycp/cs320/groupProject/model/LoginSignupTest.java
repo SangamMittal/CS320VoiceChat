@@ -5,6 +5,10 @@ import org.junit.Test;
 
 public class LoginSignupTest {
 	
+	// *************************************************************//
+	// ************** DID NOT USE **********************************//
+	//**************************************************************//
+	/*
 	@Before
 	
 	@Test
@@ -21,4 +25,6 @@ public class LoginSignupTest {
 	public void testCheckIfNameTaken(){
 		
 	}
+	
+	*/
 }

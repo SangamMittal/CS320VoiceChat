@@ -51,7 +51,9 @@ public class LoginServlet extends HttpServlet {
 		// Decode form parameters and dispatch to controller
 		try {
 			username = req.getParameter("username");
-			password = req.getParameter("second");
+			password = req.getParameter("password");
+			System.out.println("Username: " + username);
+			System.out.println("Password: " + password);
 
 			if (username == null || password == null) {
 				errorMessage = "Please enter infomation";
@@ -76,6 +78,7 @@ public class LoginServlet extends HttpServlet {
 			//model = controller.login(user);
 			boolean logincheck = controller.login(user);
 			// if user exist and matched password
+			System.out.println("Logined: " + logincheck);
 			if(logincheck == true){
 				sharedUser = user.getUsername();
 				resp.sendRedirect("chatroomList");
@@ -117,7 +120,7 @@ public class LoginServlet extends HttpServlet {
 		req.setAttribute("errorMessage", errorMessage);
 		
 		// Forward to view to render the result HTML document
-		//req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 		
 		//********* TESTING ************
 		//System.out.println(user.getName());

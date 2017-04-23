@@ -32,5 +32,23 @@ public class ChatroomControllerTest {
 	public void testPermanentlyExitChatroom(){
 		
 	}
+	
+	@Test
+	public void testCreate(){
+		
+	}
+	
+	@Test
+	public void testGetAllChatrooms(){
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

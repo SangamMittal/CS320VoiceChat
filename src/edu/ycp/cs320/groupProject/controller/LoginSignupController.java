@@ -6,11 +6,19 @@ import java.util.List;
 
 import edu.ycp.cs320.groupProject.model.Chatroom;
 import edu.ycp.cs320.groupProject.persist.DatabaseProvider;
+import edu.ycp.cs320.groupProject.persist.DerbyDatabase;
 import edu.ycp.cs320.groupProject.persist.IDatabase;
 
 public class LoginSignupController {
 	
+	private IDatabase db = null;
 
+	public LoginSignupController() {
+		
+		// creating DB instance here
+		DatabaseProvider.setInstance(new DerbyDatabase());
+		db = DatabaseProvider.getInstance();		
+	}
 	
 	
 	
@@ -19,7 +27,6 @@ public class LoginSignupController {
 	public Boolean login(User u){
 		//User userDatabase = new User();
 		
-		IDatabase db = DatabaseProvider.getInstance();
 	
 		 Boolean isCorrect =  db.Login(u) ;
 		
@@ -34,7 +41,6 @@ public class LoginSignupController {
 	// SignUp Method: Check to see if 
 	public Boolean signUp(User u){
 	
-		IDatabase db = DatabaseProvider.getInstance();
 		Boolean isCorrect =  db.signUp(u) ;
 		
 		return isCorrect;

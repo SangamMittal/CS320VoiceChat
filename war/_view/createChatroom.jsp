@@ -20,12 +20,12 @@
 		<form action="${pageContext.servletContext.contextPath}/createChatroom" method="post">
 			  <div class="form-group">
 			    <label>Chat Room Name</label>
-			    <input type="username" class="form-control"
+			    <input type="username" name = "roomName" class="form-control"
 			    			placeholder="Name - 32 max characters" value="${model.first}" >
 			  </div>
 			  <div class="form-group">
 			    <label>Password</label>
-			    <input type="password" class="form-control" 
+			    <input type="password" name = "roomPassword" class="form-control" 
 			    			placeholder="Password - 32 max characters" value="${model.second}">
 			  </div>
 				
