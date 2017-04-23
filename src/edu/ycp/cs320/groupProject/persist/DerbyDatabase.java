@@ -962,6 +962,7 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt3= null;
 				PreparedStatement stmt4= null;
+				PreparedStatement stmt5=null;
 				
 				try {
 					stmt1 = conn.prepareStatement(
@@ -989,6 +990,10 @@ public class DerbyDatabase implements IDatabase {
 					stmt4= conn.prepareStatement("create table messagesList (chatroom_id int, sender_id varchar(32), messageString varchar(70))" );
 					stmt4.executeUpdate();
 					
+					stmt5= conn.prepareStatement("create table postContents (messageString varchar(70), user_id int, room_id int)");
+					stmt5.executeUpdate();
+					
+					
 					
 					return true;
 				} finally {
@@ -1008,11 +1013,16 @@ public class DerbyDatabase implements IDatabase {
 				List<User> userList;
 				List<Chatroom> chatroomList;
 				List<User> chatroomUserList;
+				List<Post> messagesList;
+				List<Post> postContents;
 				
 				try {
 					userList = InitialData.getUsers();
 					chatroomList = InitialData.getChatroomList();
 					chatroomUserList = InitialData.getChatroomUsers();
+					messagesList= InitialData.getPosts();
+					postContents= InitialData.getPosts2();
+					
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -1020,6 +1030,9 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertChatroom = null;
 				PreparedStatement insertUser   = null;
 				PreparedStatement insertchatroomUserList= null;
+			
+				PreparedStatement insertMessagesList= null;
+				PreparedStatement insertPostContents= null;
 
 				try {
 					// populate authors table (do authors first, since author_id is foreign key in books table)
@@ -1058,6 +1071,36 @@ public class DerbyDatabase implements IDatabase {
 						insertchatroomUserList.addBatch();
 					}
 					insertchatroomUserList.executeBatch();
+					
+					/////////////////////////////////////
+					
+					insertMessagesList = conn.prepareStatement("insert into messagesList (chatroom_id, sender_id, messageString) values (?, ?, ?)");
+					for (Post post: messagesList) {
+//						
+						insertMessagesList.setInt(1, post.getRoomID() );
+						insertMessagesList.setInt(2, post.getSenderID() );
+						insertMessagesList.setString(3, post.getText());
+						
+						
+			
+						insertMessagesList.addBatch();
+					}
+					insertMessagesList.executeBatch();
+					
+					//////////////////////////////////////
+					
+					insertPostContents = conn.prepareStatement("insert into postContents (messageString, user_id, room_id) values (?, ?, ?)");
+					for (Post post: postContents) {
+//						
+						insertPostContents.setString(1, post.getText() );
+						insertPostContents.setInt(2, post.getSenderID() );
+						insertPostContents.setInt(3, post.getRoomID());
+						
+						
+			
+						insertPostContents.addBatch();
+					}
+					insertPostContents.executeBatch();
 					
 					
 					
