@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
 			password = req.getParameter("password");
 			password2 = req.getParameter("password2");
 			System.out.println("Username: " + username);
-			System.out.println("Password: " + password);
+			//System.out.println("Password: " + password);
 
 			if (username == null || password == null) {
 				errorMessage = "Please enter infomation";
@@ -94,7 +94,7 @@ public class LoginServlet extends HttpServlet {
 		
 		// User click on signUp button
 		else if (req.getParameter("signUp") != null){
-			if(password.equals(password2)){
+			if(!password.equals(password2)){
 				errorMessage = "Passwords entered do not match!";
 				
 			}
@@ -125,8 +125,9 @@ public class LoginServlet extends HttpServlet {
 		*/
 		
 		// Add result objects as request attributes
-		req.setAttribute("errorMessage", errorMessage);
-		
+		if(errorMessage != null){
+			req.setAttribute("errorMessage", errorMessage);
+		}
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 		
