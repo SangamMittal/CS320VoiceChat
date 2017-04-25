@@ -51,6 +51,11 @@
 			    <input type="password" name = "password" class="form-control" 
 			    			placeholder="Password - 32 max characters" value="${model.password}">
 			  </div>
+			  <div class="form-group">
+			    <label class = "form-group label">Confirm Password</label>
+			    <input type="password" name = "password2" class="form-control" 
+			    			placeholder="Confirm Password for Signup" value="${model.password2}">
+			  </div>
 				
 			<input class="btn btn-primary" type="Submit" name="login" value="Login">
 			<input class="btn btn-success" type="Submit" name="signUp" value="Sign Up">

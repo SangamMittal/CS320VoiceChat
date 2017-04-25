@@ -32,6 +32,7 @@ public class LoginServlet extends HttpServlet {
 		String errorMessage = null;
 		String username = null;
 		String password = null;
+		String password2 = null;
 		LoginSignupController controller;
 		User user = new User();
 		User model = new User();
@@ -52,6 +53,7 @@ public class LoginServlet extends HttpServlet {
 		try {
 			username = req.getParameter("username");
 			password = req.getParameter("password");
+			password2 = req.getParameter("password2");
 			System.out.println("Username: " + username);
 			System.out.println("Password: " + password);
 
@@ -92,16 +94,22 @@ public class LoginServlet extends HttpServlet {
 		
 		// User click on signUp button
 		else if (req.getParameter("signUp") != null){
-			controller = new LoginSignupController();
-			//model = controller.signUp(user);			// call function and try it signUp the user
-			boolean signupcheck = controller.signUp(user);
-			// signUp is successful
-			if(signupcheck == true){
-				sharedUser = user.getUsername();
-				resp.sendRedirect("chatroomList");
+			if(password.equals(password2)){
+				errorMessage = "Passwords entered do not match!";
+				
 			}
 			else{
-				errorMessage = "Username already taken!";
+				controller = new LoginSignupController();
+				//model = controller.signUp(user);			// call function and try it signUp the user
+				boolean signupcheck = controller.signUp(user);
+				// signUp is successful
+				if(signupcheck){
+					sharedUser = user.getUsername();
+					resp.sendRedirect("chatroomList");
+				}
+				else{
+					errorMessage = "Username already taken!";
+				}
 			}
 		}//end of user click on signUp button
 
