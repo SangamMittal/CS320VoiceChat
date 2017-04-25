@@ -247,12 +247,14 @@ public class DerbyDatabase implements IDatabase {
 			
 				//while (resultSet.next()){
 				if(resultSet.next() != false){
-					if(u.getUsername().equals(resultSet.getString(2)))
+				//	if(u.getUsername().equals(resultSet.getString(2)))
 						loadUser(uReturn, resultSet, 1);
+				
+						
 				}
-				else{
-					uReturn = null;
-				}
+		//		else{
+		//			uReturn = null;
+		//		}
 				//}
 				
 
@@ -535,29 +537,30 @@ public class DerbyDatabase implements IDatabase {
 		{
 			PreparedStatement stmt= null;
 			PreparedStatement stmt2= null;
-			ResultSet resultSet = null;
+			ResultSet resultSet2 = null;
 			try
 			{
 				stmt = conn.prepareStatement("insert into messagesList (chatroom_id, sender_id, messageString) values(?, ?, ?)" );
 				stmt.setInt(1, getRoomID(c));
+				//The line below this one is causing problems in my testPost in PostControllerTest-null Pointer Exception
 				stmt.setInt(2, selectUser(u).getUserID());
 				stmt.setString(3, p.getText());
 				stmt.executeUpdate();
 				
 				boolean found = false;
 				
-				stmt2 = conn.prepareStatement("select from messagesList where chatroom_id = ? and sender_id = ? and messageString = ?" );
+				stmt2 = conn.prepareStatement("select * from messagesList where chatroom_id = ? and sender_id = ? and messageString = ?" );
 				stmt2.setInt(1, getRoomID(c));
 				stmt2.setInt(2, selectUser(u).getUserID());
 				stmt2.setString(3, p.getText());
 				
-				resultSet = stmt2.executeQuery();
+				resultSet2 = stmt2.executeQuery();
 				
-				while (resultSet.next())
+				while (resultSet2.next())
 				{
 					found = true;	
 					User user = new User();
-					loadUser(user, resultSet, 1);
+					loadUser(user, resultSet2, 1);
 					
 					return true;
 					
@@ -572,7 +575,8 @@ public class DerbyDatabase implements IDatabase {
 				
 			} finally {
 				
-				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(resultSet2);
 				DBUtil.closeQuietly(stmt2);
 			}
 		} //end execute

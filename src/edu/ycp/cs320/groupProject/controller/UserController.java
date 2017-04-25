@@ -1,36 +1,53 @@
 package edu.ycp.cs320.groupProject.controller;
 
 import edu.ycp.cs320.groupProject.model.Chatroom;
+import edu.ycp.cs320.groupProject.model.Post;
 import edu.ycp.cs320.groupProject.model.User;
+import edu.ycp.cs320.groupProject.persist.DatabaseProvider;
+import edu.ycp.cs320.groupProject.persist.DerbyDatabase;
+import edu.ycp.cs320.groupProject.persist.IDatabase;
 
 public class UserController {
 	
-	// 
-	public void sendMessage(User user, String message, Chatroom chatroom)
+	private IDatabase db = null;
+	
+	public UserController()
 	{
+		DatabaseProvider.setInstance(new DerbyDatabase());
+		db = DatabaseProvider.getInstance();	
+	}
+	
+	 
+	public Boolean sendMessage(User user, Post message, Chatroom chatroom)
+	{
+		Boolean inserted=false;
 		// Appending the message so it's in the form, username: the message...
-		String s = user.getName() + ": " + message;
+		String s = user.getUsername() + ": " + message;
 		
 		// Contact the database
 		// Adding to the existing message using method in DerbyDatabase
+		inserted = db.insertMessages(chatroom, message, user);
 		
-		
+		return inserted;
 	}
 	
 	// A user object with null will be return, when they want to logout
 	public User logout()
 	{	
 		return null;
+		
+		
 	}//end of logout
 	
 	
 	
 	//should it be return type Chatroom?
-	public Chatroom createChatroom(Chatroom c)
+	public Boolean createChatroom(Chatroom c, User u )
 	{
 		Chatroom chatR = null;
 		// Contact Database
-		// chatR = db.someMethodName(c);
+		Boolean created= false;
+		 created = db.createChatroom(c, u);
 		/* Database Method:
 		 * 			Select stmt to see if chatroom name already exist
 		 * 			if not
@@ -38,11 +55,10 @@ public class UserController {
 		 * 			if already exist
 		 * 				return null
 		 */
-		
-		return chatR;
+		return created;
 	}
 	
-	public boolean deleteAccount(User user, Chatroom c)
+	public User deleteAccount(User user, Chatroom c)
 	{
 		boolean success = false;
 		// Contact Database
@@ -51,19 +67,25 @@ public class UserController {
 		//			If yes, then remove the chatroom from that list and return true
 		//			If not, return false
 		
-		return success;
+		User deleted = db.deleteUser(user);
+		
+		return deleted;
 	}
 	
-	public Chatroom CreateAccount(User u, Chatroom c)
+	public Boolean CreateAccount(User u, Chatroom c)
 	{
 		Chatroom chatR = null;
+		Boolean created= false;
 		// Contact the database
 		// Database Method:
 		//			Check to see if chatroom name already exist
 		//			If not, use insert stmt to put it in the database, return that chatroom
 		//			If yes, return null;
 		
-		return chatR;
+		created = db.insertUserIntoChatroom(u, c);
+		
+		
+		return created;
 	}
 	
 
