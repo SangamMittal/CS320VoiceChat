@@ -73,6 +73,7 @@ public class LoginServlet extends HttpServlet {
 			errorMessage = "Invalid double";
 		}
 		
+		req.getSession().setAttribute("sharedUser", sharedUser);
 		
 		// User click on login button
 		if(req.getParameter("login") != null){
@@ -117,7 +118,7 @@ public class LoginServlet extends HttpServlet {
 		// Add parameters(model) as request attributes for other servlets during this session
 		//sharedUser = model;
 		
-		req.getSession().setAttribute("sharedUser", sharedUser);
+		//req.getSession().setAttribute("sharedUser", sharedUser);
 
 		/*
 		// Add parameters as request attributes
