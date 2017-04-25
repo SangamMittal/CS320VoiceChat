@@ -55,7 +55,7 @@ public class ChatroomController {
 			success = false;
 		}
 		else{
-			
+			success = db.removeUserFromChatroom(chatroom, user);
 		}
 		
 		return success;
@@ -64,9 +64,24 @@ public class ChatroomController {
 	
 	public boolean create(Chatroom c, User u){
 		boolean success = false;
+		boolean nameTaken = false;
 		// Contact the database
 		// Database Method: check to see if chatroom name is taken
 		//				if not create the chatroom
+		List<Chatroom> listOfChatrooms = db.selectAllChatrooms();
+		for(Chatroom room: listOfChatrooms){
+			if(room.getChatroomName().equals(c.getChatroomName())){
+				nameTaken = true;
+				break;
+			}
+		}
+		
+		if(nameTaken == true){
+			System.out.println("Chatroom name already taken!");
+		}
+		else{
+			db.createChatroom(c, u);
+		}
 		
 		return success;
 	}
