@@ -347,6 +347,10 @@ public class DerbyDatabaseTests {
 	@Test	//Add this test between createChatroom and deleteChatroom tests
 	public void testInsertMessages() {
 		System.out.println("\n*** Testing insertMessages ***************************************************");
+		
+		
+		
+		
 
 	}// end testInsertMessages
 	

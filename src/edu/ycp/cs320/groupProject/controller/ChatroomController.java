@@ -86,6 +86,15 @@ public class ChatroomController {
 		return success;
 	}
 	
+	public boolean deleteChatroom(Chatroom c, User u)
+	{
+		Boolean deleted=false;
+		deleted=db.deleteChatroom(c, u);
+		return deleted;
+		
+		
+	}
+	
 	public ArrayList<Chatroom> getAllChatroom(){
 		List<Chatroom> listChatrooms = null;
 		ArrayList<Chatroom> allChatrooms = null;

@@ -207,6 +207,7 @@ public class DerbyDatabase implements IDatabase {
 				// Check to if removal was successful
 				if(uTry == null){
 					System.out.println("User: " + u.getUsername() + " is deleted!");
+					
 				}
 				else{
 					System.out.println("UNABLE to delete user: " + u.getUsername());

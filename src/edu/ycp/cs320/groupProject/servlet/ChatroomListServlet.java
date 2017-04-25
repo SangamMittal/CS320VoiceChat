@@ -18,26 +18,37 @@ import edu.ycp.cs320.groupProject.model.User;
 
 public class ChatroomListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private User sharedUser;
+	private String sharedUser;
+	private User u;
+	
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TESTING 1 2 3
-		String user = (String) req.getSession().getAttribute("sharedUser");
+	//	String user = (String) req.getSession().getAttribute("sharedUser");
 		
-		if(user == null){
-			System.out.println("    User: <" + user + "> not logged in or session timed out");
+		//problemo: it's returning null here
+		sharedUser = (String) req.getSession().getAttribute("sharedUser");
+		
+		u = new User();
+		
+		u.setUsername(sharedUser);
+		
+		
+		if(sharedUser == null){
+			System.out.println("    User: <" + sharedUser + "> not logged in or session timed out");
 		
 			// user is not logged in, or the session expired
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 		
+		
+		
 		// now we have the user's User object,
 		// proceed to handle request...
-		System.out.println("     User: <" + user + "> logged in");
-		
+		System.out.println(" User: <" + sharedUser + "> logged in");
 		
 		req.getRequestDispatcher("/_view/chatroomList.jsp").forward(req, resp);
 
@@ -55,11 +66,24 @@ public class ChatroomListServlet extends HttpServlet {
 		
 		allChatrooms = roomController.getAllChatroom();
 		
-		if(req.getParameter("logout") != null){
-			sharedUser = userController.logout();
-			resp.sendRedirect("login");
+		for (Chatroom c: allChatrooms)
+		{
+			if (req.getParameter(c.getChatroomName())!= null)
+				{	
+					//add user to chatroom	
+					userController.insertUserIntoChatroom(u, c);
+
+					//redirect
+					resp.sendRedirect("chatroom");
+					
+				}
 		}
-		else if(req.getParameter("createChatroom") != null){
+		
+//		if(req.getParameter("logout") != null){
+//			sharedUser = userController.logout();
+//			resp.sendRedirect("login");
+//		}
+		if(req.getParameter("createChatroom") != null){
 			resp.sendRedirect("createChatroom");
 		}
 		
@@ -72,11 +96,12 @@ public class ChatroomListServlet extends HttpServlet {
 		//req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("allChatrooms", allChatrooms);
 
+		
+		
+		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/chatroomList.jsp").forward(req, resp);
-		
-		
-		
+			
 	}
 
 	

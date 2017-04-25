@@ -58,7 +58,7 @@ public class UserController {
 		return created;
 	}
 	
-	public User deleteAccount(User user, Chatroom c)
+	public User deleteAccount(User user)
 	{
 		boolean success = false;
 		// Contact Database
@@ -72,20 +72,32 @@ public class UserController {
 		return deleted;
 	}
 	
-	public Boolean CreateAccount(User u, Chatroom c)
-	{
-		Chatroom chatR = null;
-		Boolean created= false;
+	
+	//fix
+//	public Boolean CreateAccount(User u, Chatroom c)
+//	{
+//		Chatroom chatR = null;
+//		Boolean created= false;
 		// Contact the database
 		// Database Method:
 		//			Check to see if chatroom name already exist
 		//			If not, use insert stmt to put it in the database, return that chatroom
 		//			If yes, return null;
 		
-		created = db.insertUserIntoChatroom(u, c);
+	//	created = db.insertUserIntoChatroom(u, c);
 		
 		
-		return created;
+	//	return created;
+//	}
+	
+	public Boolean insertUserIntoChatroom(User u, Chatroom c)
+	{
+		Boolean created=false;
+		
+			created = db.insertUserIntoChatroom(u, c);		
+			return created;
+		
+		
 	}
 	
 

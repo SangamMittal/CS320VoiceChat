@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs320.groupProject.controller.ChatroomController;
+import edu.ycp.cs320.groupProject.controller.PostController;
 import edu.ycp.cs320.groupProject.controller.UserController;
 import edu.ycp.cs320.groupProject.model.Chatroom;
+import edu.ycp.cs320.groupProject.model.Post;
 import edu.ycp.cs320.groupProject.model.User;
 
 //import edu.ycp.cs320.groupProject.controller.NumbersController;
@@ -17,17 +19,24 @@ import edu.ycp.cs320.groupProject.model.User;
 
 public class ChatroomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private User sharedUser;
+	private String sharedUser;
 	private Chatroom sharedChatroom;
+	private PostController pc = new PostController();
+	private Post post = new Post();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		String user = (String) req.getSession().getAttribute("sharedUser");
+	//	String user = (String) req.getSession().getAttribute("sharedUser");
 		
-		if(user == null){
-			System.out.println("    User: <" + user + "> not logged in or session timed out");
+	sharedUser=	(String) req.getSession().getAttribute("sharedUser");
+	sharedChatroom = (Chatroom) (req.getSession().getAttribute("sharedChatroom"));
+	
+	
+		
+		if(sharedUser ==null   ){
+			System.out.println("    User: <" + sharedUser + "> not logged in or session timed out");
 		
 			// user is not logged in, or the session expired
 			resp.sendRedirect(req.getContextPath() + "/login");
@@ -36,7 +45,7 @@ public class ChatroomServlet extends HttpServlet {
 		
 		// now we have the user's User object,
 		// proceed to handle request...
-		System.out.println("     User: <" + user + "> logged in");
+		System.out.println("     User: <" + sharedUser + "> logged in");
 		
 		
 		req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
@@ -48,12 +57,16 @@ public class ChatroomServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String errorMessage = null;
 		String userMessage = null;
-		User user = sharedUser;
+		
+		User u = new User();
+		u.setUsername(sharedUser);
+		
 		Chatroom chatroom = sharedChatroom;
+		Post p = post;
 		UserController uController = new UserController();
 		ChatroomController cController = new ChatroomController();
 		
-		System.out.println(user.getUsername());
+		System.out.println(sharedUser);
 		
 		try {
 			userMessage = req.getParameter("usermessage");
@@ -70,11 +83,13 @@ public class ChatroomServlet extends HttpServlet {
 		}
 		else if(req.getParameter("send") != null){
 			if(userMessage != null){
-			//	uController.sendMessage(user, userMessage, chatroom);
+				pc.post(u, p, chatroom);
+				
+				
 			}
 		}
 		else if(req.getAttribute("exitP") != null){
-			cController.permanentlyExitChatroom(user, chatroom);
+			cController.permanentlyExitChatroom(u, chatroom);
 			resp.sendRedirect("chatroomList");
 		}
 

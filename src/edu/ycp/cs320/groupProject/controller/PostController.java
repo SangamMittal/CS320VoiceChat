@@ -23,7 +23,6 @@ public class PostController {
 	}
 	
 	
-	
 	public Boolean post(User u, Post post, Chatroom c)
 	{
 		inserted= db.insertMessages(c, post, u);
