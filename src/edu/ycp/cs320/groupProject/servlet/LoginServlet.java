@@ -37,8 +37,8 @@ public class LoginServlet extends HttpServlet {
 		User user = new User();
 		User model = new User();
 		String sharedUser = null;
-		
-		
+		boolean signupcheck = false;
+		boolean logincheck = false;
 		
 		//String sharedTest = "Shared Testing!";
 	    //req.getSession().setAttribute("sharedTest", sharedTest); // add to session
@@ -73,18 +73,18 @@ public class LoginServlet extends HttpServlet {
 			errorMessage = "Invalid double";
 		}
 		
-		req.getSession().setAttribute("sharedUser", sharedUser);
+		//req.getSession().setAttribute("sharedUser", sharedUser);
 		
 		// User click on login button
 		if(req.getParameter("login") != null){
 			controller = new LoginSignupController();
 			//model = controller.login(user);
-			boolean logincheck = controller.login(user);
+			logincheck = controller.login(user);
 			// if user exist and matched password
 			System.out.println("Logined: " + logincheck);
 			if(logincheck == true){
 				sharedUser = user.getUsername();
-				resp.sendRedirect("chatroomList");
+				//resp.sendRedirect("chatroomList");
 			}
 			else{
 				errorMessage = "Invalid Username and Password";
@@ -102,23 +102,25 @@ public class LoginServlet extends HttpServlet {
 			else{
 				controller = new LoginSignupController();
 				//model = controller.signUp(user);			// call function and try it signUp the user
-				boolean signupcheck = controller.signUp(user);
+				signupcheck = controller.signUp(user);
 				// signUp is successful
 				if(signupcheck){
 					sharedUser = user.getUsername();
-					resp.sendRedirect("chatroomList");
+					//resp.sendRedirect("chatroomList");
 				}
 				else{
 					errorMessage = "Username already taken!";
 				}
 			}
 		}//end of user click on signUp button
-
+		
+		req.getSession().setAttribute("sharedUser", sharedUser);
+		if(logincheck || signupcheck){
+			resp.sendRedirect("chatroomList");
+		}
 		
 		// Add parameters(model) as request attributes for other servlets during this session
 		//sharedUser = model;
-		
-		//req.getSession().setAttribute("sharedUser", sharedUser);
 
 		/*
 		// Add parameters as request attributes
