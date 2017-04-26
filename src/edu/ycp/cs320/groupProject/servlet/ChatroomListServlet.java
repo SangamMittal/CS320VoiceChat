@@ -66,6 +66,8 @@ public class ChatroomListServlet extends HttpServlet {
 		
 		allChatrooms = roomController.getAllChatroom();
 		
+		Boolean redirect = false;
+		
 		for (Chatroom c: allChatrooms)
 		{
 			if (req.getParameter(c.getChatroomName())!= null)
@@ -73,8 +75,11 @@ public class ChatroomListServlet extends HttpServlet {
 					//add user to chatroom	
 					userController.insertUserIntoChatroom(u, c);
 
+					chatroom = c;
+					
 					//redirect
-					resp.sendRedirect("chatroom");
+					redirect=true;
+					
 					
 				}
 		}
@@ -97,6 +102,10 @@ public class ChatroomListServlet extends HttpServlet {
 		req.setAttribute("allChatrooms", allChatrooms);
 
 		
+		if (redirect==true)
+		{
+			resp.sendRedirect("chatroom");
+		}
 		
 		
 		// Forward to view to render the result HTML document
