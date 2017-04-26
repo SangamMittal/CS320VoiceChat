@@ -490,7 +490,7 @@ public class DerbyDatabase implements IDatabase {
 			List<Post> postList = new ArrayList<Post>();
 			try
 			{
-				stmt = conn.prepareStatement("select messagesList.* from messagesList "
+				stmt = conn.prepareStatement("select * from messagesList "
 						+ " where messagesList.chatroom_id = ? ");
 				//setting the second argument to 1 right now rather than getRoomID(c) just for the test's sake
 				//until we can figure it out
@@ -502,7 +502,7 @@ public class DerbyDatabase implements IDatabase {
 				while (resultSet.next())
 				{
 					Post message = new Post();		
-					loadPost(message, resultSet, 3);
+					loadPost(message, resultSet, 1);
 					postList.add(message);
 				}
 				
@@ -523,6 +523,8 @@ public class DerbyDatabase implements IDatabase {
 	
 	public void loadPost(Post p, ResultSet resultSet, int index)
 			throws SQLException {
+		p.setRoomID(resultSet.getInt(index++));
+		p.setSenderName(resultSet.getString(index++));
 		p.setText(resultSet.getString(index++));
 	//	p.setMessagesID(resultSet.getInt(index++));
 	

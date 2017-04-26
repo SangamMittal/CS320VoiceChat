@@ -118,7 +118,10 @@ public class ChatroomController {
 		return allChatrooms;
 	}
 	
-	
+	public String formatMessage(Post p){
+		String message = "[" + p.getSenderName() + "]: " + p.getText();
+		return message;
+	}
 	
 	/*
 	public void appearVoiceIcon()

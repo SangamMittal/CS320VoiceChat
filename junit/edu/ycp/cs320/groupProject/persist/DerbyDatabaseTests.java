@@ -146,7 +146,7 @@ public class DerbyDatabaseTests {
 		
 		u.setUsername("Hi2");
 		u.setPassword("HI2");
-		c.setChatroomName("chatroom");
+		c.setChatroomName("chatroom 6");
 		db.signUp(u);
 		created	= db.createChatroom(c, u);
 		db.deleteChatroom(c, u);
