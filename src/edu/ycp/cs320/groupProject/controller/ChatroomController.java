@@ -81,6 +81,7 @@ public class ChatroomController {
 		}
 		else{
 			db.createChatroom(c, u);
+			success = true;
 		}
 		
 		return success;
