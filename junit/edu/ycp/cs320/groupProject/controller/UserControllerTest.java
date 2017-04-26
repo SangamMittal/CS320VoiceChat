@@ -90,8 +90,23 @@ public class UserControllerTest {
 	@Test
 	public void testCreateChatroom()
 	{
+		User u = new User();
+		Post p = new Post();
+		Chatroom c = new Chatroom();
 		
+		u.setUsername("UsernameTest");
+		u.setPassword("Password");
+		
+		//Should I have these lines?
+		c.setChatroomName("Hello");
+		c.setPassword("test");
+		
+		//I think I need to manually create the user here?
+		lsc.signUp(u);
+	
+	
 		Boolean created= false;
+		/*
 		c.setAdminID(1);
 		c.setChatroomID(2);
 		c.setChatroomName("Muskets");
@@ -105,6 +120,7 @@ public class UserControllerTest {
 		u.setUserId(1);
 		u.setNum(4);
 		u.setAdmin(false);
+		*/
 		
 		
 		created= uc.createChatroom(c, u);
@@ -118,6 +134,9 @@ public class UserControllerTest {
 		{
 			
 		}
+		
+		cc.deleteChatroom(c, u);
+		uc.deleteAccount(u);
 		
 		
 	}
@@ -167,7 +186,7 @@ public class UserControllerTest {
 	else 
 	{
 		System.out.println("Model getter returns:"+  deleted.getUsername());
-		fail("It return null");
+		fail("It returns null");
 	}
 	
 	uc.deleteAccount(u);
