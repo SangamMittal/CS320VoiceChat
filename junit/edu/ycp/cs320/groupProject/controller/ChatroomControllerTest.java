@@ -135,7 +135,14 @@ public class ChatroomControllerTest {
 	}
 	
 	
-	
+	@Test
+	public void testFormatMessage(){
+		ArrayList<Post> allMessages = chatroomController.allMessages(chatroom);
+		Post p = allMessages.get(0);
+		if(chatroomController.formatMessage(p).length() <= 0){
+			fail("No Message String return");
+		}
+	}
 	
 	
 	
