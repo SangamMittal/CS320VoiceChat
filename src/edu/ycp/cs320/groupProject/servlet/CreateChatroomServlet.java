@@ -73,26 +73,29 @@ public class CreateChatroomServlet extends HttpServlet {
 		} catch (NumberFormatException e) {
 			errorMessage = "Invalid double";
 		}
-		
+		Boolean createChatroomcheck = false;
 		// User click on create button
 		if(req.getParameter("create") != null){
 			roomController = new ChatroomController();
-			boolean createChatroomcheck = roomController.create(room, user);
+			createChatroomcheck = roomController.create(room, user);
 			// if user exist and matched password
-			if(createChatroomcheck == true){
-				resp.sendRedirect("chatroomList");
-			}
-			else{
+			if(!createChatroomcheck){
 				errorMessage = "Username is already taken";
-			}
-			
+			}		
 		}//end of user click on create button
 		
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
-
+		req.getSession().setAttribute("sharedChatroom", room);
 		
+		if(createChatroomcheck){
+			resp.sendRedirect("chatroom");
+			
+		}
+		
+		req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
+
 	}
 
 	
