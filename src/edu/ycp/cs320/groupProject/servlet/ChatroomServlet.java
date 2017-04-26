@@ -25,7 +25,7 @@ public class ChatroomServlet extends HttpServlet {
 	private PostController pc = new PostController();
 	private Post post = new Post();
 	private ArrayList<Post> posts = null;
-	private ArrayList<String> messages = null;
+	private ArrayList<String> messages = new ArrayList<String>();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
