@@ -347,10 +347,21 @@ public class DerbyDatabaseTests {
 	@Test	//Add this test between createChatroom and deleteChatroom tests
 	public void testInsertMessages() {
 		System.out.println("\n*** Testing insertMessages ***************************************************");
+		User user = new User();
+		user.setUsername("InsertyGuy");
+		user.setPassword("inserted");
+		System.out.println("	SignUp Success: " + db.signUp(user));
 		
-		
-		
-		
+		Chatroom room = new Chatroom();
+		room.setChatroomName("InsertingRoom");
+		room.setPassword("inserted");
+		System.out.println("	Create Success: " + db.createChatroom(room, user));
+		Post post = new Post();
+		post.setText("This is a message!");
+		Boolean test = db.insertMessages(room, post, user);
+		if(!test){
+			fail("Message not inserted");
+		}
 
 	}// end testInsertMessages
 	
