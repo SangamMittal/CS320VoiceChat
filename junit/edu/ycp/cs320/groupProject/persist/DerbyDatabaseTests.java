@@ -74,9 +74,14 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testLogin(){
 		System.out.println("\n*** Testing login ***************************************************");
+		User user = new User();
+		user.setUsername("LoginMan");
+		user.setPassword("l0gin");
+		db.signUp(user);
 		if(!db.Login(user)){
 			fail("User not logged in");
 		}
+		db.deleteUser(user);
 	}
 	
 	@Test
