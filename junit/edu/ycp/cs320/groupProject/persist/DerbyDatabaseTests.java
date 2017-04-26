@@ -179,8 +179,18 @@ public class DerbyDatabaseTests {
 		List<Post> PostList = null;
 		
 		Chatroom c = new Chatroom("ChatroomName", "password", true);
-		c.setChatroomID(1);
-	
+		//c.setChatroomID(1);
+		User u = new User();
+		u.setUsername("MessageMan");
+		u.setPassword("pass");
+		db.signUp(u);
+		db.createChatroom(c, u);
+		Post p = new Post();
+		p.setText("hey");
+		Post p2 = new Post();
+		p2.setText("bye");
+		db.insertMessages(c, p, u);
+		db.insertMessages(c, p2, u);
 		//Something should be going into PostList here, otherwise I wouldn't be getting a null pointer exception
 		PostList = db.selectMessages(c);
 		
@@ -188,18 +198,19 @@ public class DerbyDatabaseTests {
 		{
 			fail("PostList empty when it should have messages from chatroom c in it");
 		}
-		
+		/*
 		else
 		{
 			posts = new ArrayList<Post>();
-			for (Post p : posts) {
+			for (Post po : posts) {
 				
-				posts.add(p);
-				System.out.println(p.getText());
+				posts.add(po);
+				System.out.println(po.getText());
 			}
 		}
-		
-		
+		*/
+		db.deleteChatroom(c, u);
+		db.deleteUser(u);
 		
 		
 	}
