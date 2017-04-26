@@ -1,6 +1,7 @@
 package edu.ycp.cs320.groupProject.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,17 +24,22 @@ public class ChatroomServlet extends HttpServlet {
 	private Chatroom sharedChatroom;
 	private PostController pc = new PostController();
 	private Post post = new Post();
+	private ArrayList<Post> posts = null;
+	private ArrayList<String> messages = null;
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-	//	String user = (String) req.getSession().getAttribute("sharedUser");
+		//	String user = (String) req.getSession().getAttribute("sharedUser");
 		
-	sharedUser=	(String) req.getSession().getAttribute("sharedUser");
-	sharedChatroom = (Chatroom) (req.getSession().getAttribute("sharedChatroom"));
+		sharedUser=	(String) req.getSession().getAttribute("sharedUser");
+		sharedChatroom = (Chatroom) (req.getSession().getAttribute("sharedChatroom"));
 	
-	
+		posts = pc.getMessage(sharedChatroom);
+		for(Post p: posts){
+			messages.add(pc.formatMessage(p));
+		}
 		
 		if(sharedUser ==null   ){
 			System.out.println("    User: <" + sharedUser + "> not logged in or session timed out");

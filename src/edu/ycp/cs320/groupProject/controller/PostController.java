@@ -54,7 +54,10 @@ public class PostController {
 		// return authors for this title
 		return postArrayList;
 	}
-	
+	public String formatMessage(Post p){
+		String message = "[" + p.getSenderName() + "]: " + p.getText();
+		return message;
+	}
 	
 	
 
