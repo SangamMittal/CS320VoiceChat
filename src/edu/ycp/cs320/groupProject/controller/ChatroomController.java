@@ -123,6 +123,7 @@ public class ChatroomController {
 		return message;
 	}
 	
+	
 	/*
 	public void appearVoiceIcon()
 	{

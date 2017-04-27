@@ -93,7 +93,7 @@ function addtext() {
 			
 		<c:forEach items="${messages}" var = "post">
 				
-			<p> ${model.messages}   </p>		
+			<p> "${post.messages}"   </p>		
 					
 			</c:forEach>
 

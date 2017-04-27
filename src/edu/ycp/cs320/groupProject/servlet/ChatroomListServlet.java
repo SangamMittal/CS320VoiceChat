@@ -50,6 +50,12 @@ public class ChatroomListServlet extends HttpServlet {
 		// proceed to handle request...
 		System.out.println(" User: <" + sharedUser + "> logged in");
 		
+		ArrayList<Chatroom> allChatrooms = null;
+		ChatroomController roomController = new ChatroomController();
+
+		allChatrooms = roomController.getAllChatroom();
+		req.setAttribute("allChatrooms", allChatrooms);
+		
 		req.getRequestDispatcher("/_view/chatroomList.jsp").forward(req, resp);
 
 	}
@@ -65,13 +71,16 @@ public class ChatroomListServlet extends HttpServlet {
 		ArrayList<Chatroom> allChatrooms = null;
 		
 		allChatrooms = roomController.getAllChatroom();
-		
+		req.setAttribute("allChatrooms", allChatrooms);
+
 		Boolean redirect = false;
 		
 		for (Chatroom c: allChatrooms)
 		{
+			System.out.println("Got into For loop");
 			if (req.getParameter(c.getChatroomName())!= null)
 				{	
+					System.out.println("Got into if statement");
 					//add user to chatroom	
 					userController.insertUserIntoChatroom(u, c);
 
@@ -94,15 +103,16 @@ public class ChatroomListServlet extends HttpServlet {
 		
 		// Add parameters as request attributes for other servlets during this session
 		req.getSession().setAttribute("sharedUser", sharedUser);
-		sharedChatroom = chatroom;
-		req.getSession().setAttribute("sharedChatroom", sharedChatroom);
+		//sharedChatroom = chatroom;
+		System.out.println("C: " + chatroom.getChatroomName());
+		String sharedString = chatroom.getChatroomName();
+		req.getSession().setAttribute("sharedChatroom", sharedString);
 		
 		// Add result objects as request attributes
 		//req.setAttribute("errorMessage", errorMessage);
-		req.setAttribute("allChatrooms", allChatrooms);
 
 		
-		if (redirect==true)
+		if (redirect==true || req.getParameter("refresh") != null)
 		{
 			resp.sendRedirect("chatroom");
 		}

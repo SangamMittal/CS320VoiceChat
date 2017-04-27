@@ -57,7 +57,7 @@ public class CreateChatroomServlet extends HttpServlet {
 			if(username == null)
 				System.out.println("Not Logged In!!");
 			
-			if (roomName == null || roomPassword == null) {
+			if (roomName == null) {
 				errorMessage = "Please enter infomation";
 			}
 			else if (roomName.length() > 32 || roomPassword.length() > 32){
@@ -81,7 +81,10 @@ public class CreateChatroomServlet extends HttpServlet {
 			// if user exist and matched password
 			if(!createChatroomcheck){
 				errorMessage = "Username is already taken";
-			}		
+			}
+			else{
+				resp.sendRedirect("chatroom");
+			}
 		}//end of user click on create button
 		
 		

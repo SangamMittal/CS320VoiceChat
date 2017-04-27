@@ -56,16 +56,9 @@
 			<c:forEach items="${allChatrooms}" var = "room">
 					<div class = "list-group row"> 	
 							<input class="list-group-item col-xs-3 form-horizontal" type="Submit" name=${room.chatroomName} value=${room.chatroomName}>
-					</div/>
+					</div>
 			</c:forEach>
-			<div class="list-group row">
-				<a href = http://localhost:8081/groupProject/chatroom class="list-group-item col-xs-3 form-horizontal"> Chatroom 2 </a>
 
-
-			
-
-			
-			</div>
 			
 			<div class = "row> 	
 				<div class="col-md-4 col-md-offset-10">

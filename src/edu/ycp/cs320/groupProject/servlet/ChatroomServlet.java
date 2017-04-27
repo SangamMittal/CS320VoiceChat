@@ -21,10 +21,11 @@ import edu.ycp.cs320.groupProject.model.User;
 public class ChatroomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String sharedUser;
-	private Chatroom sharedChatroom;
+	private String sharedChatroom; // Changes here
+	private Chatroom chatroom;
 	private PostController pc = new PostController();
 	private Post post = new Post();
-	private ArrayList<Post> posts = null;
+	private ArrayList<Post> posts = new ArrayList<Post>();
 	private ArrayList<String> messages = new ArrayList<String>();
 	
 	@Override
@@ -34,18 +35,40 @@ public class ChatroomServlet extends HttpServlet {
 		//	String user = (String) req.getSession().getAttribute("sharedUser");
 		
 		sharedUser=	(String) req.getSession().getAttribute("sharedUser");
-		sharedChatroom = (Chatroom) (req.getSession().getAttribute("sharedChatroom"));
-	
-		posts = pc.getMessage(sharedChatroom);
+		sharedChatroom = (String) req.getSession().getAttribute("sharedChatroom");
+		//System.out.println("pc.getMessage?");
+		chatroom = new Chatroom();
+		chatroom.setChatroomName(sharedChatroom);
+		posts = pc.getMessage(chatroom);
+		//System.out.println("Got Message? : " + !posts.isEmpty());
+		if (posts != null)
+		{
+		
+		
 		for(Post p: posts){
+			System.out.println(p.getText());
 			messages.add(pc.formatMessage(p));
 		}
 		
-		if(sharedUser ==null   ){
+		}
+		
+		else if (posts==null)
+		{
+			System.out.println("Posts is null");
+		}
+		
+		if(sharedUser ==null){
 			System.out.println("    User: <" + sharedUser + "> not logged in or session timed out");
 		
 			// user is not logged in, or the session expired
 			resp.sendRedirect(req.getContextPath() + "/login");
+			return;
+		}
+		if(sharedChatroom ==null){
+			//System.out.println("    User: <" + sharedUser + "> not logged in or session timed out");
+		
+			// user is not logged in, or the session expired
+			resp.sendRedirect(req.getContextPath() + "/chatroom");
 			return;
 		}
 		
@@ -67,7 +90,7 @@ public class ChatroomServlet extends HttpServlet {
 		User u = new User();
 		u.setUsername(sharedUser);
 		
-		Chatroom chatroom = sharedChatroom;
+		//String chatroom = sharedChatroom;
 		Post p = post;
 		UserController uController = new UserController();
 		ChatroomController cController = new ChatroomController();
@@ -107,6 +130,7 @@ public class ChatroomServlet extends HttpServlet {
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
+		
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
