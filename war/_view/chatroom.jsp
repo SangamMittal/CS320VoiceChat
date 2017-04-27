@@ -2,8 +2,22 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
+<!-- Cited: http://www.mediacollege.com/internet/javascript/form/add-text.html -->
+
 <html>
 	<head>
+	
+<script language="javascript" type="text/javascript">
+function addtext() {
+	var newtext = document.MyForm.usermessage.value;
+	document.MyForm.allmessages.value += newtext+"\n";
+	
+	document.MyForm.usermessage.value= ""  ;
+	
+}
+</script>
+	
+		<!-- Fix chatroom title -->
 		<title>Chatroom: </title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
 			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -57,19 +71,38 @@
 		</c:if >
 	
 		
-		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post">
+		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post" name="MyForm">
 			
-			<textarea class="boxSizeAllM"  type="text" name = "allmessages" readonly>${send}</textarea>
+			<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly>${send}</textarea>
 			
-			<textarea class="boxSize form-group"  type="text" name = "usermessage" ></textarea>
+			<textarea class="boxSize form-group" id="bottom" type="text" onclick="select();"  name = "usermessage"> </textarea>
 			
-			<input class="btn btn-success" type="Submit" name="send" value="Send">
+			
+			<!-- May need to change this back to type Submit
+			
+			Do a for loop that prints things into the messages box. model.messages
+			-->
+			
+			<input class="btn btn-success" type="button" name="send" value="Send" onclick="addtext();">
+			
+			
 			<input class="btn btn-danger" type="Submit" name="logout" value="Logout">
 			<input class="btn btn-warning" type="Submit" name="exitP" value="Exit Chat Room Permanently">
+		
+	
 			
-			
+		<c:forEach items="${messages}" var = "post">
+				
+			<p> ${model.messages}   </p>		
+					
+			</c:forEach>
+
 			
 			
 		</form>
+		
+		
 	</body>
+	
+	
 </html>
