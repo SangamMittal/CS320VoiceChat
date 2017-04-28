@@ -98,7 +98,7 @@ public class CreateChatroomServlet extends HttpServlet {
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
-		req.getSession().setAttribute("sharedChatroom", room);
+		req.getSession().setAttribute("sharedChatroomName", room.getChatroomName());
 		
 		if(createChatroomcheck){
 			resp.sendRedirect("chatroom");

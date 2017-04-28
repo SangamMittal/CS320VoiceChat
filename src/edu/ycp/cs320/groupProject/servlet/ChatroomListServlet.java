@@ -65,8 +65,12 @@ public class ChatroomListServlet extends HttpServlet {
 			throws ServletException, IOException {
 		UserController userController = new UserController();
 		ChatroomController roomController = new ChatroomController();
-		Chatroom chatroom = null;
-		Chatroom sharedChatroom = null;
+	//	String chatroomName = null;
+		String sharedChatroomName = null;
+		Chatroom chatroom2 = null;
+		
+	
+		
 		
 		ArrayList<Chatroom> allChatrooms = null;
 		
@@ -74,6 +78,8 @@ public class ChatroomListServlet extends HttpServlet {
 		req.setAttribute("allChatrooms", allChatrooms);
 
 		Boolean redirect = false;
+		
+		String roomName = null;
 		
 		for (Chatroom c: allChatrooms)
 		{
@@ -84,7 +90,11 @@ public class ChatroomListServlet extends HttpServlet {
 					//add user to chatroom	
 					userController.insertUserIntoChatroom(u, c);
 
-					chatroom = c;
+					
+					
+					chatroom2 = c;
+					roomName = c.getChatroomName();
+					chatroom2.setChatroomName(sharedChatroomName);
 					
 					//redirect
 					redirect=true;
@@ -92,6 +102,8 @@ public class ChatroomListServlet extends HttpServlet {
 					
 				}
 		}
+		
+		
 		
 //		if(req.getParameter("logout") != null){
 //			sharedUser = userController.logout();
@@ -108,8 +120,8 @@ public class ChatroomListServlet extends HttpServlet {
 		req.getSession().setAttribute("sharedUser", sharedUser);
 		//sharedChatroom = chatroom;
 //		System.out.println("C: " + chatroom.getChatroomName());
-		String sharedString = chatroom.getChatroomName();
-		req.getSession().setAttribute("sharedChatroom", sharedString);
+		String sharedString = chatroom2.getChatroomName();
+		req.getSession().setAttribute("sharedChatroomName", roomName);
 		
 		// Add result objects as request attributes
 		//req.setAttribute("errorMessage", errorMessage);

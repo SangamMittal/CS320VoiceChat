@@ -21,8 +21,8 @@ import edu.ycp.cs320.groupProject.model.User;
 public class ChatroomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String sharedUser;
-	private Chatroom sharedChatroom; // Changes here
-	private Chatroom chatroom;
+	private String sharedChatroomName; // Changes here
+	private Chatroom chatroom2;
 	private PostController pc = new PostController();
 	private Post post = new Post();
 	private ArrayList<Post> posts = new ArrayList<Post>();
@@ -34,12 +34,15 @@ public class ChatroomServlet extends HttpServlet {
 		
 		//	String user = (String) req.getSession().getAttribute("sharedUser");
 		
+		
+		
 		sharedUser=	(String) req.getSession().getAttribute("sharedUser");
-		sharedChatroom = (Chatroom) req.getSession().getAttribute("sharedChatroom");
+		sharedChatroomName = (String) req.getSession().getAttribute("sharedChatroomName");
 		//System.out.println("pc.getMessage?");
-		chatroom = new Chatroom();
-		chatroom.setChatroomName(sharedChatroom.getChatroomName());
-		posts = pc.getMessage(chatroom);
+		chatroom2 = new Chatroom();
+		chatroom2.setChatroomName(sharedChatroomName);
+		chatroom2.setChatroomName(chatroom2.getChatroomName());
+		posts = pc.getMessage(chatroom2);
 		//System.out.println("Got Message? : " + !posts.isEmpty());
 		if (posts != null)
 		{
@@ -64,7 +67,7 @@ public class ChatroomServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
-		if(sharedChatroom ==null){
+		if(sharedChatroomName ==null){
 			//System.out.println("    User: <" + sharedUser + "> not logged in or session timed out");
 		
 			// user is not logged in, or the session expired
@@ -112,14 +115,18 @@ public class ChatroomServlet extends HttpServlet {
 		}
 		else if(req.getParameter("send") != null){
 			if(userMessage != null){
-				pc.post(u, p, chatroom);
+				pc.post(u, p, chatroom2);
 				
 				
 			}
 		}
-		else if(req.getAttribute("exitP") != null){
-			cController.permanentlyExitChatroom(u, chatroom);
+		//Changed to req.getParameter from req.getAttribute(typo I think)
+		else if(req.getParameter("exitP") != null){
+			cController.permanentlyExitChatroom(u, chatroom2);
 			resp.sendRedirect("chatroomList");
+			
+		
+			
 		}
 
 		
