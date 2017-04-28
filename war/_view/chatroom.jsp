@@ -9,10 +9,10 @@
 	
 <script language="javascript" type="text/javascript">
 function addtext() {
-	var newtext = document.MyForm.usermessage.value;
+	var newtext = document.MyForm.source.value;
 	document.MyForm.allmessages.value += newtext+"\n";
 	
-	document.MyForm.usermessage.value= ""  ;
+	document.MyForm.source.value= ""  ;
 	
 }
 </script>
@@ -73,9 +73,9 @@ function addtext() {
 		
 		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post" name="MyForm">
 			
-			<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly>${send}</textarea>
+			<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly></textarea>
 			
-			<textarea class="boxSize form-group" id="bottom" type="text" onclick="select();"  name = "usermessage"> </textarea>
+			<input type = "text" name = "source" value= "${source}">
 			
 			
 			<!-- May need to change this back to type Submit
@@ -83,20 +83,21 @@ function addtext() {
 			Do a for loop that prints things into the messages box. model.messages
 			-->
 			
-			<input class="btn btn-success" type="button" name="send" value="Send" onclick="addtext();">
-			
+			<input class="btn btn-success" type="Submit" name="send" value="Send">
 			
 			<input class="btn btn-danger" type="Submit" name="logout" value="Logout">
 			<input class="btn btn-warning" type="Submit" name="exitP" value="Exit Chat Room Permanently">
 		
 	
-			
+	<!--	commented out for now
+		
 		<c:forEach items="${messages}" var = "post">
 				
-			<p> "${post.text}"   </p>		
+			<p>   </p>		
 					
 			</c:forEach>
 
+-->
 			
 			
 		</form>

@@ -28,6 +28,11 @@ public class ChatroomServlet extends HttpServlet {
 	private ArrayList<Post> posts = new ArrayList<Post>();
 	private ArrayList<String> messages = new ArrayList<String>();
 	
+	public Post getChatroomServletPost()
+	{
+		return post;
+	}
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -42,6 +47,8 @@ public class ChatroomServlet extends HttpServlet {
 		chatroom2 = new Chatroom();
 		chatroom2.setChatroomName(sharedChatroomName);
 		chatroom2.setChatroomName(chatroom2.getChatroomName());
+		
+		
 		posts = pc.getMessage(chatroom2);
 		//System.out.println("Got Message? : " + !posts.isEmpty());
 		if (posts != null)
@@ -94,14 +101,20 @@ public class ChatroomServlet extends HttpServlet {
 		u.setUsername(sharedUser);
 		
 		//String chatroom = sharedChatroom;
-		Post p = post;
+		
 		UserController uController = new UserController();
 		ChatroomController cController = new ChatroomController();
 		
 		System.out.println(sharedUser);
 		
 		try {
-			userMessage = req.getParameter("usermessage");
+		
+			//Is the problem that the post method doesn't know of this usermessage object?
+			
+			userMessage = (String) req.getParameter("source");
+			//Added line
+			post.setText(userMessage);
+			System.out.println("In the try in ChatroomServlet: the get from post.setText(userMessage) is this:" + post.getText() + "and this is usermessage:" + userMessage + "they should be the same"); 
 					
 					
 		} catch (NumberFormatException e) {
@@ -114,11 +127,14 @@ public class ChatroomServlet extends HttpServlet {
 			resp.sendRedirect("login");
 		}
 		else if(req.getParameter("send") != null){
-			if(userMessage != null){
-				pc.post(u, p, chatroom2);
+			System.out.println("In send else-if, this is userMessage: " + post.getText());
+	//		if(userMessage != null){
+				//It's coming out null here but still printing...
+				System.out.println("In userMessage statement, this is userMessage:" + post.getText());
+				pc.post(u, post, chatroom2);
 				
 				
-			}
+//			}
 		}
 		//Changed to req.getParameter from req.getAttribute(typo I think)
 		else if(req.getParameter("exitP") != null){
@@ -140,6 +156,28 @@ public class ChatroomServlet extends HttpServlet {
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
 		
+		
+		//Start new
+		/*
+		posts = pc.getMessage(chatroom2);
+		//System.out.println("Got Message? : " + !posts.isEmpty());
+		if (posts != null)
+		{
+		
+		
+		for(Post po: posts){
+			System.out.println(p.getText());
+			messages.add(pc.formatMessage(p));
+		}
+		
+		}
+		
+		else if (posts==null)
+		{
+			System.out.println("Posts is null");
+		}
+		*/
+		//End new
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);

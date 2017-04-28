@@ -12,6 +12,7 @@ import java.util.List;
 
 import edu.ycp.cs320.groupProject.persist.DBUtil;
 import edu.ycp.cs320.groupProject.persist.InitialData;
+import edu.ycp.cs320.groupProject.servlet.ChatroomServlet;
 import edu.ycp.cs320.groupProject.model.Chatroom;
 import edu.ycp.cs320.groupProject.model.Post;
 import edu.ycp.cs320.groupProject.model.User;
@@ -20,6 +21,7 @@ import edu.ycp.cs320.groupProject.model.User;
 import edu.ycp.cs320.groupProject.persist.DerbyDatabase.Transaction;
 
 public class DerbyDatabase implements IDatabase {
+	
 	static {
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -545,8 +547,12 @@ public class DerbyDatabase implements IDatabase {
 			try
 			{
 				stmt = conn.prepareStatement("insert into postContents (messageString, user_id, room_id) values(?, ?, ?)" );
+				System.out.println("In insertMessages: p.getText() is: "+p.getText()); 
+				
+				//p.getText() is blank-- I think it's null-- I think I may have to get it from the JavaScript or the session Parameter
 				stmt.setString(1, p.getText() );
-				//The line below this one is causing problems in my testPost in PostControllerTest-null Pointer Exception
+				
+				
 				stmt.setInt(2, selectUser(u).getUserID());
 				stmt.setInt(3, getRoomID(c));
 				stmt.executeUpdate();
@@ -564,7 +570,8 @@ public class DerbyDatabase implements IDatabase {
 				{
 					found = true;	
 					User user = new User();
-					loadUser(user, resultSet2, 1);
+					//We're trying to load room_id, user_id, messageString into a User object, but User table only has user_id in common... won't work
+				//	loadUser(user, resultSet2, 1);
 					
 					return true;
 					
