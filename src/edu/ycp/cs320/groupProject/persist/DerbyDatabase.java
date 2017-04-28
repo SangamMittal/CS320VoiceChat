@@ -544,16 +544,16 @@ public class DerbyDatabase implements IDatabase {
 			ResultSet resultSet2 = null;
 			try
 			{
-				stmt = conn.prepareStatement("insert into messagesList (chatroom_id, sender_id, messageString) values(?, ?, ?)" );
-				stmt.setInt(1, getRoomID(c));
+				stmt = conn.prepareStatement("insert into postContents (messageString, user_id, room_id) values(?, ?, ?)" );
+				stmt.setString(1, p.getText() );
 				//The line below this one is causing problems in my testPost in PostControllerTest-null Pointer Exception
 				stmt.setInt(2, selectUser(u).getUserID());
-				stmt.setString(3, p.getText());
+				stmt.setInt(3, getRoomID(c));
 				stmt.executeUpdate();
 				
 				boolean found = false;
 				
-				stmt2 = conn.prepareStatement("select * from messagesList where chatroom_id = ? and sender_id = ? and messageString = ?" );
+				stmt2 = conn.prepareStatement("select * from postContents where room_id = ? and user_id = ? and messageString = ?" );
 				stmt2.setInt(1, getRoomID(c));
 				stmt2.setInt(2, selectUser(u).getUserID());
 				stmt2.setString(3, p.getText());
