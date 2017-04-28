@@ -100,6 +100,9 @@ public class ChatroomListServlet extends HttpServlet {
 		if(req.getParameter("createChatroom") != null){
 			resp.sendRedirect("createChatroom");
 		}
+		if(req.getParameter("refresh") != null){
+			resp.sendRedirect("chatroomList");
+		}
 		
 		// Add parameters as request attributes for other servlets during this session
 		req.getSession().setAttribute("sharedUser", sharedUser);
@@ -112,7 +115,7 @@ public class ChatroomListServlet extends HttpServlet {
 		//req.setAttribute("errorMessage", errorMessage);
 
 		
-		if (redirect==true || req.getParameter("refresh") != null)
+		if (redirect==true)
 		{
 			resp.sendRedirect("chatroom");
 		}
