@@ -104,7 +104,7 @@ public class ChatroomListServlet extends HttpServlet {
 		// Add parameters as request attributes for other servlets during this session
 		req.getSession().setAttribute("sharedUser", sharedUser);
 		//sharedChatroom = chatroom;
-		System.out.println("C: " + chatroom.getChatroomName());
+//		System.out.println("C: " + chatroom.getChatroomName());
 		String sharedString = chatroom.getChatroomName();
 		req.getSession().setAttribute("sharedChatroom", sharedString);
 		

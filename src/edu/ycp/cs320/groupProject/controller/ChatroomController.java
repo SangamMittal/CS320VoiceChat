@@ -72,7 +72,7 @@ public class ChatroomController {
 		for(Chatroom room: listOfChatrooms){
 			if(room.getChatroomName().equals(c.getChatroomName())){
 				nameTaken = true;
-				break;
+				//break;
 			}
 		}
 		
@@ -122,7 +122,6 @@ public class ChatroomController {
 		String message = "[" + p.getSenderName() + "]: " + p.getText();
 		return message;
 	}
-	
 	
 	/*
 	public void appearVoiceIcon()

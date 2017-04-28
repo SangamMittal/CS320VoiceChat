@@ -46,47 +46,55 @@ public class CreateChatroomServlet extends HttpServlet {
 		User user = new User();
 		ChatroomController roomController;
 		String errorMessage = null;
+		Boolean error = false;
+		Boolean createChatroomcheck = false;
 		
-		
-		// Decode form parameters and dispatch to controller
-		try {
-			String username = (String) req.getSession().getAttribute("sharedUser");
-			String roomName = req.getParameter("roomName");
-			String roomPassword = req.getParameter("roomPassword");
-			
-			if(username == null)
-				System.out.println("Not Logged In!!");
-			
-			if (roomName == null) {
-				errorMessage = "Please enter infomation";
-			}
-			else if (roomName.length() > 32 || roomPassword.length() > 32){
-				errorMessage = "Error: Max 32 Characters";
-			}
-			else{
+		if(req.getParameter("create") != null){
+			// Decode form parameters and dispatch to controller
+			try {
+				String username = (String) req.getSession().getAttribute("sharedUser");
+				String roomName = req.getParameter("roomName");
+				String roomPassword = req.getParameter("roomPassword");
+				/*
+				if(username == null){
+					System.out.println("Not Logged In!!");
+					error = true;
+				}
+				*/
+				if (roomName == null) {
+					errorMessage = "Please enter infomation";
+					System.out.println(errorMessage);
+					error = true;
+				}
+				else if (roomName.length() > 32 || roomPassword.length() > 32){
+					errorMessage = "Error: Max 32 Characters";
+					System.out.println(errorMessage);
+					error = true;
+				}
+				
 				user.setUsername(username);
 				room.setChatroomName(roomName);
 				room.setPassword(roomPassword);
+				
+						
+						
+			} catch (NumberFormatException e) {
+				errorMessage = "Invalid double";
+				System.out.println(errorMessage);
+				error = true;
 			}
-					
-					
-		} catch (NumberFormatException e) {
-			errorMessage = "Invalid double";
+			
+			// User click on create button
+			if(!error){
+				roomController = new ChatroomController();
+				createChatroomcheck = roomController.create(room, user);
+				// if user exist and matched password
+				if(!createChatroomcheck){
+					errorMessage = "Chatroom name is already taken";
+					System.out.println(errorMessage);
+				}		
+			}//end of user click on create button
 		}
-		Boolean createChatroomcheck = false;
-		// User click on create button
-		if(req.getParameter("create") != null){
-			roomController = new ChatroomController();
-			createChatroomcheck = roomController.create(room, user);
-			// if user exist and matched password
-			if(!createChatroomcheck){
-				errorMessage = "Username is already taken";
-			}
-			else{
-				resp.sendRedirect("chatroom");
-			}
-		}//end of user click on create button
-		
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
@@ -97,7 +105,7 @@ public class CreateChatroomServlet extends HttpServlet {
 			
 		}
 		
-		req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/createChatroom.jsp").forward(req, resp);
 
 	}
 

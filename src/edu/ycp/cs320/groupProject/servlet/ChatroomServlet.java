@@ -21,7 +21,7 @@ import edu.ycp.cs320.groupProject.model.User;
 public class ChatroomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String sharedUser;
-	private String sharedChatroom; // Changes here
+	private Chatroom sharedChatroom; // Changes here
 	private Chatroom chatroom;
 	private PostController pc = new PostController();
 	private Post post = new Post();
@@ -35,10 +35,10 @@ public class ChatroomServlet extends HttpServlet {
 		//	String user = (String) req.getSession().getAttribute("sharedUser");
 		
 		sharedUser=	(String) req.getSession().getAttribute("sharedUser");
-		sharedChatroom = (String) req.getSession().getAttribute("sharedChatroom");
+		sharedChatroom = (Chatroom) req.getSession().getAttribute("sharedChatroom");
 		//System.out.println("pc.getMessage?");
 		chatroom = new Chatroom();
-		chatroom.setChatroomName(sharedChatroom);
+		chatroom.setChatroomName(sharedChatroom.getChatroomName());
 		posts = pc.getMessage(chatroom);
 		//System.out.println("Got Message? : " + !posts.isEmpty());
 		if (posts != null)
@@ -126,6 +126,8 @@ public class ChatroomServlet extends HttpServlet {
 		
 		// Add parameters as request attributes
 		//req.setAttribute("model", chatroom);
+		
+		req.setAttribute("messages", messages);
 
 		
 		// Add result objects as request attributes

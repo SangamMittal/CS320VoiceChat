@@ -17,7 +17,15 @@
 	</head>
 
 	<body>
+	
+			<c:if test="${! empty errorMessage}">
+			<div class="error">${errorMessage}</div>
+		</c:if>	
+	
 		<form action="${pageContext.servletContext.contextPath}/createChatroom" method="post">
+		
+					
+		
 			  <div class="form-group">
 			    <label>Chat Room Name</label>
 			    <input type="username" name = "roomName" class="form-control"
@@ -30,6 +38,8 @@
 			  </div>
 				
 			<input class="btn btn-warning" type="Submit" name="create" value="Create">
+			
+			
 
 		</form>
 	</body>
