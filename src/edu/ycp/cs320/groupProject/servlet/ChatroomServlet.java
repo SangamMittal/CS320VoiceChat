@@ -136,6 +136,11 @@ public class ChatroomServlet extends HttpServlet {
 				
 //			}
 		}
+		else if (req.getParameter("Refresh")!= null)
+		{
+			resp.sendRedirect("chatroom");
+		}
+		
 		//Changed to req.getParameter from req.getAttribute(typo I think)
 		else if(req.getParameter("exitP") != null){
 			cController.permanentlyExitChatroom(u, chatroom2);
@@ -151,6 +156,7 @@ public class ChatroomServlet extends HttpServlet {
 		//req.setAttribute("model", chatroom);
 		
 		req.setAttribute("messages", messages);
+		req.setAttribute("post", post);
 
 		
 		// Add result objects as request attributes
