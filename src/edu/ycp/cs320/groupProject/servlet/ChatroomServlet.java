@@ -125,6 +125,10 @@ public class ChatroomServlet extends HttpServlet {
 		
 		if(req.getParameter("logout") != null){
 			resp.sendRedirect("login");
+			chatroom2= null;
+			post = null;
+			sharedUser= null;
+			
 		}
 		else if(req.getParameter("send") != null){
 			System.out.println("In send else-if, this is userMessage: " + post.getText());
@@ -145,7 +149,8 @@ public class ChatroomServlet extends HttpServlet {
 		else if(req.getParameter("exitP") != null){
 			cController.permanentlyExitChatroom(u, chatroom2);
 			resp.sendRedirect("chatroomList");
-			
+			chatroom2= null;
+			post= null;
 		
 			
 		}
