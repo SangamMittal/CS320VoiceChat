@@ -526,7 +526,7 @@ public class DerbyDatabase implements IDatabase {
 	public void loadPost(Post p, ResultSet resultSet, int index)
 			throws SQLException {
 		p.setText(resultSet.getString(index++));
-		p.setSenderName(resultSet.getString(index++));
+		p.setSenderID(resultSet.getInt(index++));
 		p.setRoomID(resultSet.getInt(index++));
 		
 		
