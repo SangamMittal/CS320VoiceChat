@@ -73,7 +73,7 @@ function addtext() {
 		
 		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post" name="MyForm">
 			
-			<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly>${post.text}</textarea>
+			<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly>${messages}</textarea>
 			
 			<textarea class="boxSize form-group" id="source" input type="text"  name = "source" value =  "${source}"> </textarea>
 			
@@ -95,16 +95,10 @@ function addtext() {
 			<p> ${messages} </p>		
 					
 			</c:forEach>
--->
-
-	
+-->	
 
 
-
-			
 		</form>
-		
-		
 	</body>
 	
 	
