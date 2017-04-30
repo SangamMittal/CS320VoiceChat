@@ -75,7 +75,7 @@ function addtext() {
 			
 			<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly>${messages}</textarea>
 			
-			<textarea class="boxSize form-group" id="source" input type="text"  name = "source" value =  "${source}"> </textarea>
+			<textarea class="boxSize form-group" id="source" input type="text"  name = "source" value =  "${source}"></textarea>
 			
 			
 			<!-- May need to change this back to type Submit

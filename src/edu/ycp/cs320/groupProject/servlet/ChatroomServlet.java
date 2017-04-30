@@ -114,7 +114,7 @@ public class ChatroomServlet extends HttpServlet {
 			userMessage = (String) req.getParameter("source");
 			//Added line
 			
-				if (pc.messageIsValid(userMessage) || userMessage!=null)
+				if (pc.messageIsValid(userMessage) == true && userMessage!=null)
 				{		
 				post.setText(userMessage);
 				}
@@ -143,7 +143,8 @@ public class ChatroomServlet extends HttpServlet {
 	//		if(userMessage != null){
 				//It's coming out null here but still printing...
 				System.out.println("In userMessage statement, this is userMessage:" + post.getText());
-				pc.post(u, post, chatroom2);
+				if(post.getText()!=null)
+					pc.post(u, post, chatroom2);
 				
 				
 //			}
