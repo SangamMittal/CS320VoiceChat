@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.ycp.cs320.booksdb.model.Author;
-import edu.ycp.cs320.booksdb.model.Book;
-import edu.ycp.cs320.booksdb.model.Pair;
+
+import edu.ycp.cs320.groupProject.model.Chatroom;
+import edu.ycp.cs320.groupProject.model.Post;
+import edu.ycp.cs320.groupProject.model.User;
 
 //Worked with Bradley and Rathana.
 //I helped figure out the fake database with Bradley for the lastNameQuery.
@@ -20,107 +21,105 @@ import edu.ycp.cs320.booksdb.model.Pair;
 
 public class FakeDatabase implements IDatabase {
 	
-	private List<Author> authorList;
-	private List<Book> bookList;
+	
 	
 	public FakeDatabase() {
-		authorList = new ArrayList<Author>();
-		bookList = new ArrayList<Book>();
+		
 		
 		// Add initial data
-		readInitialData();
+	
 		
-		System.out.println(authorList.size() + " authors");
-		System.out.println(bookList.size() + " books");
-	}
-
-	public void readInitialData() {
-		try {
-			authorList.addAll(InitialData.getAuthors());
-			bookList.addAll(InitialData.getBooks());
-		} catch (IOException e) {
-			throw new IllegalStateException("Couldn't read initial data", e);
-		}
+		
 	}
 	
+
 	@Override
-	public List<Pair<Author, Book>> findAuthorAndBookByTitle(String title) {
-		List<Pair<Author, Book>> result = new ArrayList<Pair<Author,Book>>();
-		for (Book book : bookList) {
-			if (book.getTitle().equals(title)) {
-				Author author = findAuthorByAuthorId(book.getAuthorId());
-				result.add(new Pair<Author, Book>(author, book));
-			}
-		}
-		return result;
-	}
-	
-	public List<Pair<Author, Book>> findAuthorAndBookByAuthorLastName(String lastname)
-	{
-		//for a specified last name, return a book
-		
-		List<Pair<Author, Book>> result = new ArrayList<Pair<Author,Book>>();
-		
-		for (Author author: authorList)
-		{
-			if (author.getLastname().equals(lastname))
-			{
-				for (Book book: bookList)
-				{			
-					if (book.getAuthorId() == author.getAuthorId())
-					{		
-				result.add(new Pair<Author, Book>(author, book));
-					}
-				}
-				}
-		}
-		return result;
-	}
-	
-	public List<Pair<Author, Book>> insertBook(String firstname, String lastname, String ISBN, int year, String title )
-	{
-	
-		List<Pair<Author, Book>> result = new ArrayList<Pair<Author,Book>>();
-		
-		int authorID= -1;
-		
-		Book b = new Book();
-		
-		b.setAuthorId(authorID);
-		b.setIsbn(ISBN);
-		b.setPublished(year);
-		b.setTitle(title);
-		
-		boolean authorExists= false;
-		
-		
-		for (Author a: authorList)
-		{
-		if (a.getFirstname().equals(firstname) && a.getLastname().equals(lastname))
-		{	
-			 authorExists = true;
-			 authorID = a.getAuthorId();	
-		}
-		}
-		
-		if (authorExists == false)
-		{	
-		Author added = new Author();
-		added.setFirstname(firstname);
-		added.setLastname(lastname);
-		added.setAuthorId(authorList.size()+1);
-		result.add( new Pair<Author, Book>(added, b) );
-		authorID = authorList.size()+1;
-		}
-		return result;
+	public Boolean signUp(User u) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	private Author findAuthorByAuthorId(int authorId) {
-		for (Author author : authorList) {
-			if (author.getAuthorId() == authorId) {
-				return author;
-			}
-		}
+	@Override
+	public boolean Login(User u) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public User deleteUser(User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean deleteChatroom(Chatroom c, User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean createChatroom(Chatroom c, User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Post> selectMessages(Chatroom c) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean removeUserFromChatroom(Chatroom c, User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User selectAdminFromChatroom(Chatroom c) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean changeAdmin(Chatroom c, User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean insertMessages(Chatroom c, Post p, User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Chatroom> selectAllChatrooms() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean insertUserIntoChatroom(User u, Chatroom c) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User selectUser(User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Chatroom selectChatroom(Chatroom c) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User selectUserByID(User u) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	
