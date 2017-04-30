@@ -59,6 +59,26 @@ public class PostController {
 		return message;
 	}
 	
+	public boolean messageIsValid(String s)
+	{
+		//ArrayList<Character> characters = new ArrayList<Character>();
+		
+		for (int i=0; i<s.length(); i++)
+		{
+			
+			if ( s.charAt(i) != ' ' )
+			{
+				return true;
+			}
+			
+			
+		}
+			return false;
+		
+		
+		
+	}
+	
 	
 
 }

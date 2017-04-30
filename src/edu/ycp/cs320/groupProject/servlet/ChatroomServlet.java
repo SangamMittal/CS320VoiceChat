@@ -113,7 +113,11 @@ public class ChatroomServlet extends HttpServlet {
 			
 			userMessage = (String) req.getParameter("source");
 			//Added line
-			post.setText(userMessage);
+			
+				if (pc.messageIsValid(userMessage))
+				{		
+				post.setText(userMessage);
+				}
 			System.out.println("In the try in ChatroomServlet: the get from post.setText(userMessage) is this:" + post.getText() + "and this is usermessage:" + userMessage + "they should be the same"); 
 					
 					
