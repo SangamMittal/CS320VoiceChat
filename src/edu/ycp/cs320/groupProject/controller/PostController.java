@@ -55,7 +55,10 @@ public class PostController {
 		return postArrayList;
 	}
 	public String formatMessage(Post p){
-		String message = "[" + p.getSenderName() + "]: " + p.getText() + "\n";
+		User u = new User();
+		u.setUserId(p.getSenderID());
+		u = db.selectUserByID(u);
+		String message = "[" + u.getUsername() + "]: " + p.getText() + "\n";
 		return message;
 	}
 	

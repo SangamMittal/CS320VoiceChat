@@ -45,7 +45,8 @@ public interface IDatabase {
 	public Chatroom selectChatroom(Chatroom c);
 	
 	
-	
+	// Rathana
+	public User selectUserByID(User u);
 	
 	
 	

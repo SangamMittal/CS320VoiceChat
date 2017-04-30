@@ -272,6 +272,50 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
+	public User selectUserByID(User u)
+	{
+		return executeTransaction(new Transaction<User>()
+		{
+		@Override
+		public User execute(Connection conn) throws SQLException
+		{
+			PreparedStatement stmt= null;
+			ResultSet resultSet= null;
+			String username= null;
+			User uReturn = new User();
+			try
+			{
+				// Getting the user based on username
+				stmt = conn.prepareStatement("select * from userList where user_id = ?" );
+				stmt.setInt(1, u.getUserID());	
+				resultSet= stmt.executeQuery();
+			
+				//while (resultSet.next()){
+				if(resultSet.next() != false){
+				//	if(u.getUsername().equals(resultSet.getString(2)))
+						loadUser(uReturn, resultSet, 1);
+				
+						
+				}
+		//		else{
+		//			uReturn = null;
+		//		}
+				//}
+				
+
+				return uReturn;
+				
+			} finally {
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(resultSet);
+			}
+		} 
+		});	
+	}
+	
+	
+	
+	@Override
 	public Chatroom selectChatroom(Chatroom c)
 	{
 		return executeTransaction(new Transaction<Chatroom>()
