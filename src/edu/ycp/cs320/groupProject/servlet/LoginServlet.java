@@ -19,8 +19,17 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		//System.out.println("In the Login servlet");
-		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 
+		if((String) req.getSession().getAttribute("sharedUser") != null){
+			System.out.println("    User is already logged in");
+		
+			// user is logged in
+			resp.sendRedirect(req.getContextPath() + "/chatroomList");
+			return;
+		}
+		
+		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
+		
 
 	}
 	
