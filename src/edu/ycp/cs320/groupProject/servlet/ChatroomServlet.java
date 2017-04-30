@@ -131,7 +131,7 @@ public class ChatroomServlet extends HttpServlet {
 			messages = null;
 			chatroom2 = new Chatroom();
 			post = new Post();
-			messages = new ArrayList<>();
+			messages = new ArrayList<String>();
 			
 		}
 		else if(req.getParameter("send") != null){
