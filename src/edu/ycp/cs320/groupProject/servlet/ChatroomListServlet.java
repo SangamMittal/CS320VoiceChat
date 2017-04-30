@@ -105,12 +105,13 @@ public class ChatroomListServlet extends HttpServlet {
 				}
 		}
 		
+		boolean logout = false;
 		
-		
-//		if(req.getParameter("logout") != null){
-//			sharedUser = userController.logout();
-//			resp.sendRedirect("login");
-//		}
+		if(req.getParameter("logout") != null){
+			sharedUser = null;
+			logout = true;
+			
+		}
 		if(req.getParameter("createChatroom") != null){
 			resp.sendRedirect("createChatroom");
 		}
@@ -120,6 +121,9 @@ public class ChatroomListServlet extends HttpServlet {
 		
 		// Add parameters as request attributes for other servlets during this session
 		req.getSession().setAttribute("sharedUser", sharedUser);
+		if(logout){
+			resp.sendRedirect("login");
+		}
 		//sharedChatroom = chatroom;
 //		System.out.println("C: " + chatroom.getChatroomName());
 		String sharedString = chatroom2.getChatroomName();

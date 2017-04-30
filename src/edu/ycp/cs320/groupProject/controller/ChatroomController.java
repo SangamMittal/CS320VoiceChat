@@ -48,15 +48,15 @@ public class ChatroomController {
 		// Database Method: check to see if the user exist in that chatroom
 		//			If the user does, then remove it from the database and return true
 		//			else do nothing and return false;
-		String admin = db.selectAdminFromChatroom(chatroom).getUsername();
-		if(user.getUsername().equals(admin)){
-			System.out.println("Cannot delete yourself");
-			System.out.println("Transfer your admin control to someone first!");
-			success = false;
-		}
-		else{
+		//String admin = db.selectAdminFromChatroom(chatroom).getUsername();
+		//if(user.getUsername().equals(admin)){
+		//	System.out.println("Cannot delete yourself");
+		//	System.out.println("Transfer your admin control to someone first!");
+		//	success = false;
+		//}
+		//else{
 			success = db.removeUserFromChatroom(chatroom, user);
-		}
+		//}
 		
 		return success;
 		
