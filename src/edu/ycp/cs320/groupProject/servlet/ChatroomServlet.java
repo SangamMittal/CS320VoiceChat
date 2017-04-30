@@ -150,13 +150,17 @@ public class ChatroomServlet extends HttpServlet {
 				if(post.getText()!=null)
 					pc.post(u, post, chatroom2);
 				
+				resp.sendRedirect("chatroom");
+				req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
+				
 				
 //			}
 		}
 		else if (req.getParameter("Refresh")!= null)
 		{
+			resp.sendRedirect("chatroom");
 			req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
-			//resp.sendRedirect("chatroom");
+			
 			
 			chatroom2= null;
 			post= null;
