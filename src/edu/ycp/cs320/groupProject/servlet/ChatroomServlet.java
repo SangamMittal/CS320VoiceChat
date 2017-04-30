@@ -128,8 +128,10 @@ public class ChatroomServlet extends HttpServlet {
 			chatroom2= null;
 			post = null;
 			sharedUser= null;
+			messages = null;
 			chatroom2 = new Chatroom();
 			post = new Post();
+			messages = new ArrayList<>();
 			
 		}
 		else if(req.getParameter("send") != null){
@@ -153,8 +155,10 @@ public class ChatroomServlet extends HttpServlet {
 			resp.sendRedirect("chatroomList");
 			chatroom2= null;
 			post= null;
+			messages = null;
 			chatroom2 = new Chatroom();
 			post = new Post();
+			messages = new ArrayList<String>();
 		
 			
 		}
