@@ -12,10 +12,7 @@ public class ChatroomTest {
 	
 	@Before
 	public void setUp(){
-		String name = "name";
-		String password = "password";
-		Boolean hasPassword = true;
-		room = new Chatroom(name, password, hasPassword);
+		room = new Chatroom();
 	}
 	
 	@Test
@@ -34,6 +31,7 @@ public class ChatroomTest {
 	
 	@Test
 	public void testGetName(){
+		room.setChatroomName("name");
 		assertEquals("name", room.getChatroomName());
 	}
 	
@@ -46,6 +44,7 @@ public class ChatroomTest {
 	
 	@Test
 	public void testGetPassword(){
+		room.setPassword("password");
 		assertEquals("password", room.getPassword());
 	}
 	
