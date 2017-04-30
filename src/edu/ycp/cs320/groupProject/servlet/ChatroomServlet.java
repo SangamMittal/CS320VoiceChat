@@ -151,7 +151,17 @@ public class ChatroomServlet extends HttpServlet {
 		}
 		else if (req.getParameter("Refresh")!= null)
 		{
+			
 			resp.sendRedirect("chatroom");
+			
+			chatroom2= null;
+			post= null;
+			messages = null;
+			chatroom2 = new Chatroom();
+			post = new Post();
+			messages = new ArrayList<String>();
+			
+			
 		}
 		
 		//Changed to req.getParameter from req.getAttribute(typo I think)
