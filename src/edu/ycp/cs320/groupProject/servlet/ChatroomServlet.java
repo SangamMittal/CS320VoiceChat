@@ -114,7 +114,7 @@ public class ChatroomServlet extends HttpServlet {
 			userMessage = (String) req.getParameter("source");
 			//Added line
 			
-				if (pc.messageIsValid(userMessage) || userMessage==null)
+				if (pc.messageIsValid(userMessage) || userMessage!=null)
 				{		
 				post.setText(userMessage);
 				}
