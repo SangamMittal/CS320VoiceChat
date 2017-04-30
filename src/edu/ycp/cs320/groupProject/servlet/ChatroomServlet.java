@@ -38,7 +38,9 @@ public class ChatroomServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		//	String user = (String) req.getSession().getAttribute("sharedUser");
-		
+	
+		//Only have 1 second to type in a message
+		//resp.setIntHeader("Refresh", 10);
 		
 		
 		sharedUser=	(String) req.getSession().getAttribute("sharedUser");
