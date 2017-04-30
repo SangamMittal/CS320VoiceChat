@@ -73,7 +73,13 @@ function addtext() {
 		
 		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post" name="MyForm">
 			
-			<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly>${messages}</textarea>
+			<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly>
+			
+		<c:forEach items="${messages}" var="post" >	
+			<p> ${post} </p>		
+			</c:forEach>
+			
+			</textarea>
 			
 			<textarea class="boxSize form-group" id="source" input type="text"  name = "source" value =  "${source}"></textarea>
 			
@@ -89,13 +95,8 @@ function addtext() {
 			<input class="btn btn-warning" type="Submit" name="exitP" value="Exit Chat Room Permanently">
 			<input class="btn btn-warning" type="Submit" name="Refresh" value="Refresh">
 		
-	<!--	
-		<c:forEach items="${messages}" >
-				
-			<p> ${messages} </p>		
-					
-			</c:forEach>
--->	
+
+
 
 
 		</form>
