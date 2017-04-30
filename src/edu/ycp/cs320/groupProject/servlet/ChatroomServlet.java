@@ -87,6 +87,9 @@ public class ChatroomServlet extends HttpServlet {
 		// proceed to handle request...
 		System.out.println("     User: <" + sharedUser + "> logged in");
 		
+		req.setAttribute("messages", messages);
+
+		
 		
 		req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
 
