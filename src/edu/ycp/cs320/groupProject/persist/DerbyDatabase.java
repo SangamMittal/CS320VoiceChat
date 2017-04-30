@@ -493,7 +493,7 @@ public class DerbyDatabase implements IDatabase {
 				stmt.setString(1, roomName);	
 				stmt.setString(2, c.getPassword());	
 				stmt.setInt(3, adminID);	
-				stmt.setInt(4, c.getMessagesID());	
+				stmt.setInt(4, 0);	
 				stmt.executeUpdate();
 				
 				//Trying to get that chatroom
