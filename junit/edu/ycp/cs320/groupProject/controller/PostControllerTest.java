@@ -60,11 +60,11 @@ public class PostControllerTest {
 	
 	@Test public void testGetMessage()
 	{
-		Chatroom c= new Chatroom("Bananas", "pw", false);
+		Chatroom c= new Chatroom();
 		c.setChatroomName("Bananas");
 		c.setPassword("Dood");
 		
-		User u = new User("Bluh", "Hi", false);
+		User u = new User();
 		u.setUsername("Bluh");
 		u.setPassword("Dood");
 		
@@ -73,8 +73,10 @@ public class PostControllerTest {
 		//Do I need this line?
 		p.setText("MUMBO JUMBO");
 		
-		cc.create(c, u);
 		lsc.signUp(u);
+	//	cc.create(c, u);
+		System.out.println("cc.create is:"+ cc.create(c, u));
+		pc.post(u, p, c);
 		
 		ArrayList<Post> posts = new ArrayList<Post>();
 			
