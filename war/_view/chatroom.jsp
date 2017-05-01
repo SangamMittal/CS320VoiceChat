@@ -7,46 +7,27 @@
 <html>
 	<head>
 	
-<script language="javascript" type="text/javascript">
-function addtext() {
-	var newtext = document.MyForm.source.value;
-	document.MyForm.allmessages.value += newtext+"\n";
-	
-	document.MyForm.source.value= ""  ;
-	
-}
-</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
+<script>
 
 
+$(function()
+{
 
+setInterval(function()
+{
 
-<script type="text/javascript"><
-function ReplaceContentInContainer(dest,${messages}) {
-var container = document.getElementById(dest);
-container.innerHTML = ${messages};
-} >
+$('#top').html( $('#top').html() );
 
-</script>
+}, 1000);
 
-<!--http://www.willmaster.com/library/web-development/replace-div-content.php -->
-
-
-
-<script type="text/javascript"><!--
-var containerID = "dest";
-var timerID = setInterval("Refresh",1000);
-function Refresh() {
-
-	
-	ReplaceContentInContainer(containerID,${messages});
-	
 
 }
+);
+
+
+
 </script>
-
-
-
-
 
 	
 		<!-- Fix chatroom title -->
@@ -115,7 +96,7 @@ function Refresh() {
 			Do a for loop that prints things into the messages box. model.messages
 			-->
 			
-			<input class="btn btn-success" type="Submit" name="send" value="Send" >
+			<input class="btn btn-success" type="Submit" name="send" id="send" value="Send" >
 			
 			<input class="btn btn-danger" type="Submit" name="logout" value="Logout">
 			<input class="btn btn-warning" type="Submit" name="exitP" value="Exit Chat Room Permanently">

@@ -38,7 +38,7 @@ public class ChatroomServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		///if(refresh == true){
-			resp.addHeader("Refresh", "1");
+		//	resp.addHeader("Refresh", "1");
 			refresh = false;
 		//}
 
