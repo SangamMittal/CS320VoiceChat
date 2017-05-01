@@ -16,6 +16,38 @@ function addtext() {
 	
 }
 </script>
+
+
+
+
+<script type="text/javascript"><
+function ReplaceContentInContainer(dest,${messages}) {
+var container = document.getElementById(dest);
+container.innerHTML = ${messages};
+} >
+
+</script>
+
+<!--http://www.willmaster.com/library/web-development/replace-div-content.php -->
+
+
+
+<script type="text/javascript"><!--
+var containerID = "dest";
+var timerID = setInterval("Refresh",1000);
+function Refresh() {
+
+	
+	ReplaceContentInContainer(containerID,${messages});
+	
+
+}
+</script>
+
+
+
+
+
 	
 		<!-- Fix chatroom title -->
 		<title>${sharedChatroomName}</title>
@@ -73,8 +105,8 @@ function addtext() {
 		
 		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post" name="MyForm">
 			
-			<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly><c:forEach items="${messages}" var="post" >${post}</c:forEach></textarea>
-			
+	<div id="dest">		<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly><c:forEach items="${messages}" var="post" >${post}</c:forEach></textarea>
+			</div>
 			<textarea class="boxSize form-group" id="source" input type="text"  name = "source" value =  "${source}"></textarea>
 			
 			
@@ -83,7 +115,7 @@ function addtext() {
 			Do a for loop that prints things into the messages box. model.messages
 			-->
 			
-			<input class="btn btn-success" type="Submit" name="send" value="Send">
+			<input class="btn btn-success" type="Submit" name="send" value="Send" >
 			
 			<input class="btn btn-danger" type="Submit" name="logout" value="Logout">
 			<input class="btn btn-warning" type="Submit" name="exitP" value="Exit Chat Room Permanently">
