@@ -25,6 +25,7 @@ public class ChatroomListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		System.out.println("************************ Session: " + req.getSession().getId());
 		req.getSession().setAttribute("sharedChatroomName", null);
 
 		// TESTING 1 2 3

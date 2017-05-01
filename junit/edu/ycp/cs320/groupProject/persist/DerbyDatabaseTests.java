@@ -378,6 +378,10 @@ public class DerbyDatabaseTests {
 		if(!test){
 			fail("Message not inserted");
 		}
+		
+		// delete users and chatroom
+		db.deleteUser(user);
+		db.deleteChatroom(room, user);
 
 	}// end testInsertMessages
 	

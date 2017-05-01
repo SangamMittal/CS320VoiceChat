@@ -27,6 +27,7 @@ public class ChatroomServlet extends HttpServlet {
 	private Post post = new Post();
 	private ArrayList<Post> posts = new ArrayList<Post>();
 	private ArrayList<String> messages = new ArrayList<String>();
+	private boolean refresh;
 	
 	public Post getChatroomServletPost()
 	{
@@ -36,7 +37,11 @@ public class ChatroomServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+		///if(refresh == true){
+			resp.addHeader("Refresh", "1");
+			refresh = false;
+		//}
+
 		//	String user = (String) req.getSession().getAttribute("sharedUser");
 	
 		//Only have 1 second to type in a message
@@ -89,6 +94,7 @@ public class ChatroomServlet extends HttpServlet {
 		// proceed to handle request...
 		System.out.println("     User: <" + sharedUser + "> logged in");
 		
+		
 		req.setAttribute("messages", messages);
 
 		
@@ -100,6 +106,7 @@ public class ChatroomServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		sharedUser = (String) req.getSession().getAttribute("sharedUser");
 		String errorMessage = null;
 		String userMessage = null;
 		
@@ -151,7 +158,7 @@ public class ChatroomServlet extends HttpServlet {
 				System.out.println("In userMessage statement, this is userMessage:" + post.getText());
 				if(post.getText()!=null)
 					pc.post(u, post, chatroom2);
-				
+				refresh = true;
 				resp.sendRedirect("chatroom");
 				req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
 				

@@ -22,7 +22,6 @@ public class LoginServlet extends HttpServlet {
 
 		if((String) req.getSession().getAttribute("sharedUser") != null){
 			System.out.println("    User is already logged in");
-		
 			// user is logged in
 			resp.sendRedirect(req.getContextPath() + "/chatroomList");
 			return;
@@ -122,7 +121,7 @@ public class LoginServlet extends HttpServlet {
 				}
 			}
 		}//end of user click on signUp button
-		
+		String sessionID = req.getSession().getId();
 		req.getSession().setAttribute("sharedUser", sharedUser);
 		if(logincheck || signupcheck){
 			resp.sendRedirect("chatroomList");
