@@ -8,26 +8,34 @@
 	<head>
 	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
+
 <script>
 
-
-$(function()
-{
-
-setInterval(function()
-{
-
-$('#top').html( $('#top').html() );
-
-}, 1000);
-
-
+function poll(){
+    
+     $.get("http://192.168.186.134:8081/groupProject/chatroomText", function(data, status){
+          
+          var text = (data);
+          
+          
+          
+          $('#top').val(text);
+            
+            
+            
+        });
+    
+       
+        
+ 
 }
-);
+
+setInterval(poll, 5000);
 
 
 
 </script>
+
 
 	
 		<!-- Fix chatroom title -->
@@ -86,28 +94,12 @@ $('#top').html( $('#top').html() );
 		
 		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post" name="MyForm">
 			
-	<div id="dest">		<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly><c:forEach items="${messages}" var="post" >${post}</c:forEach></textarea>
-			</div>
+		<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly><c:forEach items="${messages}" var="post">${post}</c:forEach></textarea>
 			<textarea class="boxSize form-group" id="source" input type="text"  name = "source" value =  "${source}"></textarea>
-			
-			
-			<!-- May need to change this back to type Submit
-			
-			Do a for loop that prints things into the messages box. model.messages
-			-->
-			
 			<input class="btn btn-success" type="Submit" name="send" id="send" value="Send" >
-			
 			<input class="btn btn-danger" type="Submit" name="logout" value="Logout">
 			<input class="btn btn-warning" type="Submit" name="exitP" value="Exit Chat Room Permanently">
 			<input class="btn btn-warning" type="Submit" name="Refresh" value="Refresh">
-		
-
-
-
-
 		</form>
 	</body>
-	
-	
 </html>

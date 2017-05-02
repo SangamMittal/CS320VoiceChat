@@ -24,6 +24,8 @@
   </servlet>
   
 
+  
+
 
   <!-- Servlet mappings -->
   <servlet-mapping>
@@ -41,6 +43,10 @@
   <servlet-mapping>
     <servlet-name>CreateChatroomServlet</servlet-name>
     <url-pattern>/createChatroom</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>ChatroomServlet</servlet-name>
+    <url-pattern>/chatroomText</url-pattern>
   </servlet-mapping>
   
 

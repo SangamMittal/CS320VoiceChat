@@ -96,6 +96,7 @@ public class ChatroomServlet extends HttpServlet {
 		
 		
 		req.setAttribute("messages", messages);
+		
 
 		
 		
@@ -157,7 +158,13 @@ public class ChatroomServlet extends HttpServlet {
 				//It's coming out null here but still printing...
 				System.out.println("In userMessage statement, this is userMessage:" + post.getText());
 				if(post.getText()!=null)
-					pc.post(u, post, chatroom2);
+					
+				{	pc.post(u, post, chatroom2);
+				//Added these 2 lines 5/2/17
+					messages.add(pc.formatMessage(post));
+					posts.add(post );
+				
+				}
 				refresh = true;
 				resp.sendRedirect("chatroom");
 				req.getRequestDispatcher("/_view/chatroom.jsp").forward(req, resp);
