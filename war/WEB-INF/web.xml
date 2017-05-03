@@ -23,6 +23,14 @@
     <servlet-class>edu.ycp.cs320.groupProject.servlet.CreateChatroomServlet</servlet-class>
   </servlet>
   
+    <servlet>
+    <servlet-name>ChatroomTextServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.groupProject.servlet.ChatroomTextServlet</servlet-class>
+  </servlet>
+
+
+ 
+  
 
   
 
@@ -44,10 +52,13 @@
     <servlet-name>CreateChatroomServlet</servlet-name>
     <url-pattern>/createChatroom</url-pattern>
   </servlet-mapping>
-    <servlet-mapping>
-    <servlet-name>ChatroomServlet</servlet-name>
+
+
+     <servlet-mapping>
+    <servlet-name>ChatroomTextServlet</servlet-name>
     <url-pattern>/chatroomText</url-pattern>
   </servlet-mapping>
+
   
 
 </web-app>

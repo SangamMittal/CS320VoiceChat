@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<div id = "whole">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
@@ -13,16 +14,20 @@
 
 function poll(){
     
-     $.get("http://192.168.186.134:8081/groupProject/chatroomText", function(data, status){
+    var textarea = document.getElementById('top');
+	textarea.scrollTop = textarea.scrollHeight;
+     $.get("http://192.168.186.64:8081/groupProject/chatroomText",
+     
+     
+     
+      function(data, status){
+          
+          
           
           var text = (data);
-          
-          
-          
-          $('#top').val(text);
+          $('#top').html(text);
             
-            
-            
+              
         });
     
        
@@ -30,7 +35,7 @@ function poll(){
  
 }
 
-setInterval(poll, 5000);
+setInterval(poll, 2000);
 
 
 
@@ -93,8 +98,9 @@ setInterval(poll, 5000);
 	
 		
 		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post" name="MyForm">
-			
+		<div id = "dest">	
 		<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly><c:forEach items="${messages}" var="post">${post}</c:forEach></textarea>
+		</div>
 			<textarea class="boxSize form-group" id="source" input type="text"  name = "source" value =  "${source}"></textarea>
 			<input class="btn btn-success" type="Submit" name="send" id="send" value="Send" >
 			<input class="btn btn-danger" type="Submit" name="logout" value="Logout">
@@ -102,4 +108,5 @@ setInterval(poll, 5000);
 			<input class="btn btn-warning" type="Submit" name="Refresh" value="Refresh">
 		</form>
 	</body>
+	</div>
 </html>
