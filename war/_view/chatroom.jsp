@@ -21,7 +21,7 @@ function poll(){
 	
 	
 	
-     $.get("http://192.168.186.64:8081/groupProject/chatroomText",
+     $.get("http://192.168.1.107:8081/groupProject/chatroomText",
      
      
      

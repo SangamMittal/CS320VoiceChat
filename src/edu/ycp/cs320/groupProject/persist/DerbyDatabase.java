@@ -1046,10 +1046,10 @@ public class DerbyDatabase implements IDatabase {
 					stmt3 = conn.prepareStatement("create table chatroomUser (num int primary key generated always as identity (start with 1, increment by 1),room_id int, user_id int)");
 					stmt3.executeUpdate();
 					
-					stmt4= conn.prepareStatement("create table messagesList (chatroom_id int, sender_id varchar(32), messageString varchar(70))" );
+					stmt4= conn.prepareStatement("create table messagesList (chatroom_id int, sender_id varchar(32), messageString varchar(200))" );
 					stmt4.executeUpdate();
 					
-					stmt5= conn.prepareStatement("create table postContents (messageString varchar(70), user_id int, room_id int)");
+					stmt5= conn.prepareStatement("create table postContents (messageString varchar(200), user_id int, room_id int)");
 					stmt5.executeUpdate();
 					
 					
