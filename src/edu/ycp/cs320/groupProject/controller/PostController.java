@@ -69,7 +69,7 @@ public class PostController {
 		for (int i=0; i<s.length(); i++)
 		{
 			
-			if ( (s.charAt(i) != ' ') )
+			if ( (s.charAt(i) != ' ' ) )
 			{
 				return true;
 			}

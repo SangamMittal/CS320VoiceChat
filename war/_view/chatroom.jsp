@@ -8,6 +8,8 @@
 <html>
 	<head>
 	
+
+	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
 
 <script>
@@ -16,6 +18,9 @@ function poll(){
     
     var textarea = document.getElementById('top');
 	textarea.scrollTop = textarea.scrollHeight;
+	
+	
+	
      $.get("http://192.168.186.64:8081/groupProject/chatroomText",
      
      
@@ -35,7 +40,7 @@ function poll(){
  
 }
 
-setInterval(poll, 2000);
+setInterval(poll, 1000);
 
 
 
@@ -99,7 +104,11 @@ setInterval(poll, 2000);
 		
 		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post" name="MyForm">
 		<div id = "dest">	
+		
+		
 		<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly><c:forEach items="${messages}" var="post">${post}</c:forEach></textarea>
+	
+	
 		</div>
 			<textarea class="boxSize form-group" id="source" input type="text"  name = "source" value =  "${source}"></textarea>
 			<input class="btn btn-success" type="Submit" name="send" id="send" value="Send" >
