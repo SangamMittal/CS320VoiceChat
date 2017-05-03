@@ -25,7 +25,7 @@ function poll(){
           
           
           var text = (data);
-          $('#top').html(text);
+          $('#top').text(text);
             
               
         });
