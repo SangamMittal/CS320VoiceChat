@@ -6,6 +6,17 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+
+/*Sources: 
+
+Professor Hake's Library example,
+w3schools.com,
+stackoverflow.com,
+
+
+*/
+
+
 public class Main {
 	public static void main(String[] args) throws Exception {
 		Server server = new Server(8081);
