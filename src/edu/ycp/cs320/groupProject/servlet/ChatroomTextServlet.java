@@ -63,9 +63,9 @@ public class ChatroomTextServlet extends HttpServlet {
 		
 		messages = null;
 		messages = new ArrayList<String>();
-		for(Post p: posts){
-			System.out.println(p.getText());
-			messages.add(pc.formatMessage(p));
+		for(int i = posts.size()-1; i >= 0; i--){
+			System.out.println(posts.get(i).getText());
+			messages.add(pc.formatMessage(posts.get(i)));
 		}
 		
 		}
