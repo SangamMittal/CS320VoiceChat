@@ -157,12 +157,12 @@ public class ChatroomServlet extends HttpServlet {
 	//		if(userMessage != null){
 				//It's coming out null here but still printing...
 				System.out.println("In userMessage statement, this is userMessage:" + post.getText());
-				if(post.getText()!=null)
+				if(post.getText()!=null && post.getText().length() <=200)
 					
 				{	pc.post(u, post, chatroom2);
 				//Added these 2 lines 5/2/17
-					messages.add(pc.formatMessage(post));
-					posts.add(post );
+				//	messages.add(pc.formatMessage(post));
+				//	posts.add(post );
 				
 				}
 				refresh = true;

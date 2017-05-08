@@ -101,7 +101,7 @@ public class CreateChatroomServlet extends HttpServlet {
 		req.getSession().setAttribute("sharedChatroomName", room.getChatroomName());
 		
 		if(createChatroomcheck){
-			resp.sendRedirect("chatroom");
+			resp.sendRedirect("chatroomList");
 			
 		}
 		

@@ -161,12 +161,12 @@ public class ChatroomTextServlet extends HttpServlet {
 					
 				{	pc.post(u, post, chatroom2);
 				//Added these 2 lines 5/2/17
-					messages.add(pc.formatMessage(post));
-					posts.add(post );
+				//	messages.add(pc.formatMessage(post));
+				//	posts.add(post );
 				
 				}
 				refresh = true;
-				resp.sendRedirect("chatroom");
+				resp.sendRedirect("chatroomText");
 				req.getRequestDispatcher("/_view/chatroomText.jsp").forward(req, resp);
 				
 				

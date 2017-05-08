@@ -14,22 +14,22 @@
 
 <script>
 
+
+
 function poll(){
     
    
-	
-	
-     $.get("http://192.168.168.107:8081/groupProject/chatroomText",
-     
-     
-     
+    
+     $.get("http://192.168.187.94:8081/groupProject/chatroomText",
+      
       function(data, status){
           
-          
-          
+               
           var text = (data);
+          
+   		
           $('#top').text(text);
-            
+        
               
         });
     
