@@ -12,36 +12,20 @@
 	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
 
+
+
 <script>
-
-
-
 function poll(){
-    
-   
-    
      $.get("http://192.168.187.94:8081/groupProject/chatroomText",
-      
       function(data, status){
-          
-               
           var text = (data);
-          
-   		
           $('#top').text(text);
-        
-              
+
         });
-    
 }
-
-
-
 setInterval(poll, 1000);
-
-
-
 </script>
+
 
 
 		<title>${sharedChatroomName}</title>

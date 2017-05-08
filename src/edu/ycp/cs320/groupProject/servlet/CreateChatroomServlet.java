@@ -12,6 +12,8 @@ import edu.ycp.cs320.groupProject.controller.LoginSignupController;
 import edu.ycp.cs320.groupProject.model.Chatroom;
 import edu.ycp.cs320.groupProject.model.User;
 
+import edu.ycp.cs320.groupProject.servlet.ChatroomServlet;
+
 
 //import edu.ycp.cs320.groupProject.controller.GuessingGameController;
 //import edu.ycp.cs320.groupProject.model.GuessingGame;
@@ -103,6 +105,9 @@ public class CreateChatroomServlet extends HttpServlet {
 		
 		if(createChatroomcheck){
 			resp.sendRedirect("chatroomList");
+			
+			
+			
 			
 		}
 		

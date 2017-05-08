@@ -100,6 +100,12 @@ public class ChatroomListServlet extends HttpServlet {
 					chatroom2.setChatroomName(sharedChatroomName);
 					
 					//redirect
+					
+					//redirect to TypeInRoomPW if the chatroom has a password
+					
+					
+				//	if ( typed != null  )
+					
 					redirect=true;
 					
 					
@@ -121,7 +127,7 @@ public class ChatroomListServlet extends HttpServlet {
 		}
 		
 		// Add parameters as request attributes for other servlets during this session
-		req.getSession().setAttribute("sharedUser", sharedUser);
+		//req.getSession().setAttribute("sharedUser", sharedUser);
 		if(logout){
 			resp.sendRedirect("login");
 		}

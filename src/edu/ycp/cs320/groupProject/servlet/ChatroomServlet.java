@@ -108,6 +108,9 @@ public class ChatroomServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		sharedUser = (String) req.getSession().getAttribute("sharedUser");
+		sharedChatroomName = (String) req.getSession().getAttribute("sharedChatroomName");
+		chatroom2.setChatroomName(sharedChatroomName);
+
 		String errorMessage = null;
 		String userMessage = null;
 		
@@ -160,6 +163,9 @@ public class ChatroomServlet extends HttpServlet {
 				if(post.getText()!=null && post.getText().length() <=200)
 					
 				{	pc.post(u, post, chatroom2);
+					post = null;
+					post = new Post();
+					
 				//Added these 2 lines 5/2/17
 				//	messages.add(pc.formatMessage(post));
 				//	posts.add(post );

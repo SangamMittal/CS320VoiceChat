@@ -27,6 +27,11 @@
     <servlet-name>ChatroomTextServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.groupProject.servlet.ChatroomTextServlet</servlet-class>
   </servlet>
+  
+      <servlet>
+    <servlet-name>TypeInRoomPWServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.groupProject.servlet.TypeInRoomPWServlet</servlet-class>
+  </servlet>
 
 
  
@@ -58,6 +63,12 @@
     <servlet-name>ChatroomTextServlet</servlet-name>
     <url-pattern>/chatroomText</url-pattern>
   </servlet-mapping>
+  
+    <servlet-mapping>
+    <servlet-name>TypeInRoomPWServlet</servlet-name>
+    <url-pattern>/typeInRoomPW</url-pattern>
+  </servlet-mapping>
+  
 
   
 
