@@ -33,10 +33,9 @@ function poll(){
               
         });
     
-       
-        
- 
 }
+
+
 
 setInterval(poll, 1000);
 
@@ -45,8 +44,6 @@ setInterval(poll, 1000);
 </script>
 
 
-	
-		<!-- Fix chatroom title -->
 		<title>${sharedChatroomName}</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
 			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -103,8 +100,12 @@ setInterval(poll, 1000);
 		<form action="${pageContext.servletContext.contextPath}/chatroom" method="post" name="MyForm">
 		<div id = "dest">	
 		
+	
+		<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly>
 		
-		<textarea class="boxSizeAllM" id="top" type="text" name = "allmessages" readonly><c:forEach items="${messages}" var="post">${post}</c:forEach></textarea>
+
+		
+		</textarea>
 	
 	
 		</div>

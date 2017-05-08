@@ -95,7 +95,7 @@ public class ChatroomServlet extends HttpServlet {
 		System.out.println("     User: <" + sharedUser + "> logged in");
 		
 		
-		req.setAttribute("messages", messages);
+		req.getSession().setAttribute("messages", messages);
 		
 
 		
@@ -207,12 +207,12 @@ public class ChatroomServlet extends HttpServlet {
 		// Add parameters as request attributes
 		//req.setAttribute("model", chatroom);
 		
-		req.setAttribute("messages", messages);
-		req.setAttribute("post", post);
+		req.getSession().setAttribute("messages", messages);
+		req.getSession().setAttribute("post", post);
 
 		
 		// Add result objects as request attributes
-		req.setAttribute("errorMessage", errorMessage);
+		req.getSession().setAttribute("errorMessage", errorMessage);
 		
 		
 		//Start new

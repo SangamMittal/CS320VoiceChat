@@ -57,7 +57,7 @@ public class ChatroomListServlet extends HttpServlet {
 		ChatroomController roomController = new ChatroomController();
 
 		allChatrooms = roomController.getAllChatroom();
-		req.setAttribute("allChatrooms", allChatrooms);
+		req.getSession().setAttribute("allChatrooms", allChatrooms);
 		
 		req.getRequestDispatcher("/_view/chatroomList.jsp").forward(req, resp);
 
@@ -78,7 +78,7 @@ public class ChatroomListServlet extends HttpServlet {
 		ArrayList<Chatroom> allChatrooms = null;
 		
 		allChatrooms = roomController.getAllChatroom();
-		req.setAttribute("allChatrooms", allChatrooms);
+		req.getSession().setAttribute("allChatrooms", allChatrooms);
 
 		Boolean redirect = false;
 		

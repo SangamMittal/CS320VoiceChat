@@ -12,6 +12,7 @@ import edu.ycp.cs320.groupProject.controller.LoginSignupController;
 import edu.ycp.cs320.groupProject.model.Chatroom;
 import edu.ycp.cs320.groupProject.model.User;
 
+
 //import edu.ycp.cs320.groupProject.controller.GuessingGameController;
 //import edu.ycp.cs320.groupProject.model.GuessingGame;
 
@@ -97,7 +98,7 @@ public class CreateChatroomServlet extends HttpServlet {
 		}
 		
 		// Add result objects as request attributes
-		req.setAttribute("errorMessage", errorMessage);
+		req.getSession().setAttribute("errorMessage", errorMessage);
 		req.getSession().setAttribute("sharedChatroomName", room.getChatroomName());
 		
 		if(createChatroomcheck){
