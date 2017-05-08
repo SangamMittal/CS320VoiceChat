@@ -97,7 +97,7 @@ setInterval(poll, 1000);
 			<input class="btn btn-success" type="Submit" name="send" id="send" value="Send" >
 			<input class="btn btn-danger" type="Submit" name="logout" value="Logout">
 			<input class="btn btn-warning" type="Submit" name="exitP" value="Exit Chat Room Permanently">
-			<input class="btn btn-warning" type="Submit" name="Refresh" value="Refresh">
+	<!--		<input class="btn btn-warning" type="Submit" name="Refresh" value="Refresh"> -->
 		</form>
 	</body>
 	</div>
