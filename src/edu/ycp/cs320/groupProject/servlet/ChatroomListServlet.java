@@ -102,7 +102,7 @@ public class ChatroomListServlet extends HttpServlet {
 					//redirect
 					
 					//redirect to TypeInRoomPW if the chatroom has a password
-					
+					//have a method to see if the chatroom has a pw
 					
 				//	if ( typed != null  )
 					
