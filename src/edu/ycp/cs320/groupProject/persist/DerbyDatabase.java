@@ -338,12 +338,6 @@ public class DerbyDatabase implements IDatabase {
 				Chatroom chatroom = new Chatroom();
 			
 				while (resultSet.next()){
-					
-				chatroomName = resultSet.getString(2);	
-				chatroomPassword=  resultSet.getString(3);
-				admin_id = resultSet.getInt(4);
-				messages_id= resultSet.getInt(5);
-				
 				
 				loadChatroom(chatroom, resultSet, 1);
 				
