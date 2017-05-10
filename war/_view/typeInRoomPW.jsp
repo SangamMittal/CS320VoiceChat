@@ -14,7 +14,7 @@
 	<form action = "${pageContext.servletContext.contextPath}/typeInRoomPW" method="post">
 	
 	  Chatroom Password: <br>
-	  <input type="text" name="password" name="box">
+	  <input type="text" name="box">
 	<input type = "submit" value = "Enter" name="submit">
 	
 	</form>

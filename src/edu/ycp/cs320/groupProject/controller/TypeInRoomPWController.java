@@ -20,13 +20,10 @@ public class TypeInRoomPWController {
 	{
 		
 		Chatroom room = db.selectChatroom(c);
-		
-		
-			if (	room.getPassword().equals(c.getPassword()) )
+			if (room.getPassword().equals(c.getPassword()) )
 			{
 				return true;
 			}
-			
 			return false;
 	}
 	
