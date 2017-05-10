@@ -123,6 +123,21 @@ public class ChatroomController {
 		return message;
 	}
 	
+	public boolean checkIfRoomHasPassword(Chatroom c)
+	{
+	Chatroom room = db.selectChatroom(c);
+	
+	if (room.getPassword() == null || room.getPassword().equals(""))
+	{
+		return false;
+	}
+	else return true;
+	
+	
+	}
+	
+	
+	
 	/*
 	public void appearVoiceIcon()
 	{

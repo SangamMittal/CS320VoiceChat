@@ -20,6 +20,7 @@ public class ChatroomListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String sharedUser;
 	private User u;
+	private ChatroomController cc = new ChatroomController();
 	
 
 	@Override
@@ -81,6 +82,7 @@ public class ChatroomListServlet extends HttpServlet {
 		req.getSession().setAttribute("allChatrooms", allChatrooms);
 
 		Boolean redirect = false;
+		Boolean redirectToTypeIn = false;
 		
 		String roomName = null;
 		
@@ -99,14 +101,20 @@ public class ChatroomListServlet extends HttpServlet {
 					roomName = c.getChatroomName();
 					chatroom2.setChatroomName(sharedChatroomName);
 					
-					//redirect
+					//"redirect" redirects to chatroom
 					
 					//redirect to TypeInRoomPW if the chatroom has a password
 					//have a method to see if the chatroom has a pw
 					
-				//	if ( typed != null  )
+					if (  cc.checkIfRoomHasPassword(c)  )
+					{
+						redirectToTypeIn=true;
+					}
+					else if ( cc.checkIfRoomHasPassword(c)==false )
+					{
+						redirect=true;
+					}
 					
-					redirect=true;
 					
 					
 				}
@@ -143,6 +151,10 @@ public class ChatroomListServlet extends HttpServlet {
 		if (redirect==true)
 		{
 			resp.sendRedirect("chatroom");
+		}
+		else if (redirectToTypeIn==true)
+		{
+			resp.sendRedirect("typeInRoomPW");
 		}
 		
 		
