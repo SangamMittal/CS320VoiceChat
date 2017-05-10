@@ -380,8 +380,8 @@ public class DerbyDatabaseTests {
 		}
 		
 		// delete users and chatroom
-		db.deleteUser(user);
 		db.deleteChatroom(room, user);
+		db.deleteUser(user);
 
 	}// end testInsertMessages
 	
