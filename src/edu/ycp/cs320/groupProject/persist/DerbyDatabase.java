@@ -326,19 +326,31 @@ public class DerbyDatabase implements IDatabase {
 			PreparedStatement stmt= null;
 			ResultSet resultSet= null;
 			String chatroomName= null;
+			String chatroomPassword=null;
+			int admin_id=-1;
+			int messages_id=1;
 			try
 			{
 				stmt = conn.prepareStatement("select * from chatroomList where chatroom_name = ?" );
 				stmt.setString(1, c.getChatroomName());	
 				resultSet= stmt.executeQuery();
+				
+				Chatroom chatroom = new Chatroom();
 			
 				while (resultSet.next()){
 					
 				chatroomName = resultSet.getString(2);	
+				chatroomPassword=  resultSet.getString(3);
+				admin_id = resultSet.getInt(4);
+				messages_id= resultSet.getInt(5);
+				
+				
+				loadChatroom(chatroom, resultSet, 1);
+				
 				}
 				
 
-				return c;
+				return chatroom;
 				
 			} finally {
 				DBUtil.closeQuietly(stmt);
