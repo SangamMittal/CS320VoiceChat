@@ -23,7 +23,7 @@ public class TypeInRoomPWServlet extends HttpServlet {
 	
 		
 		
-		
+		req.getRequestDispatcher("/_view/typeInRoomPW.jsp").forward(req, resp);	
 	
 	}
 
@@ -53,7 +53,7 @@ public class TypeInRoomPWServlet extends HttpServlet {
 		}
 		
 		
-		
+		req.getRequestDispatcher("/_view/typeInRoomPW.jsp").forward(req, resp);
 	
 	
 			}
