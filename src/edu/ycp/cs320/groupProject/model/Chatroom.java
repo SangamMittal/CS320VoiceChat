@@ -1,7 +1,7 @@
 package edu.ycp.cs320.groupProject.model;
 
 public class Chatroom {
-	
+	//hey
 	private String chatroomname;
 	private String password;
 	private boolean hasPassword;

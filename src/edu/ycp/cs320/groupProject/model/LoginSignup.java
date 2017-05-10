@@ -1,7 +1,7 @@
 package edu.ycp.cs320.groupProject.model;
 
 public class LoginSignup {
-	
+	//hey
 	// Do not need a model for loginSignUp
 	// It is not an object
 	

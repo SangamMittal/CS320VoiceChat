@@ -1,7 +1,7 @@
 package edu.ycp.cs320.groupProject.model;
 
 public class Post {
-	
+	//hey
 	private String text;
 	private int messages_id;
 	private String user;
